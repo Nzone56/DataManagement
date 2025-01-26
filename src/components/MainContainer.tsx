@@ -1,5 +1,9 @@
 import { MainContainerStyles } from "./MainContainer.styled";
 
-export const MainContainer = () => {
-  return <MainContainerStyles>MainContainer</MainContainerStyles>;
+interface MainContainerProps {
+  children: React.ReactNode;
+}
+
+export const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
+  return <MainContainerStyles>{children}</MainContainerStyles>;
 };
