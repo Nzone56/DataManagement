@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { setInitialData } from "./data.actions";
-import { Data } from "../models/interfaces/interfaces";
+import type { Data } from "../models/interfaces/interfaces";
 
 interface DataReducer {
   data: Data | null;

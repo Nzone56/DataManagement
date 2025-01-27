@@ -1,22 +1,54 @@
-import { Box, styled } from "@mui/material";
+import { Box, keyframes, styled, Typography } from "@mui/material";
 
-export const SideMenuContainer = styled(Box)<{ active: boolean }>(
-  ({ active }) => ({
-    display: "flex",
-    flexDirection: "column",
-    position: "absolute",
-    backgroundColor: "#2864f6",
-    color: "white",
-    borderRadius: "0px 15px 15px 0px",
-    width: active ? "200px" : "50px",
-    height: "calc(100% - 10px)",
-    margin: "5px",
-    transition: "width 0.2s ease-in",
-  })
-);
+const fadeInTitles = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+export const SideMenuContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "expanded",
+})<{ expanded: boolean }>(({ expanded }) => ({
+  display: "flex",
+  flexDirection: "column",
+  position: "absolute",
+  backgroundColor: "#2864f6",
+  color: "white",
+  borderRadius: "0px 15px 15px 0px",
+  margin: "5px",
+  height: "calc(100% - 10px)",
+  width: expanded ? "200px" : "50px",
+  transition: "width 0.2s ease-in",
+}));
+
+export const SideMenuTitle = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})<{ animate: boolean }>(({ animate }) => ({
+  fontSize: "0.9rem",
+  opacity: animate ? 1 : 0,
+  animation: animate ? `${fadeInTitles} 0.5s ease-in-out` : "none",
+  transition: "opacity 0.5s ease-in-out",
+}));
+
+export const SideMenuSubTitle = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})<{ animate: boolean }>(({ animate }) => ({
+  color: "#b7e1fa",
+  fontSize: "0.7rem",
+  opacity: animate ? 1 : 0,
+  animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
+  transition: "opacity 0.5s ease-in-out",
+}));
 
 export const MenuHeader = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  fontSize: "0.9rem",
   marginBottom: "1rem",
+  paddingTop: "1rem",
 });
 
 export const MenuSection = styled("section")({
@@ -40,19 +72,29 @@ export const LogoMenu = styled(Box)({
   borderRadius: "10px",
   backgroundColor: "#4a7df6",
   "& > svg": {
-    fill: "white", // Cambia el color del relleno del svg
-    width: "100%", // Ajusta el tamaño al del contenedor padre
-    height: "100%", // Ajusta la altura al contenedor
+    fill: "white",
+    width: "100%",
+    height: "100%",
   },
 });
 
-export const MenuOption = styled(Box)({
+export const MenuOption = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})<{ animate: boolean }>(({ animate }) => ({
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "center",
-  width: "calc(100% - 25px)",
-  height: "25px",
-  margin: "12.5px 12.5px 20px 12.5px",
+  width: "calc(100% - 15px)",
+  height: "35px",
+  margin: "7.5px",
+  cursor: "pointer",
+  padding: "5px",
+  borderRadius: "5px",
+  "&:hover": {
+    backgroundColor: "#4a7df6",
+    opacity: 0.7,
+  },
+
   // ICON STYLES
   "& > svg": {
     fill: "white",
@@ -64,5 +106,8 @@ export const MenuOption = styled(Box)({
     marginLeft: "1rem",
     fontWeight: "500",
     fontSize: "0.8rem",
+    opacity: animate ? 1 : 0,
+    animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
+    transition: "opacity 0.5s ease-in-out",
   },
-});
+}));
