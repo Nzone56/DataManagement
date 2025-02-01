@@ -1,8 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ErrorPage } from "../components/pages/ErrorPage";
-import { HomePage } from "../components/pages/HomePage";
 import { LandingPage } from "../components/pages/LandingPage";
 import { restrictAccess, checkUser } from "../utils/authLoader";
+import { HomePage } from "../components/pages/HomePage";
+import { ClientsPage } from "../components/pages/ClientsPage";
 
 export const router = createBrowserRouter(
   [
@@ -15,6 +16,11 @@ export const router = createBrowserRouter(
     {
       path: "/home",
       element: <HomePage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/clients",
+      element: <ClientsPage />,
       loader: restrictAccess,
     },
   ],

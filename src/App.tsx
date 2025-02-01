@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "./app/store.ts";
+import { store } from "./store/store.ts";
 import { router } from "./routes/DataRoutes.tsx";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 

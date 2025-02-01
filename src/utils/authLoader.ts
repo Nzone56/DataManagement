@@ -11,7 +11,6 @@ export const checkUser = () => {
 
 export const restrictAccess = () => {
   const selectedUserStorage = localStorage.getItem("selectedUser");
-  console.log(selectedUserStorage);
   if (!selectedUserStorage) {
     return redirect("/");
   }

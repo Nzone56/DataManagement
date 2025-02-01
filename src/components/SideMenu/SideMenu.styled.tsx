@@ -18,10 +18,10 @@ export const SideMenuContainer = styled(Box, {
   backgroundColor: "#2864f6",
   color: "white",
   borderRadius: "0px 15px 15px 0px",
-  margin: "5px",
+  margin: "5px 0px 5px 5px",
   height: "calc(100% - 10px)",
   width: expanded ? "200px" : "50px",
-  transition: "width 0.2s ease-in",
+  transition: "width 0.25s ease-in",
 }));
 
 export const SideMenuTitle = styled(Typography, {
@@ -31,6 +31,7 @@ export const SideMenuTitle = styled(Typography, {
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.5s ease-in-out` : "none",
   transition: "opacity 0.5s ease-in-out",
+  whiteSpace: "nowrap",
 }));
 
 export const SideMenuSubTitle = styled(Typography, {
@@ -66,6 +67,7 @@ export const LogoMenu = styled(Box)({
   justifyContent: "center",
   alignItems: "center",
   width: "35px",
+  minWidth: "35px",
   height: "35px",
   margin: "7.5px",
   padding: "7.5px",

@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import type { User } from "../models/interfaces/interfaces";
+import type { User } from "../../models/interfaces/User/IUser";
 import { setCurrentUser } from "./user.actions";
 
 interface UserReducer {

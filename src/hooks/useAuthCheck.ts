@@ -1,23 +1,37 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setCurrentUser } from "../reducer/user.actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { setCurrentUser } from "../store/user/user.actions";
+import { getCurrentUser } from "../store/user/user.selector";
 
 const useAuthCheck = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentUser = useSelector(getCurrentUser);
+  const location = useLocation();
 
   useEffect(() => {
     const selectedUserStorage = localStorage.getItem("selectedUser");
+    const isHomePage = location.pathname === "/";
 
-    if (selectedUserStorage) {
-      const user = JSON.parse(selectedUserStorage);
-      dispatch(setCurrentUser(user));
-      navigate("/home");
+    if (currentUser.uid) {
+      if (isHomePage) {
+        navigate("/home");
+      }
     } else {
-      navigate("/");
+      if (selectedUserStorage) {
+        const user = JSON.parse(selectedUserStorage);
+        dispatch(setCurrentUser(user));
+        if (isHomePage) {
+          navigate("/home");
+        }
+      } else {
+        navigate("/");
+      }
     }
-  }, [dispatch, navigate]);
+
+    //eslint-disable-next-line
+  }, []);
 };
 
 export default useAuthCheck;

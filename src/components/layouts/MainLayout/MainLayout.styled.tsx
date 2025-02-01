@@ -4,5 +4,12 @@ import { Box } from "@mui/material";
 export const MainLayoutContainer = styled(Box)({
   display: "flex",
   minHeight: "100vh",
-  width: "100vw",
+});
+
+export const MainContentContainer = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  marginLeft: "55px",
+  flexBasis: 0,
+  flexGrow: 1,
 });

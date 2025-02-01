@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router";
-import { setCurrentUser } from "../../../reducer/user.actions";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser } from "../../../reducer/user.selector";
-import { User } from "../../../models/interfaces/interfaces";
+
+import { User } from "../../../models/interfaces/User/IUser";
+import { getCurrentUser } from "../../../store/user/user.selector";
+import { setCurrentUser } from "../../../store/user/user.actions";
 
 const PlaceholderUser: User = {
   uid: "123",
   name: "Nubia",
-  lastname: "Bermudez",
+  lastname: "Torres",
   email: "nubiabermudez@bermudezyco.com.co",
   company: "Bermudez & Co",
 };
