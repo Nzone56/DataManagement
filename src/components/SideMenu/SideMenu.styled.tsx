@@ -11,17 +11,18 @@ const fadeInTitles = keyframes`
 
 export const SideMenuContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== "expanded",
-})<{ expanded: boolean }>(({ expanded }) => ({
+})<{ expanded: boolean }>(({ expanded, theme }) => ({
   display: "flex",
   flexDirection: "column",
   position: "absolute",
-  backgroundColor: "#2864f6",
+  backgroundColor: theme.palette.primary.main,
   color: "white",
   borderRadius: "0px 15px 15px 0px",
   margin: "5px 0px 5px 5px",
   height: "calc(100% - 10px)",
   width: expanded ? "200px" : "50px",
   transition: "width 0.25s ease-in",
+  zIndex: "1000",
 }));
 
 export const SideMenuTitle = styled(Typography, {
@@ -36,8 +37,8 @@ export const SideMenuTitle = styled(Typography, {
 
 export const SideMenuSubTitle = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "animate",
-})<{ animate: boolean }>(({ animate }) => ({
-  color: "#b7e1fa",
+})<{ animate: boolean }>(({ animate, theme }) => ({
+  color: theme.palette.secondary.contrastText,
   fontSize: "0.7rem",
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
@@ -62,7 +63,7 @@ export const MenuHr = styled("hr")({
   backgroundColor: "#3872f9",
 });
 
-export const LogoMenu = styled(Box)({
+export const LogoMenu = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -72,17 +73,17 @@ export const LogoMenu = styled(Box)({
   margin: "7.5px",
   padding: "7.5px",
   borderRadius: "10px",
-  backgroundColor: "#4a7df6",
+  backgroundColor: theme.palette.primary.light,
   "& > svg": {
     fill: "white",
     width: "100%",
     height: "100%",
   },
-});
+}));
 
 export const MenuOption = styled(Box, {
   shouldForwardProp: (prop) => prop !== "animate",
-})<{ animate: boolean }>(({ animate }) => ({
+})<{ animate: boolean }>(({ animate, theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "center",
@@ -93,7 +94,7 @@ export const MenuOption = styled(Box, {
   padding: "5px",
   borderRadius: "5px",
   "&:hover": {
-    backgroundColor: "#4a7df6",
+    backgroundColor: theme.palette.primary.light,
     opacity: 0.7,
   },
 

@@ -1,11 +1,11 @@
 import { MainLayout } from "../../layouts/MainLayout";
-import { TableLayout } from "../../layouts/TableLayout";
+import { ListLayout } from "../../layouts/ListLayout";
 import { ClientList, ClientWorkLogs } from "./PlaceholderData";
 
 export const ClientsPage = () => {
   return (
     <MainLayout>
-      <TableLayout
+      <ListLayout
         title="Clientes"
         list={ClientList}
         data={ClientWorkLogs}

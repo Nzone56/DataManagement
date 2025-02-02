@@ -2,7 +2,7 @@ export interface Client {
   id: string;
   name: string;
   phone: string;
-  joinedDate: Date;
+  joinedDate: number;
 }
 
 export interface ClientWorkLog {

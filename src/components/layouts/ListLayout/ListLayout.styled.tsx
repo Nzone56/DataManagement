@@ -1,0 +1,87 @@
+import {
+  Box,
+  Button,
+  Paper,
+  styled,
+  TableCell,
+  TableFooter,
+  TableHead,
+} from "@mui/material";
+
+export const ListLayoutContainer = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  flexGrow: 1,
+  padding: "1rem",
+});
+
+export const ListTitleContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+});
+
+export const ListTitle = styled("h2")({
+  fontSize: "1.8rem",
+  marginBottom: "1rem",
+  fontWeight: 600,
+});
+
+export const AddButton = styled(Button)(({ theme }) => ({
+  padding: "5px 10px",
+  color: theme.palette.primary.contrastText,
+  backgroundColor: theme.palette.primary.dark,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
+export const FiltersContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+});
+
+export const ListContainer = styled(Box)({
+  display: "flex",
+  marginTop: "1rem",
+  maxHeight: "calc(100vh - 200px)",
+});
+
+export const PaperTableContainer = styled(Paper)({
+  backgroundColor: "#f4f4f4",
+  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+});
+
+export const TableCellStyled = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== "header",
+})<{
+  cellwidth: string;
+  header: boolean;
+}>(({ cellwidth, header }) => ({
+  width: cellwidth ? `${cellwidth}%` : "auto",
+  border: "1px solid #e0e0e0",
+  color: header ? "white" : "black",
+  "& svg": {
+    cursor: "pointer",
+    fill: header ? "white" : "black",
+    width: "22px",
+    height: "22px",
+  },
+}));
+
+export const StyledTableHeader = styled(TableHead)(({ theme }) => ({
+  position: "sticky",
+  top: 0,
+  zIndex: 1,
+  backgroundColor: theme.palette.primary.dark,
+  color: "white !important",
+  border: "1px solid #e0e0e0",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+}));
+
+export const StyledTableFooter = styled(TableFooter)({
+  position: "sticky",
+  bottom: 0,
+  zIndex: 1,
+  backgroundColor: "#f4f4f4",
+  border: "1px solid #e0e0e0",
+});
