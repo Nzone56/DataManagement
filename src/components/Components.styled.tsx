@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, Button, IconButton, styled } from "@mui/material";
 
 export const ColumnJustifyFlex = styled(Box)({
   display: "flex",
@@ -9,6 +9,12 @@ export const ColumnJustifyFlex = styled(Box)({
 export const CenterdBox = styled(Box)({
   display: "flex",
   alignItems: "center",
+});
+
+export const CenteredBoxBetween = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 });
 
 export const IconBox = styled(Box)(({ theme }) => ({
@@ -25,9 +31,18 @@ export const IconBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const IconContainer = styled(Box)({
+export const IconButtonContainer = styled(IconButton)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   width: "100%",
 });
+
+export const PrimaryButton = styled(Button)(({ theme }) => ({
+  padding: "5px 10px",
+  color: theme.palette.primary.contrastText,
+  backgroundColor: theme.palette.primary.dark,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));

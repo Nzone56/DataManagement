@@ -15,18 +15,21 @@ import {
   TableRow,
   TableBody,
   TablePagination,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { formatDate } from "../../../utils/dates";
 import { useEffect, useState } from "react";
 import { TablePaginationActions } from "./ListPaginationActions";
-import { IconContainer } from "../../Components.styled";
+import { IconButtonContainer } from "../../Components.styled";
 
 interface ListTableProps<T> {
   list: T[];
   header: string[];
   title: string;
   searchState: string;
+  handleOpenModal: (mode: "edit", data: T) => void;
 }
 
 export const ListTable = <T extends Record<string, string | number>>({
@@ -34,11 +37,32 @@ export const ListTable = <T extends Record<string, string | number>>({
   header,
   title,
   searchState,
+  handleOpenModal,
 }: ListTableProps<T>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
 
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<{
+    [key: string]: HTMLElement | null;
+  }>({});
+
+  //Dropdown function
+  const handleOpenDropdown = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    // setAnchorEl(event.currentTarget);
+    setAnchorEl((prev) => ({ ...prev, [id]: event.currentTarget }));
+  };
+
+  const handleCloseDropdown = (id: string) => {
+    // setAnchorEl(null);
+    setAnchorEl((prev) => ({ ...prev, [id]: null }));
+  };
+
+  // PAGINATION FUNCTIONS
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -96,9 +120,9 @@ export const ListTable = <T extends Record<string, string | number>>({
                 );
               })}
               <TableCellStyled cellwidth="5" header={true}>
-                <IconContainer>
-                  <SettingsIcon /> {/* Aquí aplicas el tamaño real del icono */}
-                </IconContainer>
+                <IconButtonContainer>
+                  <SettingsIcon />
+                </IconButtonContainer>
               </TableCellStyled>
             </TableRow>
           </StyledTableHeader>
@@ -109,28 +133,57 @@ export const ListTable = <T extends Record<string, string | number>>({
                   page * rowsPerPage + rowsPerPage
                 )
               : filteredValues
-            ).map((filteredItem) => (
-              <TableRow key={filteredItem.id}>
-                {header.map((headerItem, index) => (
-                  <TableCellStyled key={index} cellwidth="" header={false}>
-                    {headerItem === "joinedDate"
-                      ? formatDate(Number(filteredItem[headerItem]))
-                      : filteredItem[headerItem]}
+            ).map((filteredItem) => {
+              const itemId = String(filteredItem.id); // Convertir a string
+              const open = Boolean(anchorEl[itemId]);
+
+              return (
+                <TableRow key={itemId}>
+                  {header.map((headerItem, index) => (
+                    <TableCellStyled key={index} cellwidth="" header={false}>
+                      {headerItem === "joinedDate"
+                        ? formatDate(Number(filteredItem[headerItem]))
+                        : filteredItem[headerItem]}
+                    </TableCellStyled>
+                  ))}
+                  <TableCellStyled cellwidth="5" header={false}>
+                    <IconButtonContainer
+                      aria-controls={open ? `menu-${itemId}` : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                      onClick={(event) => handleOpenDropdown(event, itemId)}
+                    >
+                      <MoreVertIcon />
+                    </IconButtonContainer>
+                    <Menu
+                      id={`menu-${itemId}`}
+                      anchorEl={anchorEl[itemId]}
+                      open={open}
+                      onClose={() => handleCloseDropdown(itemId)}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => handleOpenModal("edit", filteredItem)}
+                      >
+                        Editar
+                      </MenuItem>
+                      <MenuItem onClick={() => handleCloseDropdown(itemId)}>
+                        Eliminar
+                      </MenuItem>
+                    </Menu>
                   </TableCellStyled>
-                ))}
-                <TableCellStyled cellwidth="5" header={false}>
-                  <IconContainer>
-                    <MoreVertIcon />
-                  </IconContainer>
-                </TableCellStyled>
-              </TableRow>
-            ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
+          ;
           <StyledTableFooter>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
-                colSpan={3}
+                colSpan={header.length}
                 count={filteredValues.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

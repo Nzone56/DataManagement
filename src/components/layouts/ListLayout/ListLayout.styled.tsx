@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Paper,
   styled,
   TableCell,
@@ -26,15 +25,6 @@ export const ListTitle = styled("h2")({
   fontWeight: 600,
 });
 
-export const AddButton = styled(Button)(({ theme }) => ({
-  padding: "5px 10px",
-  color: theme.palette.primary.contrastText,
-  backgroundColor: theme.palette.primary.dark,
-  "&:hover": {
-    backgroundColor: theme.palette.primary.main,
-  },
-}));
-
 export const FiltersContainer = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
@@ -56,7 +46,7 @@ export const TableCellStyled = styled(TableCell, {
 })<{
   cellwidth: string;
   header: boolean;
-}>(({ cellwidth, header }) => ({
+}>(({ cellwidth, header, theme }) => ({
   width: cellwidth ? `${cellwidth}%` : "auto",
   border: "1px solid #e0e0e0",
   color: header ? "white" : "black",
@@ -65,6 +55,9 @@ export const TableCellStyled = styled(TableCell, {
     fill: header ? "white" : "black",
     width: "22px",
     height: "22px",
+    "&:hover": {
+      fill: theme.palette.secondary.dark,
+    },
   },
 }));
 
