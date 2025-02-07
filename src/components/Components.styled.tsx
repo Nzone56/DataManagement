@@ -45,4 +45,8 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.primary.main,
   },
+  "&:disabled": {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.secondary.light,
+  },
 }));

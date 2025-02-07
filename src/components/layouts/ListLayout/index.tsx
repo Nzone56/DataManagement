@@ -15,6 +15,7 @@ import { InputAdornment, TextField, Typography } from "@mui/material";
 import { ListTable } from "./ListTable";
 import { useState } from "react";
 import { ListManageItemModal } from "./ListManageItemModal";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface ListLayoutProps<
   T1 extends { id: string; name: string },
@@ -25,6 +26,10 @@ interface ListLayoutProps<
   data: T2[];
   header: string[];
   initialDataItem: T1;
+  loading: boolean;
+  addItem: ActionCreatorWithPayload<T1>;
+  removeItem: ActionCreatorWithPayload<string>;
+  updateItem: ActionCreatorWithPayload<T1>;
 }
 
 export const ListLayout = <
@@ -36,6 +41,10 @@ export const ListLayout = <
   // data,
   header,
   initialDataItem,
+  // loading,
+  addItem,
+  removeItem,
+  updateItem,
 }: ListLayoutProps<T1, T2>) => {
   const [searchState, setSearchState] = useState<string>("");
   const [modalState, setModalState] = useState<{
@@ -66,6 +75,8 @@ export const ListLayout = <
           onHide={handleCloseModal}
           list={header}
           initialValue={modalState.data ? modalState.data : initialDataItem}
+          addItem={addItem}
+          updateItem={updateItem}
         />
       ) : null}
       <ListTitleContainer>
@@ -112,6 +123,7 @@ export const ListLayout = <
         title={title}
         searchState={searchState}
         handleOpenModal={handleOpenModal}
+        removeItem={removeItem}
       />
     </ListLayoutContainer>
   );
