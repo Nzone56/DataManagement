@@ -5,7 +5,7 @@ import { CenteredBox, ColumnJustifyFlex, PrimaryButton, StartBoxBetween } from "
 import { convertToDate, convertToTimestamp } from "../../../utils/dates";
 import DatePicker from "react-datepicker";
 import { codeToText, localeDictionary } from "../../../utils/locale";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import {
   ModalFooter,
@@ -17,6 +17,7 @@ import {
 } from "./ListModal.styled";
 import { menuSections } from "../../SideMenu/SideMenuVariables";
 import { MenuOptionType } from "../../../models/interfaces/Other/IMenu";
+import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 
 type CustomModalProps<T> = {
   show: boolean;
@@ -25,8 +26,8 @@ type CustomModalProps<T> = {
   modalType: string;
   list: string[];
   initialValue: T;
-  addItem: ActionCreatorWithPayload<T>;
-  updateItem: ActionCreatorWithPayload<T>;
+  addItem: AsyncThunk<T, T, ThunkApiConfig>;
+  updateItem: AsyncThunk<T, T, ThunkApiConfig>;
 };
 
 export const ListManageItemModal = <T extends Record<string, unknown>>({
@@ -39,7 +40,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   addItem,
   updateItem,
 }: CustomModalProps<T>) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [managedItem, setManagedItem] = useState<T>(initialValue);
 
   // We use it only when adding

@@ -10,7 +10,8 @@ import { InputAdornment, TextField, Typography } from "@mui/material";
 import { ListTable } from "./ListTable";
 import { useState } from "react";
 import { ListManageItemModal } from "./ListManageItemModal";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { AsyncThunk } from "@reduxjs/toolkit";
+import { ThunkApiConfig } from "../../../store/store";
 
 interface ListLayoutProps<T1 extends { id: string; name: string }, T2 extends { id: string }> {
   title: string;
@@ -19,9 +20,9 @@ interface ListLayoutProps<T1 extends { id: string; name: string }, T2 extends { 
   header: string[];
   initialDataItem: T1;
   loading: boolean;
-  addItem: ActionCreatorWithPayload<T1>;
-  removeItem: ActionCreatorWithPayload<string>;
-  updateItem: ActionCreatorWithPayload<T1>;
+  addItem: AsyncThunk<T1, T1, ThunkApiConfig>;
+  removeItem: AsyncThunk<string, string, ThunkApiConfig>;
+  updateItem: AsyncThunk<T1, T1, ThunkApiConfig>;
 }
 
 export const ListLayout = <T1 extends { id: string; name: string }, T2 extends { id: string }>({

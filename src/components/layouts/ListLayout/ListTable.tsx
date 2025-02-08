@@ -12,8 +12,9 @@ import { formatDate } from "../../../utils/dates";
 import { useEffect, useState } from "react";
 import { TablePaginationActions } from "./ListPaginationActions";
 import { IconButtonContainer } from "../../Components.styled";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 
 interface ListTableProps<T> {
   list: T[];
@@ -21,7 +22,7 @@ interface ListTableProps<T> {
   title: string;
   searchState: string;
   handleOpenModal: (mode: "edit", data: T) => void;
-  removeItem: ActionCreatorWithPayload<string>;
+  removeItem: AsyncThunk<string, string, ThunkApiConfig>;
 }
 
 export const ListTable = <T extends Record<string, string | number>>({
@@ -32,7 +33,7 @@ export const ListTable = <T extends Record<string, string | number>>({
   handleOpenModal,
   removeItem,
 }: ListTableProps<T>) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
@@ -88,11 +89,7 @@ export const ListTable = <T extends Record<string, string | number>>({
               {header.map((row) => {
                 if (row in localeDictionary) {
                   return (
-                    <TableCellStyled
-                      cellwidth={((100 - 5) / header.length).toString()}
-                      header={true}
-                      key={row}
-                    >
+                    <TableCellStyled cellwidth={((100 - 5) / header.length).toString()} header={true} key={row}>
                       {codeToText(row as keyof typeof localeDictionary)}
                     </TableCellStyled>
                   );
