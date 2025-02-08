@@ -8,7 +8,10 @@ export const addLawyer = createAsyncThunk<Lawyer, Lawyer, ThunkApiConfig>("lawye
 );
 export const removeLawyer = createAsyncThunk<string, string, ThunkApiConfig>(
   "lawyers/removeLawyer",
-  (lawyerId: string) => LawyerService.removeLawyer(lawyerId)
+  (lawyerId: string) => {
+    LawyerService.removeLawyer(lawyerId);
+    return lawyerId;
+  }
 );
 export const updateLawyer = createAsyncThunk<Lawyer, Lawyer, ThunkApiConfig>("lawyers/updateLawyer", (lawyer: Lawyer) =>
   LawyerService.updateLawyer(lawyer)

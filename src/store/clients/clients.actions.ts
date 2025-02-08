@@ -8,7 +8,10 @@ export const addClient = createAsyncThunk<Client, Client, ThunkApiConfig>("clien
 );
 export const removeClient = createAsyncThunk<string, string, ThunkApiConfig>(
   "clients/removeClient",
-  (clientId: string) => ClientService.removeClient(clientId)
+  (clientId: string) => {
+    ClientService.removeClient(clientId);
+    return clientId;
+  }
 );
 export const updateClient = createAsyncThunk<Client, Client, ThunkApiConfig>("clients/updateClient", (client: Client) =>
   ClientService.updateClient(client)

@@ -112,6 +112,7 @@ export const ListTable = <T extends Record<string, string | number>>({
     setFilteredValues(filtered);
   }, [searchState, list]);
 
+  console.log(list);
   return (
     <ListContainer>
       <TableContainer component={PaperTableContainer}>
