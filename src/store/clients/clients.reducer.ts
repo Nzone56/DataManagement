@@ -15,7 +15,7 @@ const initialState: ClientsReducer = {
   error: null,
 };
 
-export const ClientsReducer = createReducer(initialState, (builder) => {
+export const clientsReducer = createReducer(initialState, (builder) => {
   builder
     // Fetch Clients
     .addCase(fetchClients.pending, (state) => ({
@@ -33,7 +33,7 @@ export const ClientsReducer = createReducer(initialState, (builder) => {
       return {
         ...state,
         loading: false,
-        error: action.error.message || "Failed to fetch clients",
+        error: action.error.message || "Error al obtener los clientes",
       };
     })
 

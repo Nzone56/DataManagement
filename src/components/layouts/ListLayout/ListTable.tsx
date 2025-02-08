@@ -46,7 +46,7 @@ export const ListTable = <T extends Record<string, string | number>>({
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
   const [sortedHeader, setSortedHeader] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-
+  //TODO: Fix full sort and not only on page
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null;
   }>({});
@@ -112,7 +112,6 @@ export const ListTable = <T extends Record<string, string | number>>({
     setFilteredValues(filtered);
   }, [searchState, list]);
 
-  console.log(list);
   return (
     <ListContainer>
       <TableContainer component={PaperTableContainer}>

@@ -25,7 +25,6 @@ const updateClient = async (client: Client) => {
     body: JSON.stringify(client),
   });
 
-  //TODO: FETCH CLIENTS WHEN DELETING ??? OR JUST UPDATE THE TABLE
   return await response.json();
 };
 

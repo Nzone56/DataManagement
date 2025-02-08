@@ -1,13 +1,15 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { userReducer } from "./user/user.reducer";
-import { ClientsReducer } from "./clients/clients.reducer";
-import { LawyersReducer } from "./lawyers/lawyers.reducer";
+import { clientsReducer } from "./clients/clients.reducer";
+import { lawyersReducer } from "./lawyers/lawyers.reducer";
+import { expensesReducer } from "./expenses/expenses.reducer";
 
 export const store = configureStore({
   reducer: {
-    clients: ClientsReducer,
-    lawyers: LawyersReducer,
+    clients: clientsReducer,
+    lawyers: lawyersReducer,
     user: userReducer,
+    expenses: expensesReducer,
   },
 });
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   LogoMenu,
   MenuHeader,
@@ -66,7 +66,7 @@ export const SideMenu = () => {
           </SideMenuSubTitle>
           {section.items.map((item) => {
             return (
-              <>
+              <Fragment key={item.id}>
                 <MenuOption animate={expandedMenu} key={item.id} onClick={() => handleNavigateMenu(item)}>
                   {!expandedMenu ? (
                     item.component
@@ -97,7 +97,7 @@ export const SideMenu = () => {
                       </MenuOption>
                     ))
                   : null}
-              </>
+              </Fragment>
             );
           })}
           <MenuHr />

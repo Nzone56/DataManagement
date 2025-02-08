@@ -15,7 +15,7 @@ const initialState: LawyersReducer = {
   error: null,
 };
 
-export const LawyersReducer = createReducer(initialState, (builder) => {
+export const lawyersReducer = createReducer(initialState, (builder) => {
   builder
     // Fetch Lawyers
     .addCase(fetchLawyers.pending, (state) => ({
@@ -33,7 +33,7 @@ export const LawyersReducer = createReducer(initialState, (builder) => {
       return {
         ...state,
         loading: false,
-        error: action.error.message || "Failed to fetch lawyers",
+        error: action.error.message || "Error al obtener los abogados",
       };
     })
 

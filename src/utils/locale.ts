@@ -9,6 +9,7 @@ export const localeDictionary = {
   joinedDate: "Fecha de añadido",
   nit: "NIT",
   address: "Dirección",
+  type: "Tipo",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

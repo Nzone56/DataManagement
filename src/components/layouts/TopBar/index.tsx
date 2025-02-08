@@ -18,10 +18,20 @@ export const TopBar = () => {
   });
 
   const getMenuTitleByRoute = () => {
-    const lastSegment = location.pathname.split("/").pop();
-
+    //TODO: Fix full ruote
+    // const lastSegment = location.pathname.split("/").pop();
+    const lastSegment = location.pathname;
     for (const section of menuSections) {
-      const item = section.items.find((item) => item.route === lastSegment);
+      const item = section.items.find((item) => {
+        if (item.subItems) {
+          const subItem = item.subItems.find((subItem) => subItem.route === lastSegment);
+          console.log(subItem);
+          if (subItem) return subItem;
+        } else {
+          return item.route === lastSegment;
+        }
+      });
+      console.log(lastSegment, section.items);
       if (item) {
         return item;
       }

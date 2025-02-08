@@ -172,5 +172,19 @@
       "email": "isabel.garcia@firma.com",
       "joinedDate": 1696435200000
     }
+  ],
+  "expensesConcepts": [
+    { "id": "1", "name": "Agua", "type": "Servicios Públicos" },
+    { "id": "2", "name": "Transporte", "type": "Movilidad" }
+  ],
+  "expenses": [
+    {
+      "id": "101",
+      "conceptId": "1",
+      "amount": 400000,
+      "date": 1685654400000,
+      "description": "Recibo del agua del mes de Febrero"
+    },
+    { "id": "102", "conceptId": "2", "amount": 20000, "date": 1685654400000, "description": "Uber a casa" }
   ]
 }

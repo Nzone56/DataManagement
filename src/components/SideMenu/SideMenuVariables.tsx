@@ -29,7 +29,7 @@ export const menuSections: MenuSectionType[] = [
       { id: "5", route: "/lawyers", component: <Lawyers />, label: "Abogados" },
       {
         id: "6",
-        route: "expenses",
+        route: "/expenses",
         component: <Expenses />,
         label: "Gastos",
         subItems: [
