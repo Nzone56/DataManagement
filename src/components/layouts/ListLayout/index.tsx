@@ -13,7 +13,7 @@ import { ListManageItemModal } from "./ListManageItemModal";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../../../store/store";
 
-interface ListLayoutProps<T1 extends { id: string; name: string }, T2 extends { id: string }> {
+interface ListLayoutProps<T1 extends { id: string }, T2 extends { id: string }> {
   title: string;
   list: T1[];
   data: T2[];
@@ -25,7 +25,7 @@ interface ListLayoutProps<T1 extends { id: string; name: string }, T2 extends { 
   updateItem: AsyncThunk<T1, T1, ThunkApiConfig>;
 }
 
-export const ListLayout = <T1 extends { id: string; name: string }, T2 extends { id: string }>({
+export const ListLayout = <T1 extends { id: string }, T2 extends { id: string }>({
   title,
   list,
   // data,
@@ -47,7 +47,6 @@ export const ListLayout = <T1 extends { id: string; name: string }, T2 extends {
   });
 
   const handleOpenModal = (mode: "create" | "edit", data?: T1) => {
-    console.log(data);
     setModalState({ open: true, mode, data });
   };
 

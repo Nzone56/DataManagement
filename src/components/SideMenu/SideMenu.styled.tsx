@@ -57,6 +57,17 @@ export const MenuSection = styled("section")({
   marginTop: "1rem",
 });
 
+export const SectionTitle = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "animate",
+})<{ animate: boolean }>(({ animate, theme }) => ({
+  color: theme.palette.secondary.contrastText,
+  fontSize: "0.7rem",
+  marginLeft: "10px",
+  opacity: animate ? 1 : 0,
+  animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
+  transition: "opacity 0.5s ease-in-out",
+}));
+
 export const MenuHr = styled("hr")({
   margin: "0px 10px",
   height: "2px",

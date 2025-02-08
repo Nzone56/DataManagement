@@ -5,6 +5,9 @@ import {
   Person3Outlined as Lawyers,
   CreditCardOutlined as Expenses,
   Business as Customers,
+  AccessTime as AccessIcon,
+  BarChart as BarChartIcon,
+  Assessment as AssessmentIcon,
 } from "@mui/icons-material";
 import { MenuSectionType } from "../../models/interfaces/Other/IMenu";
 
@@ -30,7 +33,7 @@ export const menuSections: MenuSectionType[] = [
   },
   {
     id: "data",
-    title: "Datos",
+    title: "Datos Generales",
     items: [
       {
         id: "4",
@@ -49,6 +52,30 @@ export const menuSections: MenuSectionType[] = [
         route: "expenses",
         component: <Expenses />,
         label: "Gastos",
+      },
+    ],
+  },
+  {
+    id: "management",
+    title: "Manejo de Información",
+    items: [
+      {
+        id: "10",
+        route: "work",
+        component: <AccessIcon />,
+        label: "Trabajo",
+      },
+      {
+        id: "11",
+        route: "statistics",
+        component: <BarChartIcon />,
+        label: "Gráficas",
+      },
+      {
+        id: "12",
+        route: "reports",
+        component: <AssessmentIcon />,
+        label: "Informes",
       },
     ],
   },

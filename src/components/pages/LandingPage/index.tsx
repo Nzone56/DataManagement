@@ -10,7 +10,7 @@ import { setCurrentUser } from "../../../store/user/user.actions";
 const PlaceholderUser: User = {
   uid: "123",
   name: "Nubia",
-  lastname: "Torres",
+  lastName: "Torres",
   email: "nubiabermudez@bermudezyco.com.co",
   company: "Bermudez & Co",
 };

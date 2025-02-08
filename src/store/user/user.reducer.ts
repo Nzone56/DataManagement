@@ -10,7 +10,7 @@ const initialState: UserReducer = {
   currentUser: {
     uid: "",
     name: "",
-    lastname: "",
+    lastName: "",
     email: "",
     company: "",
   },

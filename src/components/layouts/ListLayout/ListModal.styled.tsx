@@ -36,6 +36,14 @@ export const ModalIcon = styled(Box)({
   },
 });
 
+export const ModalBody = styled(Box)({
+  marginTop: "0.5rem",
+  height: "calc(75vh - 140px)",
+  overflowX: "auto",
+  display: "flex",
+  flexDirection: "column",
+});
+
 export const ModalFormTitle = styled(Typography)({
   fontSize: "1rem",
   fontWeight: "500",

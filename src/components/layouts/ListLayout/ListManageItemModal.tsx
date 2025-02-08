@@ -8,6 +8,7 @@ import { codeToText, localeDictionary } from "../../../utils/locale";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import {
+  ModalBody,
   ModalFooter,
   ModalFormTitle,
   ModalIcon,
@@ -94,7 +95,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
           </IconButton>
         </StartBoxBetween>
         {/* MODAL BODY  */}
-        <ColumnJustifyFlex sx={{ mt: 2 }}>
+        <ModalBody sx={{ mt: 2, height: "calc(75vh - 140px)", overflowX: "auto" }}>
           {list.map((item) => {
             if (String(item.toLocaleLowerCase()).includes("date")) {
               return (
@@ -132,7 +133,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
               );
             }
           })}
-        </ColumnJustifyFlex>
+        </ModalBody>
         {/* M0DAL FOOTER */}
         <ModalFooter>
           <PrimaryButton

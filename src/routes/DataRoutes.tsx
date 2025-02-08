@@ -4,6 +4,7 @@ import { LandingPage } from "../components/pages/LandingPage";
 import { restrictAccess, checkUser } from "../utils/authLoader";
 import { HomePage } from "../components/pages/HomePage";
 import { ClientsPage } from "../components/pages/ClientsPage";
+import { LawyersPage } from "../components/pages/LawyersPage";
 
 export const router = createBrowserRouter(
   [
@@ -21,6 +22,11 @@ export const router = createBrowserRouter(
     {
       path: "/clients",
       element: <ClientsPage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/lawyers",
+      element: <LawyersPage />,
       loader: restrictAccess,
     },
   ],

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Paper,
-  styled,
-  TableCell,
-  TableFooter,
-  TableHead,
-} from "@mui/material";
+import { Box, IconButton, Paper, styled, TableCell, TableFooter, TableHead } from "@mui/material";
 
 export const ListLayoutContainer = styled(Box)({
   display: "flex",
@@ -55,6 +48,39 @@ export const TableCellStyled = styled(TableCell, {
     fill: header ? "white" : "black",
     width: "22px",
     height: "22px",
+    "&:hover": {
+      fill: theme.palette.secondary.dark,
+    },
+  },
+}));
+
+export const TableIconButtonContainer = styled(IconButton)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "30px",
+  height: "30px",
+  padding: "4px",
+});
+
+export const TableCellStyledIcon = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== "header",
+})<{
+  header: boolean;
+}>(({ header, theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "100%",
+  border: "1px solid #e0e0e0",
+  color: header ? "white" : "black",
+  "& svg": {
+    cursor: "pointer",
+    fill: header ? "white" : "black",
+    width: "22px",
+    height: "22px",
+
     "&:hover": {
       fill: theme.palette.secondary.dark,
     },

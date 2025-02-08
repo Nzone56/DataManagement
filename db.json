@@ -2,7 +2,7 @@
   "clients": [
     {
       "id": "1",
-      "name": "Tech Solutions S.A.S.",
+      "name": "Tech Solutions S.A.S",
       "phone": "+57 310 1234567",
       "nit": "900123456-7",
       "address": "Cra 10 #15-30, Bogotá",
@@ -79,57 +79,106 @@
       "nit": "909012345-6",
       "address": "Calle 26 #30-20, Bogotá",
       "joinedDate": 1642012800000
+    },
+    {
+      "id": ":r2r:",
+      "name": "Axel GAY",
+      "phone": "123123",
+      "nit": "123123213",
+      "address": "12312312312",
+      "joinedDate": 1738987257996
     }
   ],
-  "clientWorkLogs": [
+  "lawyers": [
     {
       "id": "1",
-      "clientId": null,
-      "hoursWorked": 45,
-      "month": 1,
-      "year": 2025
+      "firstName": "Carlos",
+      "lastName": "Martínez",
+      "phone": "3123456789",
+      "cc": 1234567890,
+      "email": "carlos.martinez@firma.com",
+      "joinedDate": 1617552000000
     },
     {
       "id": "2",
-      "clientId": null,
-      "hoursWorked": 50,
-      "month": 2,
-      "year": 2025
+      "firstName": "Ana",
+      "lastName": "González",
+      "phone": "3109876543",
+      "cc": 9876543210,
+      "email": "ana.gonzalez@firma.com",
+      "joinedDate": 1620057600000
     },
     {
       "id": "3",
-      "clientId": "2",
-      "hoursWorked": 40,
-      "month": 1,
-      "year": 2025
+      "firstName": "Luis",
+      "lastName": "Ramírez",
+      "phone": "3001234567",
+      "cc": 1928374650,
+      "email": "luis.ramirez@firma.com",
+      "joinedDate": 1630464000000
     },
     {
       "id": "4",
-      "clientId": "3",
-      "hoursWorked": 38,
-      "month": 1,
-      "year": 2025
+      "firstName": "Sofía",
+      "lastName": "Pérez",
+      "phone": "3056789012",
+      "cc": 1122334455,
+      "email": "sofia.perez@firma.com",
+      "joinedDate": 1640995200000
     },
     {
       "id": "5",
-      "clientId": "4",
-      "hoursWorked": 60,
-      "month": 1,
-      "year": 2025
+      "firstName": "Pedro",
+      "lastName": "López",
+      "phone": "3176543210",
+      "cc": 5678901234,
+      "email": "pedro.lopez@firma.com",
+      "joinedDate": 1651411200000
     },
     {
       "id": "6",
-      "clientId": "5",
-      "hoursWorked": 52,
-      "month": 1,
-      "year": 2025
+      "firstName": "Marta",
+      "lastName": "Sánchez",
+      "phone": "3123456789",
+      "cc": 1239876543,
+      "email": "marta.sanchez@firma.com",
+      "joinedDate": 1654027200000
     },
     {
       "id": "7",
-      "clientId": "5",
-      "hoursWorked": 48,
-      "month": 2,
-      "year": 2025
+      "firstName": "José",
+      "lastName": "Martínez",
+      "phone": "3198765432",
+      "cc": 3456789012,
+      "email": "jose.martinez@firma.com",
+      "joinedDate": 1664534400000
+    },
+    {
+      "id": "8",
+      "firstName": "Claudia",
+      "lastName": "Fernández",
+      "phone": "3198765432",
+      "cc": 2345678901,
+      "email": "claudia.fernandez@firma.com",
+      "joinedDate": 1674124800000
+    },
+    {
+      "id": "9",
+      "firstName": "Fernando",
+      "lastName": "Díaz",
+      "phone": "3145678901",
+      "cc": 7654321098,
+      "email": "fernando.diaz@firma.com",
+      "joinedDate": 1685654400000
+    },
+    {
+      "id": "10",
+      "firstName": "Isabel",
+      "lastName": "García",
+      "phone": "3176549870",
+      "cc": 9876541230,
+      "email": "isabel.garcia@firma.com",
+      "joinedDate": 1696435200000
     }
   ]
 }

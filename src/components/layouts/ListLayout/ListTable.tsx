@@ -5,13 +5,14 @@ import {
   StyledTableFooter,
   TableCellStyled,
   StyledTableHeader,
+  TableIconButtonContainer,
+  TableCellStyledIcon,
 } from "./ListLayout.styled";
 import { TableContainer, Table, TableRow, TableBody, TablePagination, Menu, MenuItem } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { formatDate } from "../../../utils/dates";
 import { useEffect, useState } from "react";
 import { TablePaginationActions } from "./ListPaginationActions";
-import { IconButtonContainer } from "../../Components.styled";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
@@ -100,11 +101,11 @@ export const ListTable = <T extends Record<string, string | number>>({
                   </TableCellStyled>
                 );
               })}
-              <TableCellStyled cellwidth="5" header={true}>
-                <IconButtonContainer>
+              <TableCellStyledIcon header={true}>
+                <TableIconButtonContainer>
                   <SettingsIcon />
-                </IconButtonContainer>
-              </TableCellStyled>
+                </TableIconButtonContainer>
+              </TableCellStyledIcon>
             </TableRow>
           </StyledTableHeader>
           <TableBody>
@@ -124,15 +125,15 @@ export const ListTable = <T extends Record<string, string | number>>({
                         : filteredItem[headerItem]}
                     </TableCellStyled>
                   ))}
-                  <TableCellStyled cellwidth="5" header={false}>
-                    <IconButtonContainer
+                  <TableCellStyledIcon header={false} sx={{}}>
+                    <TableIconButtonContainer
                       aria-controls={open ? `menu-${itemId}` : undefined}
                       aria-haspopup="true"
                       aria-expanded={open ? "true" : undefined}
                       onClick={(event) => handleOpenDropdown(event, itemId)}
                     >
                       <MoreVertIcon />
-                    </IconButtonContainer>
+                    </TableIconButtonContainer>
                     <Menu
                       id={`menu-${itemId}`}
                       anchorEl={anchorEl[itemId]}
@@ -145,7 +146,7 @@ export const ListTable = <T extends Record<string, string | number>>({
                       <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
                       <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
                     </Menu>
-                  </TableCellStyled>
+                  </TableCellStyledIcon>
                 </TableRow>
               );
             })}

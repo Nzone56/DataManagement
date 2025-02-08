@@ -8,6 +8,7 @@ import {
   SideMenuContainer,
   SideMenuTitle,
   SideMenuSubTitle,
+  SectionTitle,
 } from "./SideMenu.styled";
 import { AcUnitOutlined as AcUnitIcon } from "@mui/icons-material";
 import { useSelector } from "react-redux";
@@ -39,23 +40,16 @@ export const SideMenu = () => {
         </LogoMenu>
         {expandedMenu && (
           <ColumnJustifyFlex>
-            <SideMenuTitle animate={expandedMenu}>
-              {user?.name.concat(" ", user.lastname)}
-            </SideMenuTitle>
-            <SideMenuSubTitle animate={expandedMenu}>
-              {user?.company}
-            </SideMenuSubTitle>
+            <SideMenuTitle animate={expandedMenu}>{user?.name.concat(" ", user.lastName)}</SideMenuTitle>
+            <SideMenuSubTitle animate={expandedMenu}>{user?.company}</SideMenuSubTitle>
           </ColumnJustifyFlex>
         )}
       </MenuHeader>
       {menuSections.map((section) => (
         <MenuSection key={section.id}>
+          {expandedMenu && <SectionTitle animate={expandedMenu}>{section.title}</SectionTitle>}
           {section.items.map((item) => (
-            <MenuOption
-              animate={expandedMenu}
-              key={item.id}
-              onClick={() => handleNavigateMenu(item.route)}
-            >
+            <MenuOption animate={expandedMenu} key={item.id} onClick={() => handleNavigateMenu(item.route)}>
               {item.component}
               {expandedMenu && <span>{item.label}</span>}
             </MenuOption>
