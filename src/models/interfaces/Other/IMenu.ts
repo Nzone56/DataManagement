@@ -2,9 +2,10 @@ import { ReactNode } from "react";
 
 export interface MenuOptionType {
   id: string;
-  component: ReactNode;
+  component?: ReactNode;
   label: string;
   route: string;
+  subItems?: MenuOptionType[];
 }
 
 export interface MenuSectionType {

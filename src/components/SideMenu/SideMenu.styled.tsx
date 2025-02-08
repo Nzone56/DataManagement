@@ -43,6 +43,7 @@ export const SideMenuSubTitle = styled(Typography, {
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
   transition: "opacity 0.5s ease-in-out",
+  whiteSpace: "nowrap",
 }));
 
 export const MenuHeader = styled(Box)({
@@ -56,17 +57,6 @@ export const MenuHeader = styled(Box)({
 export const MenuSection = styled("section")({
   marginTop: "1rem",
 });
-
-export const SectionTitle = styled(Typography, {
-  shouldForwardProp: (prop) => prop !== "animate",
-})<{ animate: boolean }>(({ animate, theme }) => ({
-  color: theme.palette.secondary.contrastText,
-  fontSize: "0.7rem",
-  marginLeft: "10px",
-  opacity: animate ? 1 : 0,
-  animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
-  transition: "opacity 0.5s ease-in-out",
-}));
 
 export const MenuHr = styled("hr")({
   margin: "0px 10px",
@@ -110,13 +100,13 @@ export const MenuOption = styled(Box, {
   },
 
   // ICON STYLES
-  "& > svg": {
+  "& svg": {
     fill: "white",
     width: "25px",
     height: "25px",
   },
   // TEXT STYLES
-  "& > span": {
+  "& span": {
     marginLeft: "1rem",
     fontWeight: "500",
     fontSize: "0.8rem",
@@ -125,3 +115,21 @@ export const MenuOption = styled(Box, {
     transition: "opacity 0.5s ease-in-out",
   },
 }));
+
+export const SideMenuPoint = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "active",
+})<{ active: boolean }>(({ active }) => ({
+  position: "absolute",
+  borderRadius: "50%",
+  width: "7px",
+  height: "7px",
+  backgroundColor: active ? "white" : "#4b81f9",
+  marginLeft: "8px",
+}));
+
+export const SideMenuLine = styled(Box)({
+  width: "1px",
+  height: "42px",
+  backgroundColor: "#4b81f9",
+  marginLeft: "11px",
+});

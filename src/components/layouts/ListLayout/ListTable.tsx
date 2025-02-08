@@ -171,7 +171,7 @@ export const ListTable = <T extends Record<string, string | number>>({
                 return 0;
               })
               .map((filteredItem) => {
-                const itemId = String(filteredItem.id); // Convertir a string
+                const itemId = String(filteredItem.id);
                 const open = Boolean(anchorEl[itemId]);
 
                 return (

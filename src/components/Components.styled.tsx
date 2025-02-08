@@ -15,6 +15,7 @@ export const CenteredBoxBetween = styled(Box)({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  width: "100%",
 });
 
 export const StartBoxBetween = styled(Box)({

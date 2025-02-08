@@ -16,42 +16,26 @@ export const menuSections: MenuSectionType[] = [
     id: "main",
     title: "Principal",
     items: [
-      { id: "1", component: <HomeIcon />, label: "Inicio", route: "home" },
-      {
-        id: "2",
-        component: <InfoIcon />,
-        label: "Información",
-        route: "information",
-      },
-      {
-        id: "3",
-        component: <SettingsIcon />,
-        label: "Configuración",
-        route: "settings",
-      },
+      { id: "1", component: <HomeIcon />, label: "Inicio", route: "/home" },
+      { id: "2", component: <InfoIcon />, label: "Información", route: "/information" },
+      { id: "3", component: <SettingsIcon />, label: "Configuración", route: "/settings" },
     ],
   },
   {
     id: "data",
     title: "Datos Generales",
     items: [
-      {
-        id: "4",
-        route: "clients",
-        component: <Customers />,
-        label: "Clientes",
-      },
-      {
-        id: "5",
-        route: "lawyers",
-        component: <Lawyers />,
-        label: "Abogados",
-      },
+      { id: "4", route: "/clients", component: <Customers />, label: "Clientes" },
+      { id: "5", route: "/lawyers", component: <Lawyers />, label: "Abogados" },
       {
         id: "6",
         route: "expenses",
         component: <Expenses />,
         label: "Gastos",
+        subItems: [
+          { id: "6-1", route: "/expenses/concepts", label: "Conceptos" },
+          { id: "6-2", route: "/expenses/manage", label: "Administrar" },
+        ],
       },
     ],
   },
@@ -59,24 +43,9 @@ export const menuSections: MenuSectionType[] = [
     id: "management",
     title: "Manejo de Información",
     items: [
-      {
-        id: "10",
-        route: "work",
-        component: <AccessIcon />,
-        label: "Trabajo",
-      },
-      {
-        id: "11",
-        route: "statistics",
-        component: <BarChartIcon />,
-        label: "Gráficas",
-      },
-      {
-        id: "12",
-        route: "reports",
-        component: <AssessmentIcon />,
-        label: "Informes",
-      },
+      { id: "10", route: "/work", component: <AccessIcon />, label: "Trabajo" },
+      { id: "11", route: "/statistics", component: <BarChartIcon />, label: "Gráficas" },
+      { id: "12", route: "/reports", component: <AssessmentIcon />, label: "Informes" },
     ],
   },
 ];

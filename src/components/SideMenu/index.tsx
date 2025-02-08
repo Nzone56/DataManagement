@@ -8,31 +8,45 @@ import {
   SideMenuContainer,
   SideMenuTitle,
   SideMenuSubTitle,
-  SectionTitle,
+  SideMenuPoint,
+  SideMenuLine,
 } from "./SideMenu.styled";
-import { AcUnitOutlined as AcUnitIcon } from "@mui/icons-material";
+import {
+  AcUnitOutlined as AcUnitIcon,
+  KeyboardArrowUp as ArrowUpIcon,
+  KeyboardArrowDown as ArrowDownIcon,
+} from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
-import { ColumnJustifyFlex } from "../Components.styled";
+import { CenteredBox, CenteredBoxBetween, ColumnJustifyFlex } from "../Components.styled";
 import { useNavigate } from "react-router";
 import { menuSections } from "./SideMenuVariables";
 import { getCurrentUser } from "../../store/user/user.selector";
+import { MenuOptionType } from "../../models/interfaces/Other/IMenu";
 
 export const SideMenu = () => {
   const [expandedMenu, setExpandedMenu] = useState<boolean>(false);
+  const [expandedMenuOption, setExpandedMenuOption] = useState<string>("");
 
   const user = useSelector(getCurrentUser);
   const navigate = useNavigate();
 
-  const handleNavigateMenu = (route: string) => {
-    navigate(`/${route}`);
+  const handleNavigateMenu = (item: MenuOptionType) => {
+    if (!item.subItems) {
+      navigate(`${item.route}`);
+    } else {
+      setExpandedMenuOption(expandedMenuOption === item.id ? "" : item.id);
+    }
   };
 
   return (
     <SideMenuContainer
       expanded={expandedMenu}
       onMouseEnter={() => setExpandedMenu(true)}
-      onMouseLeave={() => setExpandedMenu(false)}
+      onMouseLeave={() => {
+        if (expandedMenuOption !== "") setExpandedMenuOption("");
+        setExpandedMenu(false);
+      }}
     >
       <MenuHeader>
         <LogoMenu>
@@ -47,13 +61,45 @@ export const SideMenu = () => {
       </MenuHeader>
       {menuSections.map((section) => (
         <MenuSection key={section.id}>
-          {expandedMenu && <SectionTitle animate={expandedMenu}>{section.title}</SectionTitle>}
-          {section.items.map((item) => (
-            <MenuOption animate={expandedMenu} key={item.id} onClick={() => handleNavigateMenu(item.route)}>
-              {item.component}
-              {expandedMenu && <span>{item.label}</span>}
-            </MenuOption>
-          ))}
+          <SideMenuSubTitle animate={expandedMenu} ml={1}>
+            {section.title}
+          </SideMenuSubTitle>
+          {section.items.map((item) => {
+            return (
+              <>
+                <MenuOption animate={expandedMenu} key={item.id} onClick={() => handleNavigateMenu(item)}>
+                  {!expandedMenu ? (
+                    item.component
+                  ) : item.subItems ? (
+                    <CenteredBoxBetween>
+                      <CenteredBox>
+                        {item.component}
+                        <span>{item.label}</span>
+                      </CenteredBox>
+                      {item.id === expandedMenuOption ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                    </CenteredBoxBetween>
+                  ) : (
+                    <>
+                      {item.component}
+                      <span>{item.label}</span>
+                    </>
+                  )}
+                </MenuOption>
+                {item.id === expandedMenuOption
+                  ? item.subItems?.map((subitem) => (
+                      <MenuOption animate={expandedMenu} key={subitem.id} onClick={() => handleNavigateMenu(subitem)}>
+                        <ColumnJustifyFlex>
+                          <SideMenuLine />
+                          <SideMenuPoint active={location.pathname === subitem.route} />
+                        </ColumnJustifyFlex>
+                        {subitem.component}
+                        <span>{subitem.label}</span>
+                      </MenuOption>
+                    ))
+                  : null}
+              </>
+            );
+          })}
           <MenuHr />
         </MenuSection>
       ))}
