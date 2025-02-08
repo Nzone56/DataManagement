@@ -1,4 +1,9 @@
-import { MoreVert as MoreVertIcon, Settings as SettingsIcon } from "@mui/icons-material";
+import {
+  MoreVert as MoreVertIcon,
+  Settings as SettingsIcon,
+  ArrowUpward as ArrowUpIcon,
+  ArrowDownward as ArrowDownIcon,
+} from "@mui/icons-material";
 import {
   ListContainer,
   PaperTableContainer,
@@ -16,6 +21,7 @@ import { TablePaginationActions } from "./ListPaginationActions";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
+import { CenteredBox } from "../../Components.styled";
 
 interface ListTableProps<T> {
   list: T[];
@@ -38,6 +44,8 @@ export const ListTable = <T extends Record<string, string | number>>({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
+  const [sortedHeader, setSortedHeader] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("");
 
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null;
@@ -66,6 +74,29 @@ export const ListTable = <T extends Record<string, string | number>>({
     setPage(0);
   };
 
+  // -- SORTING FUNCTIONS -- //
+
+  const handleSortHeader = (headerName: string) => {
+    if (sortOrder === "") {
+      setSortedHeader(headerName);
+      setSortOrder("asc");
+    } else if (sortOrder === "asc") {
+      if (sortedHeader === headerName) {
+        setSortOrder("desc");
+      } else {
+        setSortedHeader(headerName);
+      }
+    } else if (sortOrder === "desc") {
+      if (sortedHeader === headerName) {
+        setSortOrder("");
+        setSortedHeader("");
+      } else {
+        setSortedHeader(headerName);
+        setSortOrder("asc");
+      }
+    }
+  };
+
   // Update filtered list
   useEffect(() => {
     const filtered = list.filter((listitem) => {
@@ -87,11 +118,26 @@ export const ListTable = <T extends Record<string, string | number>>({
         <Table>
           <StyledTableHeader>
             <TableRow>
-              {header.map((row) => {
-                if (row in localeDictionary) {
+              {header.map((rowHeader: string) => {
+                if (rowHeader in localeDictionary) {
                   return (
-                    <TableCellStyled cellwidth={((100 - 5) / header.length).toString()} header={true} key={row}>
-                      {codeToText(row as keyof typeof localeDictionary)}
+                    <TableCellStyled
+                      cellwidth={((100 - 5) / header.length).toString()}
+                      header={true}
+                      key={rowHeader}
+                      onClick={() => handleSortHeader(rowHeader)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      <CenteredBox>
+                        {codeToText(rowHeader as keyof typeof localeDictionary)}
+                        {sortedHeader === rowHeader ? (
+                          sortOrder === "asc" ? (
+                            <ArrowUpIcon sx={{ marginLeft: "0.5rem", marginBottom: "0.15rem" }} />
+                          ) : (
+                            <ArrowDownIcon sx={{ marginLeft: "0.5rem" }} />
+                          )
+                        ) : null}
+                      </CenteredBox>
                     </TableCellStyled>
                   );
                 }
@@ -112,44 +158,56 @@ export const ListTable = <T extends Record<string, string | number>>({
             {(rowsPerPage > 0
               ? filteredValues.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : filteredValues
-            ).map((filteredItem) => {
-              const itemId = String(filteredItem.id); // Convertir a string
-              const open = Boolean(anchorEl[itemId]);
+            )
+              .sort((a, b) => {
+                const valueA = a[sortedHeader];
+                const valueB = b[sortedHeader];
 
-              return (
-                <TableRow key={itemId}>
-                  {header.map((headerItem, index) => (
-                    <TableCellStyled key={index} cellwidth="" header={false}>
-                      {headerItem === "joinedDate"
-                        ? formatDate(Number(filteredItem[headerItem]))
-                        : filteredItem[headerItem]}
-                    </TableCellStyled>
-                  ))}
-                  <TableCellStyledIcon header={false} sx={{}}>
-                    <TableIconButtonContainer
-                      aria-controls={open ? `menu-${itemId}` : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? "true" : undefined}
-                      onClick={(event) => handleOpenDropdown(event, itemId)}
-                    >
-                      <MoreVertIcon />
-                    </TableIconButtonContainer>
-                    <Menu
-                      id={`menu-${itemId}`}
-                      anchorEl={anchorEl[itemId]}
-                      open={open}
-                      onClose={() => handleCloseDropdown(itemId)}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
-                      <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
-                    </Menu>
-                  </TableCellStyledIcon>
-                </TableRow>
-              );
-            })}
+                if (typeof valueA === "number" && typeof valueB === "number") {
+                  return sortOrder === "desc" ? valueB - valueA : valueA - valueB;
+                } else if (typeof valueA === "string" && typeof valueB === "string") {
+                  return sortOrder === "desc" ? valueB.localeCompare(valueA) : valueA.localeCompare(valueB);
+                }
+                return 0;
+              })
+              .map((filteredItem) => {
+                const itemId = String(filteredItem.id); // Convertir a string
+                const open = Boolean(anchorEl[itemId]);
+
+                return (
+                  <TableRow key={itemId}>
+                    {header.map((headerItem, index) => (
+                      <TableCellStyled key={index} cellwidth="" header={false}>
+                        {headerItem === "joinedDate"
+                          ? formatDate(Number(filteredItem[headerItem]))
+                          : filteredItem[headerItem]}
+                      </TableCellStyled>
+                    ))}
+                    <TableCellStyledIcon header={false} sx={{}}>
+                      <TableIconButtonContainer
+                        aria-controls={open ? `menu-${itemId}` : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={(event) => handleOpenDropdown(event, itemId)}
+                      >
+                        <MoreVertIcon />
+                      </TableIconButtonContainer>
+                      <Menu
+                        id={`menu-${itemId}`}
+                        anchorEl={anchorEl[itemId]}
+                        open={open}
+                        onClose={() => handleCloseDropdown(itemId)}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
+                        <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
+                      </Menu>
+                    </TableCellStyledIcon>
+                  </TableRow>
+                );
+              })}
           </TableBody>
           <StyledTableFooter>
             <TableRow>
