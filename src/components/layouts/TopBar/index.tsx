@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { MenuOptionType } from "../../../models/interfaces/Other/IMenu";
 import { SearchTopBar, TopBarContainer } from "./TopBar.styled";
 import SearchIcon from "@mui/icons-material/Search";
-import { CenterdBox } from "../../Components.styled";
+import { CenteredBox } from "../../Components.styled";
 import { Typography } from "@mui/material";
 
 export const TopBar = () => {
@@ -44,10 +44,10 @@ export const TopBar = () => {
       {searchBox ? (
         <input placeholder={`/ ${currentMenuOption.label}`} />
       ) : (
-        <CenterdBox>
+        <CenteredBox>
           {currentMenuOption.component}
           <Typography>/ {currentMenuOption.label}</Typography>
-        </CenterdBox>
+        </CenteredBox>
       )}
       <SearchTopBar onClick={() => setSearchBox(true)}>
         <SearchIcon />

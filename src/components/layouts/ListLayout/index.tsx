@@ -4,23 +4,15 @@ import {
   FilterAlt as FilterIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import { CenterdBox, IconBox, PrimaryButton } from "../../Components.styled";
-import {
-  FiltersContainer,
-  ListLayoutContainer,
-  ListTitle,
-  ListTitleContainer,
-} from "./ListLayout.styled";
+import { CenteredBox, IconBox, PrimaryButton } from "../../Components.styled";
+import { FiltersContainer, ListLayoutContainer, ListTitle, ListTitleContainer } from "./ListLayout.styled";
 import { InputAdornment, TextField, Typography } from "@mui/material";
 import { ListTable } from "./ListTable";
 import { useState } from "react";
 import { ListManageItemModal } from "./ListManageItemModal";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-interface ListLayoutProps<
-  T1 extends { id: string; name: string },
-  T2 extends { id: string }
-> {
+interface ListLayoutProps<T1 extends { id: string; name: string }, T2 extends { id: string }> {
   title: string;
   list: T1[];
   data: T2[];
@@ -32,10 +24,7 @@ interface ListLayoutProps<
   updateItem: ActionCreatorWithPayload<T1>;
 }
 
-export const ListLayout = <
-  T1 extends { id: string; name: string },
-  T2 extends { id: string }
->({
+export const ListLayout = <T1 extends { id: string; name: string }, T2 extends { id: string }>({
   title,
   list,
   // data,
@@ -81,28 +70,24 @@ export const ListLayout = <
       ) : null}
       <ListTitleContainer>
         <ListTitle>{title}</ListTitle>
-        <CenterdBox>
-          <PrimaryButton
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => handleOpenModal("create")}
-          >
+        <CenteredBox>
+          <PrimaryButton variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenModal("create")}>
             Añadir {title.split("s")[0]}
           </PrimaryButton>
           <IconBox ml={1}>
             <DownloadIcon />
           </IconBox>
-        </CenterdBox>
+        </CenteredBox>
       </ListTitleContainer>
       <FiltersContainer>
-        <CenterdBox>
+        <CenteredBox>
           <Typography>Last activity date</Typography>
           <Typography>Created date</Typography>
           <Typography>Advanced Filters</Typography>
           <IconBox ml={1}>
             <FilterIcon />
           </IconBox>
-        </CenterdBox>
+        </CenteredBox>
         <TextField
           variant="outlined"
           placeholder="Buscar..."

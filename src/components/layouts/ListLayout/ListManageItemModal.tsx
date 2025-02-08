@@ -1,12 +1,22 @@
-import { Modal, Box, Typography, IconButton, TextField } from "@mui/material";
+import { Modal, Box, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useEffect, useState } from "react";
-import { CenterdBox, CenteredBoxBetween, ColumnJustifyFlex, PrimaryButton } from "../../Components.styled";
+import { useId, useState } from "react";
+import { CenteredBox, ColumnJustifyFlex, PrimaryButton, StartBoxBetween } from "../../Components.styled";
 import { convertToDate, convertToTimestamp } from "../../../utils/dates";
 import DatePicker from "react-datepicker";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import {
+  ModalFooter,
+  ModalFormTitle,
+  ModalIcon,
+  ModalInnerContainer,
+  ModalSubTitle,
+  ModalTitle,
+} from "./ListModal.styled";
+import { menuSections } from "../../SideMenu/SideMenuVariables";
+import { MenuOptionType } from "../../../models/interfaces/Other/IMenu";
 
 type CustomModalProps<T> = {
   show: boolean;
@@ -30,12 +40,14 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   updateItem,
 }: CustomModalProps<T>) => {
   const dispatch = useDispatch();
-
   const [managedItem, setManagedItem] = useState<T>(initialValue);
+
+  // We use it only when adding
+  const id = useId();
 
   // Add Item
   const handleAddItem = () => {
-    dispatch(addItem(managedItem));
+    dispatch(addItem({ ...managedItem, id }));
     onHide();
   };
 
@@ -48,7 +60,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   // Set the prop of Item with the right type
   const onChangeItemValue = <K extends keyof T>(key: K, value: unknown) => {
     let newValue = value;
-
+    console.log(typeof managedItem[key]);
     // If the value on T is type numeric we do the typechange before setting it
     if (typeof managedItem[key] === "number" && !isNaN(Number(value))) {
       newValue = Number(value);
@@ -60,43 +72,33 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
     }));
   };
 
-  useEffect(() => {
-    console.log(managedItem);
-    console.log(!Object.values(managedItem).every((prop) => prop || prop === "id"));
-    console.log(Object.values(managedItem));
-  }, [managedItem]);
-
   return (
     <Modal open={show} onClose={onHide} aria-labelledby="modal-title">
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          bgcolor: "white",
-          boxShadow: 24,
-          p: 3,
-          borderRadius: 2,
-        }}
-      >
+      <ModalInnerContainer>
         {/* MODAL HEADER */}
-        <CenteredBoxBetween>
-          <Typography id="modal-title" variant="h6">
-            {modalType === "create" ? `Crear ${title}` : `Editar ${title}`}
-          </Typography>
+        <StartBoxBetween>
+          <CenteredBox>
+            <ModalIcon>
+              {menuSections[1].items.find((menu: MenuOptionType) => menu.label === title.concat("s"))?.component}
+            </ModalIcon>
+            <ColumnJustifyFlex>
+              <ModalTitle id="modal-title">{modalType === "create" ? `Crear ${title}` : `Editar ${title}`}</ModalTitle>
+              <ModalSubTitle>
+                Llena el formulario para {modalType === "create" ? `crear` : `editar`} un {title}
+              </ModalSubTitle>
+            </ColumnJustifyFlex>
+          </CenteredBox>
           <IconButton onClick={onHide}>
             <CloseIcon />
           </IconButton>
-        </CenteredBoxBetween>
+        </StartBoxBetween>
         {/* MODAL BODY  */}
         <ColumnJustifyFlex sx={{ mt: 2 }}>
           {list.map((item) => {
             if (String(item.toLocaleLowerCase()).includes("date")) {
               return (
-                <CenteredBoxBetween key={item}>
-                  <Typography mr={1}>{codeToText(String(item) as keyof typeof localeDictionary)}:</Typography>
+                <ColumnJustifyFlex key={item}>
+                  <ModalFormTitle mr={1}>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
                   <Box>
                     <DatePicker
                       id="exampleDate"
@@ -111,12 +113,12 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                       }
                     />
                   </Box>
-                </CenteredBoxBetween>
+                </ColumnJustifyFlex>
               );
             } else {
               return (
-                <CenteredBoxBetween key={item}>
-                  <Typography mr={1}>{codeToText(String(item) as keyof typeof localeDictionary)}:</Typography>
+                <ColumnJustifyFlex key={item} mb={2}>
+                  <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
                   <TextField
                     key={item}
                     variant="outlined"
@@ -125,21 +127,21 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                     onChange={(e) => onChangeItemValue(item as keyof T, e.target.value)}
                     value={managedItem[item as keyof T]}
                   />
-                </CenteredBoxBetween>
+                </ColumnJustifyFlex>
               );
             }
           })}
         </ColumnJustifyFlex>
         {/* M0DAL FOOTER */}
-        <CenterdBox sx={{ float: "right" }} mt={2}>
+        <ModalFooter>
           <PrimaryButton
             onClick={modalType === "create" ? handleAddItem : handleUpdateItem}
             disabled={!Object.values(managedItem).every((prop, index) => prop || index === 0)}
           >
             {modalType === "create" ? `Crear ` : `Editar`}
           </PrimaryButton>
-        </CenterdBox>
-      </Box>
+        </ModalFooter>
+      </ModalInnerContainer>
     </Modal>
   );
 };

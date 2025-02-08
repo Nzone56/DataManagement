@@ -19,7 +19,6 @@ const addClient = async (client: Client) => {
 };
 
 const updateClient = async (client: Client) => {
-  console.log(client);
   const response = await fetch(`http://localhost:3000/clients/${client.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

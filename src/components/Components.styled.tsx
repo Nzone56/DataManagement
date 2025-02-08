@@ -6,7 +6,7 @@ export const ColumnJustifyFlex = styled(Box)({
   justifyContent: "center",
 });
 
-export const CenterdBox = styled(Box)({
+export const CenteredBox = styled(Box)({
   display: "flex",
   alignItems: "center",
 });
@@ -14,6 +14,12 @@ export const CenterdBox = styled(Box)({
 export const CenteredBoxBetween = styled(Box)({
   display: "flex",
   alignItems: "center",
+  justifyContent: "space-between",
+});
+
+export const StartBoxBetween = styled(Box)({
+  display: "flex",
+  alignItems: "flex-start",
   justifyContent: "space-between",
 });
 

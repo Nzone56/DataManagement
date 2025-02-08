@@ -1,7 +1,4 @@
-import {
-  Client,
-  ClientWorkLog,
-} from "../../../models/interfaces/Client/IClient";
+import { Client, ClientWorkLog } from "../../../models/interfaces/Client/IClient";
 
 export const InitialClient: Client = {
   id: "",

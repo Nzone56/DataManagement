@@ -79,14 +79,6 @@
       "nit": "909012345-6",
       "address": "Calle 26 #30-20, Bogotá",
       "joinedDate": 1642012800000
-    },
-    {
-      "id": "",
-      "name": "test",
-      "phone": "123",
-      "nit": "123",
-      "address": "123",
-      "joinedDate": 1738900580000
     }
   ],
   "clientWorkLogs": [
