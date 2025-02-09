@@ -46,7 +46,7 @@ export const ListTable = <T extends Record<string, string | number>>({
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
   const [sortedHeader, setSortedHeader] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-  //TODO: Fix full sort and not only on page
+
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null;
   }>({});
@@ -155,10 +155,7 @@ export const ListTable = <T extends Record<string, string | number>>({
             </TableRow>
           </StyledTableHeader>
           <TableBody>
-            {(rowsPerPage > 0
-              ? filteredValues.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : filteredValues
-            )
+            {filteredValues
               .sort((a, b) => {
                 const valueA = a[sortedHeader];
                 const valueB = b[sortedHeader];
@@ -170,6 +167,7 @@ export const ListTable = <T extends Record<string, string | number>>({
                 }
                 return 0;
               })
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((filteredItem) => {
                 const itemId = String(filteredItem.id);
                 const open = Boolean(anchorEl[itemId]);
