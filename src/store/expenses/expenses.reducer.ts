@@ -1,6 +1,15 @@
 import { combineReducers, createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { addExpenseConcept, fetchExpenseConcept, removeExpenseConcept, updateExpenseConcept } from "./expenses.actions";
-import { ExpenseConcept } from "../../models/interfaces/Expense/IExpense";
+import {
+  addExpense,
+  addExpenseConcept,
+  fetchExpenseConcepts,
+  fetchExpenses,
+  removeExpense,
+  removeExpenseConcept,
+  updateExpense,
+  updateExpenseConcept,
+} from "./expenses.actions";
+import { Expense, ExpenseConcept } from "../../models/interfaces/Expense/IExpense";
 import { toast } from "react-toastify";
 
 interface ExpenseConceptsReducer {
@@ -9,26 +18,38 @@ interface ExpenseConceptsReducer {
   error: string | null;
 }
 
-const initialState: ExpenseConceptsReducer = {
+const initialStateConcepts: ExpenseConceptsReducer = {
   expensesConcepts: [],
   loading: false,
   error: null,
 };
 
-export const expensesConceptsReducer = createReducer(initialState, (builder) => {
+interface ExpensesReducer {
+  expenses: Expense[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialStateExpenses: ExpensesReducer = {
+  expenses: [],
+  loading: false,
+  error: null,
+};
+
+export const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) => {
   builder
     // Fetch ExpenseConcepts
-    .addCase(fetchExpenseConcept.pending, (state) => ({
+    .addCase(fetchExpenseConcepts.pending, (state) => ({
       ...state,
       loading: true,
       error: null,
     }))
-    .addCase(fetchExpenseConcept.fulfilled, (state, action: PayloadAction<ExpenseConcept[]>) => ({
+    .addCase(fetchExpenseConcepts.fulfilled, (state, action: PayloadAction<ExpenseConcept[]>) => ({
       ...state,
       loading: false,
       expensesConcepts: action.payload,
     }))
-    .addCase(fetchExpenseConcept.rejected, (state, action) => {
+    .addCase(fetchExpenseConcepts.rejected, (state, action) => {
       toast.error("Error al obtener los conceptos de los gastos");
       return {
         ...state,
@@ -58,9 +79,7 @@ export const expensesConceptsReducer = createReducer(initialState, (builder) => 
     })
     .addCase(removeExpenseConcept.fulfilled, (state, action: PayloadAction<string>) => {
       state.loading = false;
-      state.expensesConcepts = state.expensesConcepts.filter(
-        (expensesConcept) => expensesConcept.id !== action.payload
-      );
+      state.expensesConcepts = state.expensesConcepts.filter((expenseConcept) => expenseConcept.id !== action.payload);
       toast.success("Concepto de gasto eliminado con éxito");
     })
     .addCase(removeExpenseConcept.rejected, (state, action) => {
@@ -75,7 +94,7 @@ export const expensesConceptsReducer = createReducer(initialState, (builder) => 
     })
     .addCase(updateExpenseConcept.fulfilled, (state, action: PayloadAction<ExpenseConcept>) => {
       state.loading = false;
-      const index = state.expensesConcepts.findIndex((expensesConcept) => expensesConcept.id === action.payload.id);
+      const index = state.expensesConcepts.findIndex((expenseConcept) => expenseConcept.id === action.payload.id);
       if (index !== -1) {
         state.expensesConcepts[index] = action.payload;
         toast.success("Concepto de gasto actualizado con éxito");
@@ -88,7 +107,78 @@ export const expensesConceptsReducer = createReducer(initialState, (builder) => 
     });
 });
 
+export const expensesManageReducer = createReducer(initialStateExpenses, (builder) => {
+  builder
+    // Fetch ExpenseConcepts
+    .addCase(fetchExpenses.pending, (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }))
+    .addCase(fetchExpenses.fulfilled, (state, action: PayloadAction<Expense[]>) => ({
+      ...state,
+      loading: false,
+      expenses: action.payload,
+    }))
+    .addCase(fetchExpenses.rejected, (state, action) => {
+      toast.error("Error al obtener los gastos");
+      return {
+        ...state,
+        loading: false,
+        error: action.error.message || "Error al obtener el gasto",
+      };
+    })
+
+    // Add Expense
+    .addCase(addExpense.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(addExpense.fulfilled, (state, action: PayloadAction<Expense>) => {
+      state.loading = false;
+      state.expenses.push(action.payload);
+      toast.success("Gasto añadido con éxito");
+    })
+    .addCase(addExpense.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al añadir el gasto";
+      toast.error(state.error);
+    })
+
+    // Delete Expense
+    .addCase(removeExpense.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(removeExpense.fulfilled, (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.expenses = state.expenses.filter((expenses) => expenses.id !== action.payload);
+      toast.success("Gasto eliminado con éxito");
+    })
+    .addCase(removeExpense.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al eliminar el gasto";
+      toast.error(state.error);
+    })
+
+    // Update Expense
+    .addCase(updateExpense.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateExpense.fulfilled, (state, action: PayloadAction<Expense>) => {
+      state.loading = false;
+      const index = state.expenses.findIndex((expense) => expense.id === action.payload.id);
+      if (index !== -1) {
+        state.expenses[index] = action.payload;
+        toast.success("Gasto actualizado con éxito");
+      }
+    })
+    .addCase(updateExpenseConcept.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al actualizar el concepto de gasto";
+      toast.error(state.error);
+    });
+});
+
 export const expensesReducer = combineReducers({
   concepts: expensesConceptsReducer,
-  // expenses: ExpensesReducer,
+  expenses: expensesManageReducer,
 });

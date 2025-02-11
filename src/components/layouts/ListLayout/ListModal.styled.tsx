@@ -54,3 +54,13 @@ export const ModalFooter = styled(Box)({
   alignSelf: "flex-end",
   marginTop: "auto",
 });
+
+export const ModalPickerPrev = styled(Box)<{
+  color: string;
+}>(({ color }) => ({
+  backgroundColor: color,
+  border: "1px solid black",
+  cursor: "pointer",
+  width: "25px",
+  height: "25px",
+}));

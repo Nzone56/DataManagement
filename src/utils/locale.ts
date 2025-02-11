@@ -10,6 +10,11 @@ export const localeDictionary = {
   nit: "NIT",
   address: "Dirección",
   type: "Tipo",
+  conceptId: "Concepto",
+  amount: "Cantidad",
+  date: "Fecha",
+  description: "Descripción",
+  color: "Color",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

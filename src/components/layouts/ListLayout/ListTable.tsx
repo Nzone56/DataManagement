@@ -13,7 +13,7 @@ import {
   TableIconButtonContainer,
   TableCellStyledIcon,
 } from "./ListLayout.styled";
-import { TableContainer, Table, TableRow, TableBody, TablePagination, Menu, MenuItem } from "@mui/material";
+import { TableContainer, Table, TableRow, TableBody, TablePagination, Menu, MenuItem, Typography } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { formatDate } from "../../../utils/dates";
 import { useEffect, useState } from "react";
@@ -22,6 +22,9 @@ import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 import { CenteredBox } from "../../Components.styled";
+import { ModalPickerPrev } from "./ListModal.styled";
+import { numberToCurrency } from "../../../utils/formatter";
+import { TableItemChip } from "./ui/TableItemChip";
 
 interface ListTableProps<T> {
   list: T[];
@@ -75,7 +78,6 @@ export const ListTable = <T extends Record<string, string | number>>({
   };
 
   // -- SORTING FUNCTIONS -- //
-
   const handleSortHeader = (headerName: string) => {
     if (sortOrder === "") {
       setSortedHeader(headerName);
@@ -129,7 +131,7 @@ export const ListTable = <T extends Record<string, string | number>>({
                       sx={{ cursor: "pointer" }}
                     >
                       <CenteredBox>
-                        {codeToText(rowHeader as keyof typeof localeDictionary)}
+                        <Typography>{codeToText(rowHeader as keyof typeof localeDictionary)}</Typography>
                         {sortedHeader === rowHeader ? (
                           sortOrder === "asc" ? (
                             <ArrowUpIcon sx={{ marginLeft: "0.5rem", marginBottom: "0.15rem" }} />
@@ -176,12 +178,23 @@ export const ListTable = <T extends Record<string, string | number>>({
                   <TableRow key={itemId}>
                     {header.map((headerItem, index) => (
                       <TableCellStyled key={index} cellwidth="" header={false}>
-                        {headerItem === "joinedDate"
-                          ? formatDate(Number(filteredItem[headerItem]))
-                          : filteredItem[headerItem]}
+                        {headerItem.toLocaleLowerCase().includes("date") ? (
+                          <Typography>{formatDate(Number(filteredItem[headerItem]))}</Typography>
+                        ) : headerItem.toLocaleLowerCase().includes("color") ? (
+                          <CenteredBox>
+                            <ModalPickerPrev color={String(filteredItem[headerItem])} />
+                            <Typography ml={1}>{filteredItem[headerItem]}</Typography>
+                          </CenteredBox>
+                        ) : headerItem.toLocaleLowerCase().includes("amount") ? (
+                          <Typography ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</Typography>
+                        ) : headerItem.toLocaleLowerCase().includes("id") ? (
+                          <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
+                        ) : (
+                          <Typography>{filteredItem[headerItem]}</Typography>
+                        )}
                       </TableCellStyled>
                     ))}
-                    <TableCellStyledIcon header={false} sx={{}}>
+                    <TableCellStyledIcon header={false}>
                       <TableIconButtonContainer
                         aria-controls={open ? `menu-${itemId}` : undefined}
                         aria-haspopup="true"

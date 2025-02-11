@@ -185,12 +185,20 @@
     {
       "id": "1",
       "name": "Agua",
-      "type": "Servicios Públicos"
+      "type": "Servicios Públicos",
+      "color": "#08274c"
     },
     {
       "id": "2",
       "name": "Transporte",
-      "type": "Movilidad"
+      "type": "Movilidad",
+      "color": "#f8e71c"
+    },
+    {
+      "id": ":rh:",
+      "name": "NUEVO CONCEPTO ",
+      "type": "JIJIJIJI",
+      "color": "#28032f"
     }
   ],
   "expenses": [
@@ -207,6 +215,27 @@
       "amount": 20000,
       "date": 1685654400000,
       "description": "Uber a casa"
+    },
+    {
+      "id": ":rb:",
+      "conceptId": "1",
+      "amount": 50000000,
+      "date": 1739236658976,
+      "description": "Pago agua mes marzo"
+    },
+    {
+      "id": ":ru:",
+      "conceptId": "2",
+      "amount": 300,
+      "date": 1739236658976,
+      "description": "trasnobrdo"
+    },
+    {
+      "id": ":r1i:",
+      "conceptId": ":rh:",
+      "amount": "asdasd",
+      "date": 1739236658976,
+      "description": "asdasd"
     }
   ]
 }

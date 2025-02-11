@@ -25,13 +25,11 @@ export const TopBar = () => {
       const item = section.items.find((item) => {
         if (item.subItems) {
           const subItem = item.subItems.find((subItem) => subItem.route === lastSegment);
-          console.log(subItem);
           if (subItem) return subItem;
         } else {
           return item.route === lastSegment;
         }
       });
-      console.log(lastSegment, section.items);
       if (item) {
         return item;
       }

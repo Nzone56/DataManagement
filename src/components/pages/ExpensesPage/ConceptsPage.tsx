@@ -3,7 +3,7 @@ import { ListLayout } from "../../layouts/ListLayout";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addExpenseConcept,
-  fetchExpenseConcept,
+  fetchExpenseConcepts,
   removeExpenseConcept,
   updateExpenseConcept,
 } from "../../../store/expenses/expenses.actions";
@@ -16,6 +16,7 @@ const InitialExpenseConcept: ExpenseConcept = {
   id: "",
   name: "",
   type: "",
+  color: "",
 };
 
 const ExpenseConceptWorkLogs: ExpenseConceptWorkLog[] = [
@@ -33,7 +34,7 @@ export const ConceptsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchExpenseConcept());
+    dispatch(fetchExpenseConcepts());
     //eslint-disable-next-line
   }, []);
 

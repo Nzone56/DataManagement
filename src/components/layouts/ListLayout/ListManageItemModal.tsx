@@ -1,24 +1,17 @@
-import { Modal, Box, IconButton, TextField } from "@mui/material";
+import { Modal, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useId, useState } from "react";
 import { CenteredBox, ColumnJustifyFlex, PrimaryButton, StartBoxBetween } from "../../Components.styled";
-import { convertToDate, convertToTimestamp } from "../../../utils/dates";
-import DatePicker from "react-datepicker";
-import { codeToText, localeDictionary } from "../../../utils/locale";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import {
-  ModalBody,
-  ModalFooter,
-  ModalFormTitle,
-  ModalIcon,
-  ModalInnerContainer,
-  ModalSubTitle,
-  ModalTitle,
-} from "./ListModal.styled";
+import { ModalBody, ModalFooter, ModalIcon, ModalInnerContainer, ModalSubTitle, ModalTitle } from "./ListModal.styled";
 import { menuSections } from "../../SideMenu/SideMenuVariables";
 import { MenuOptionType } from "../../../models/interfaces/Other/IMenu";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
+import { ModalDatePicker } from "./ui/ModalDatePicker";
+import { ModalSimpleInput } from "./ui/ModalSimpleInput";
+import { ModalSelectItem } from "./ui/ModalSelectItem";
+import { ModalColorPicker } from "./ui/ModalColorPicker";
 
 type CustomModalProps<T> = {
   show: boolean;
@@ -62,7 +55,6 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   // Set the prop of Item with the right type
   const onChangeItemValue = <K extends keyof T>(key: K, value: unknown) => {
     let newValue = value;
-    console.log(typeof managedItem[key]);
     // If the value on T is type numeric we do the typechange before setting it
     if (typeof managedItem[key] === "number" && !isNaN(Number(value))) {
       newValue = Number(value);
@@ -93,47 +85,56 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
           <IconButton onClick={onHide}>
             <CloseIcon />
           </IconButton>
+          {}
         </StartBoxBetween>
         {/* MODAL BODY  */}
-        <ModalBody sx={{ mt: 2, height: "calc(75vh - 140px)", overflowX: "auto" }}>
+
+        <ModalBody>
           {list.map((item) => {
+            // DATE PICKER
             if (String(item.toLocaleLowerCase()).includes("date")) {
               return (
-                <ColumnJustifyFlex key={item}>
-                  <ModalFormTitle mr={1}>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
-                  <Box>
-                    <DatePicker
-                      id="exampleDate"
-                      name="date"
-                      onChange={(date) => onChangeItemValue(item as keyof T, convertToTimestamp(String(date)))}
-                      selected={
-                        typeof managedItem[item] === "number"
-                          ? convertToDate(managedItem[item])
-                          : typeof managedItem[item] === "string" && !isNaN(Number(managedItem[item]))
-                          ? convertToDate(Number(managedItem[item]))
-                          : null
-                      }
-                    />
-                  </Box>
-                </ColumnJustifyFlex>
+                <ModalDatePicker
+                  key={item}
+                  item={item}
+                  managedItem={managedItem}
+                  onChangeItemValue={onChangeItemValue}
+                />
               );
+              // COLOR PICKER
+            } else if (String(item.toLocaleLowerCase()).includes("color")) {
+              return (
+                <ModalColorPicker
+                  key={item}
+                  item={item}
+                  managedItem={managedItem}
+                  onChangeItemValue={onChangeItemValue}
+                />
+              );
+              // SELECT WITH TYPE
+            } else if (String(item.toLocaleLowerCase()).includes("id")) {
+              return (
+                <ModalSelectItem
+                  key={item}
+                  item={item}
+                  managedItem={managedItem}
+                  onChangeItemValue={onChangeItemValue}
+                />
+              );
+              // SIMPLE INPUT
             } else {
               return (
-                <ColumnJustifyFlex key={item} mb={2}>
-                  <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
-                  <TextField
-                    key={item}
-                    variant="outlined"
-                    placeholder={`${codeToText(String(item) as keyof typeof localeDictionary).toLocaleLowerCase()}...`}
-                    size="small"
-                    onChange={(e) => onChangeItemValue(item as keyof T, e.target.value)}
-                    value={managedItem[item as keyof T]}
-                  />
-                </ColumnJustifyFlex>
+                <ModalSimpleInput
+                  key={item}
+                  item={item}
+                  managedItem={managedItem}
+                  onChangeItemValue={onChangeItemValue}
+                />
               );
             }
           })}
         </ModalBody>
+
         {/* M0DAL FOOTER */}
         <ModalFooter>
           <PrimaryButton

@@ -1,4 +1,4 @@
-import { Box, IconButton, Paper, styled, TableCell, TableFooter, TableHead } from "@mui/material";
+import { Box, Chip, IconButton, Paper, styled, TableCell, TableFooter, TableHead } from "@mui/material";
 
 export const ListLayoutContainer = styled(Box)({
   display: "flex",
@@ -104,3 +104,15 @@ export const StyledTableFooter = styled(TableFooter)({
   backgroundColor: "#f4f4f4",
   border: "1px solid #e0e0e0",
 });
+
+export const StyledChip = styled(Chip)<{ chipcolor: string; chipTextColor: string }>(
+  ({ chipcolor, chipTextColor }) => ({
+    backgroundColor: chipcolor,
+    color: chipTextColor,
+    border: `1px solid ${chipcolor}`,
+    "> span": {
+      fontWeight: 500,
+      fontSize: "1rem",
+    },
+  })
+);
