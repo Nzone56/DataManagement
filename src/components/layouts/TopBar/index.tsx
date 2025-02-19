@@ -17,33 +17,41 @@ export const TopBar = () => {
     route: "",
   });
 
-  const getMenuTitleByRoute = () => {
-    //TODO: Fix full ruote
-    // const lastSegment = location.pathname.split("/").pop();
-    const lastSegment = location.pathname;
+  const getMenuOptionByRoute = (): MenuOptionType => {
+    const currentPath = location.pathname; // Ruta completa
+
     for (const section of menuSections) {
       const item = section.items.find((item) => {
         if (item.subItems) {
-          const subItem = item.subItems.find((subItem) => subItem.route === lastSegment);
-          if (subItem) return subItem;
-        } else {
-          return item.route === lastSegment;
+          const subItem = item.subItems.find((sub) => sub.route === currentPath);
+          if (subItem) {
+            return subItem;
+          }
         }
+        return item.route === currentPath;
       });
+
       if (item) {
+        if (item.subItems) {
+          const subItem = item.subItems.find((sub) => sub.route === currentPath);
+          if (subItem) {
+            return {
+              id: subItem.id,
+              component: item.component,
+              label: `${item.label} / ${subItem.label}`,
+              route: subItem.route,
+            };
+          }
+        }
         return item;
       }
     }
-    return {
-      id: "",
-      component: null,
-      label: "",
-      route: "",
-    };
+
+    return { id: "", component: null, label: "", route: "" };
   };
 
   useEffect(() => {
-    setCurrentMenuOption(getMenuTitleByRoute());
+    setCurrentMenuOption(getMenuOptionByRoute());
     //eslint-disable-next-line
   }, [location.pathname]);
 

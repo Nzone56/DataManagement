@@ -12,13 +12,25 @@ export const getOptionsType = (name: string) => {
   return match[1];
 };
 
-export const getComplementaryColor = (rgbColor: string): string => {
-  const match = rgbColor.match(/\d+/g);
-  if (!match || match.length < 3) return "#000";
+export const getComplementaryColor = (hexColor: string): string => {
+  let hex = hexColor.replace("#", "");
 
-  const [r, g, b] = match.map(Number);
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
 
+  if (hex.length !== 6) return "#000";
+
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Calcular la luminosidad
   const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-  return luminance > 128 ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
+  // Determinar el color del texto basado en la luminosidad
+  return luminance > 150 ? "#000000" : "#FFFFFF"; // Negro si el fondo es claro, blanco si es oscuro
 };

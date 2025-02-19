@@ -62,7 +62,7 @@ const addExpense = async (expense: Expense) => {
 };
 
 const updateExpense = async (expense: Expense) => {
-  const response = await fetch(`${API_URL_EXPENSES}${expense.id}`, {
+  const response = await fetch(`${API_URL_EXPENSES}/${expense.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(expense),

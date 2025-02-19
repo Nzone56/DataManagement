@@ -186,7 +186,7 @@
       "id": "1",
       "name": "Agua",
       "type": "Servicios Públicos",
-      "color": "#08274c"
+      "color": "#1a64cd"
     },
     {
       "id": "2",
@@ -198,7 +198,13 @@
       "id": ":rh:",
       "name": "NUEVO CONCEPTO ",
       "type": "JIJIJIJI",
-      "color": "#28032f"
+      "color": "#d0021b"
+    },
+    {
+      "id": ":r8l:",
+      "name": "Gastos de limpieza",
+      "type": "Servicios de limpieza",
+      "color": "#0af34f"
     }
   ],
   "expenses": [
@@ -219,23 +225,23 @@
     {
       "id": ":rb:",
       "conceptId": "1",
-      "amount": 50000000,
+      "amount": 70000,
       "date": 1739236658976,
-      "description": "Pago agua mes marzo"
+      "description": "Pago reconexión servicio"
     },
     {
       "id": ":ru:",
       "conceptId": "2",
-      "amount": 300,
+      "amount": 3000,
       "date": 1739236658976,
-      "description": "trasnobrdo"
+      "description": "Trasbordo"
     },
     {
-      "id": ":r1i:",
-      "conceptId": ":rh:",
-      "amount": "asdasd",
-      "date": 1739236658976,
-      "description": "asdasd"
+      "id": ":r9k:",
+      "conceptId": ":r8l:",
+      "amount": 100000,
+      "date": 1739934037296,
+      "description": "Servivcios de limpieza dia 18 de Febrero"
     }
   ]
 }

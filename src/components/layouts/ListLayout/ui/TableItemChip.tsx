@@ -18,7 +18,7 @@ export const TableItemChip = ({ id, title }: { id: string; title: string }) => {
     <StyledChip
       label={getPropById(id, items, "name")}
       chipcolor={chipColor}
-      chipTextColor={getComplementaryColor(chipColor)}
+      chiptextcolor={getComplementaryColor(chipColor)}
     />
   );
 };

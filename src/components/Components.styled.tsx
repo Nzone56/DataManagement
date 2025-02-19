@@ -6,6 +6,12 @@ export const ColumnJustifyFlex = styled(Box)({
   justifyContent: "center",
 });
 
+export const ColumnAlignFlex = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+});
+
 export const CenteredBox = styled(Box)({
   display: "flex",
   alignItems: "center",

@@ -45,7 +45,11 @@ export const ModalColorPicker = <T extends Record<string, unknown>>({
       <ModalPickerPrev color={String(managedItem[item as keyof T])} onClick={() => setOpenPicker((prev) => !prev)} />
       {openPicker ? (
         <Box style={{ width: "220px" }} ref={pickerRef}>
-          <SketchPicker onChangeComplete={handleChangeColor} color={String(managedItem[item as keyof T])} />
+          <SketchPicker
+            onChangeComplete={handleChangeColor}
+            onChange={handleChangeColor}
+            color={String(managedItem[item as keyof T])}
+          />
         </Box>
       ) : null}
     </ColumnJustifyFlex>

@@ -58,7 +58,7 @@ export const ListLayout = <T1 extends { id: string }, T2 extends { id: string }>
     <ListLayoutContainer>
       {modalState.open ? (
         <ListManageItemModal
-          title={title.split("s")[0]}
+          title={title.replace(/s$/, "")}
           show={modalState.open}
           modalType={modalState.mode}
           onHide={handleCloseModal}
@@ -72,7 +72,7 @@ export const ListLayout = <T1 extends { id: string }, T2 extends { id: string }>
         <ListTitle>{title}</ListTitle>
         <CenteredBox>
           <PrimaryButton variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenModal("create")}>
-            Añadir {title.split("s")[0]}
+            Añadir {title.replace(/s$/, "")}
           </PrimaryButton>
           <IconBox ml={1}>
             <DownloadIcon />

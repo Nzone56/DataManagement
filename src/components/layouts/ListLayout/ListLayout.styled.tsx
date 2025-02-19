@@ -105,10 +105,10 @@ export const StyledTableFooter = styled(TableFooter)({
   border: "1px solid #e0e0e0",
 });
 
-export const StyledChip = styled(Chip)<{ chipcolor: string; chipTextColor: string }>(
-  ({ chipcolor, chipTextColor }) => ({
+export const StyledChip = styled(Chip)<{ chipcolor: string; chiptextcolor: string }>(
+  ({ chipcolor, chiptextcolor }) => ({
     backgroundColor: chipcolor,
-    color: chipTextColor,
+    color: chiptextcolor,
     border: `1px solid ${chipcolor}`,
     "> span": {
       fontWeight: 500,

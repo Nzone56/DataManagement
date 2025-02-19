@@ -7,6 +7,7 @@ import { ClientsPage } from "../components/pages/ClientsPage";
 import { LawyersPage } from "../components/pages/LawyersPage";
 import { ConceptsPage } from "../components/pages/ExpensesPage/ConceptsPage";
 import { ManagePage } from "../components/pages/ExpensesPage/ManagePage";
+import { StatsPage } from "../components/pages/StatsPage";
 
 export const router = createBrowserRouter(
   [
@@ -39,6 +40,11 @@ export const router = createBrowserRouter(
     {
       path: "/expenses/manage",
       element: <ManagePage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/statistics",
+      element: <StatsPage />,
       loader: restrictAccess,
     },
   ],
