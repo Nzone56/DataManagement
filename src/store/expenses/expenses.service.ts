@@ -30,7 +30,6 @@ const updateExpenseConcept = async (expensesConcept: ExpenseConcept) => {
 };
 
 const removeExpenseConcept = async (id: string) => {
-  console.log();
   const response = await fetch(`${API_URL_CONCEPTS}/${id}`, { method: "DELETE" });
   return await response.json();
 };

@@ -1,8 +1,8 @@
 import { Box, styled } from "@mui/material";
 
-export const StatsContainer = styled(Box)({
+export const SettingsLayoutContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  margin: "16px",
   flexGrow: 1,
+  padding: "16px",
 });

@@ -16,7 +16,7 @@ export const LandingPageCard = styled(Box)({
   backgroundColor: "white",
   height: "90%",
   width: "90%",
-  borderRadius: "1rem",
+  borderRadius: "16px",
 });
 
 export const LandingPageLogin = styled(Box)({
@@ -26,7 +26,7 @@ export const LandingPageLogin = styled(Box)({
   backgroundColor: "white",
   width: "50%",
   color: "black",
-  padding: "2rem 5rem",
+  padding: "32px 76px",
 });
 
 export const LandingPagePreview = styled(Box)(({ theme }) => ({
@@ -35,20 +35,18 @@ export const LandingPagePreview = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   flexDirection: "column",
   backgroundColor: theme.palette.primary.main,
-  margin: "1rem",
-  padding: "1rem",
-  width: "calc(50% - 2rem)",
-  height: "calc(100% - 2rem)",
-  borderRadius: "1rem",
+  margin: "16px",
+  padding: "16px",
+  width: "calc(50% - 32px)",
+  height: "calc(100% - 32px)",
+  borderRadius: "16px",
   color: "white",
 }));
 
 export const LandingPageTitle = styled(Typography)({
-  fontSize: "1.5rem",
   fontWeight: "500",
 });
 
 export const LandingPageSubTitle = styled(Typography)({
-  fontSize: "0.9rem",
   fontWeight: "400",
 });

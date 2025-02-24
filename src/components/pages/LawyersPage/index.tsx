@@ -5,27 +5,18 @@ import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../store/lawyers/lawyers.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { Lawyer, LawyerWorkLog } from "../../../models/interfaces/Lawyer/ILawyer";
+import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
 
 const InitialLawyer: Lawyer = {
   id: "",
-  firstName: "",
-  lastName: "",
+  name: "",
   phone: "",
   cc: "",
   email: "",
-  joinedDate: Date.now(),
+  position: "",
+  address: "",
+  entryDate: Date.now(),
 };
-
-const LawyerWorkLogs: LawyerWorkLog[] = [
-  {
-    id: "",
-    lawyerId: "",
-    hoursWorked: 0,
-    month: 0,
-    year: 0,
-  },
-];
 
 export const LawyersPage = () => {
   const { lawyers, loading } = useSelector(getLawyers);
@@ -46,7 +37,6 @@ export const LawyersPage = () => {
             title="Abogados"
             list={lawyers}
             initialDataItem={InitialLawyer}
-            data={LawyerWorkLogs}
             header={Object.keys(lawyers[0])?.filter((headItem) => headItem !== "id")}
             addItem={addLawyer}
             updateItem={updateLawyer}

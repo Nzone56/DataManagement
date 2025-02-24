@@ -13,40 +13,38 @@ import { ListManageItemModal } from "./ListManageItemModal";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../../../store/store";
 
-interface ListLayoutProps<T1 extends { id: string }, T2 extends { id: string }> {
+interface ListLayoutProps<T extends { id: string }> {
   title: string;
-  list: T1[];
-  data: T2[];
+  list: T[];
   header: string[];
-  initialDataItem: T1;
+  initialDataItem: T;
   loading: boolean;
-  addItem: AsyncThunk<T1, T1, ThunkApiConfig>;
+  addItem: AsyncThunk<T, T, ThunkApiConfig>;
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
-  updateItem: AsyncThunk<T1, T1, ThunkApiConfig>;
+  updateItem: AsyncThunk<T, T, ThunkApiConfig>;
 }
 
-export const ListLayout = <T1 extends { id: string }, T2 extends { id: string }>({
+export const ListLayout = <T extends { id: string }>({
   title,
   list,
-  // data,
   header,
   initialDataItem,
   // loading,
   addItem,
   removeItem,
   updateItem,
-}: ListLayoutProps<T1, T2>) => {
+}: ListLayoutProps<T>) => {
   const [searchState, setSearchState] = useState<string>("");
   const [modalState, setModalState] = useState<{
     open: boolean;
     mode: "create" | "edit";
-    data?: T1;
+    data?: T;
   }>({
     open: false,
     mode: "create",
   });
 
-  const handleOpenModal = (mode: "create" | "edit", data?: T1) => {
+  const handleOpenModal = (mode: "create" | "edit", data?: T) => {
     setModalState({ open: true, mode, data });
   };
 
@@ -69,7 +67,7 @@ export const ListLayout = <T1 extends { id: string }, T2 extends { id: string }>
         />
       ) : null}
       <ListTitleContainer>
-        <ListTitle>{title}</ListTitle>
+        <ListTitle variant="h1">{title}</ListTitle>
         <CenteredBox>
           <PrimaryButton variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenModal("create")}>
             Añadir {title.replace(/s$/, "")}

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { Expense, ExpenseWorklog } from "../../../models/interfaces/Expense/IExpense";
+import { Expense } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenses } from "../../../store/expenses/expenses.selector";
 import {
   addExpense,
@@ -22,17 +22,7 @@ const InitialExpense: Expense = {
   description: "",
 };
 
-const ExpenseWorkLog: ExpenseWorklog[] = [
-  {
-    id: "",
-    conceptId: "",
-    amount: 0,
-    date: Date.now(),
-    description: "",
-  },
-];
-
-export const ManagePage = () => {
+export const OperatingPage = () => {
   const { expenses, loading } = useSelector(getExpenses);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,7 +42,6 @@ export const ManagePage = () => {
             title="Gastos"
             list={expenses}
             initialDataItem={InitialExpense}
-            data={ExpenseWorkLog}
             header={Object.keys(expenses[0])?.filter((headItem) => headItem !== "id")}
             addItem={addExpense}
             updateItem={updateExpense}

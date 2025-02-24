@@ -45,7 +45,7 @@ export const LandingPage = () => {
     <LandingPageContainer>
       <LandingPageCard>
         <LandingPageLogin>
-          <LandingPageTitle>Empieza ahora</LandingPageTitle>
+          <LandingPageTitle variant="h2">Empieza ahora</LandingPageTitle>
           <LandingPageSubTitle>Ingresa tus credenciales para acceder a tu cuenta</LandingPageSubTitle>
           <ColumnJustifyFlex mt={4} mb={1}>
             <ModalFormTitle>Correo:</ModalFormTitle>
@@ -60,7 +60,7 @@ export const LandingPage = () => {
           </PrimaryButton>
         </LandingPageLogin>
         <LandingPagePreview>
-          <LandingPageTitle>Una manera simple de manejar tu trabajo</LandingPageTitle>
+          <LandingPageTitle variant="h2">Una manera simple de manejar tu trabajo</LandingPageTitle>
           <LandingPageSubTitle>Ingresa tus credenciales para acceder a tu cuenta</LandingPageSubTitle>
         </LandingPagePreview>
       </LandingPageCard>

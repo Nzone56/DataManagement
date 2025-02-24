@@ -28,7 +28,6 @@ export const SideMenuContainer = styled(Box, {
 export const SideMenuTitle = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "animate",
 })<{ animate: boolean }>(({ animate }) => ({
-  fontSize: "0.9rem",
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.5s ease-in-out` : "none",
   transition: "opacity 0.5s ease-in-out",
@@ -39,7 +38,7 @@ export const SideMenuSubTitle = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "animate",
 })<{ animate: boolean }>(({ animate, theme }) => ({
   color: theme.palette.secondary.contrastText,
-  fontSize: "0.7rem",
+  fontSize: "1.3rem",
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
   transition: "opacity 0.5s ease-in-out",
@@ -49,13 +48,13 @@ export const SideMenuSubTitle = styled(Typography, {
 export const MenuHeader = styled(Box)({
   display: "flex",
   alignItems: "center",
-  fontSize: "0.9rem",
-  marginBottom: "1rem",
-  paddingTop: "1rem",
+  fontSize: "1.4rem",
+  marginBottom: "16px",
+  paddingTop: "16px",
 });
 
 export const MenuSection = styled("section")({
-  marginTop: "1rem",
+  marginTop: "16px",
 });
 
 export const MenuHr = styled("hr")({
@@ -107,9 +106,9 @@ export const MenuOption = styled(Box, {
   },
   // TEXT STYLES
   "& span": {
-    marginLeft: "1rem",
+    marginLeft: "16px",
     fontWeight: "500",
-    fontSize: "0.8rem",
+    fontSize: "1.4rem",
     opacity: animate ? 1 : 0,
     animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
     transition: "opacity 0.5s ease-in-out",

@@ -1,184 +1,220 @@
 {
+  "settings": {
+    "theme": "light",
+    "dateFormat": "text"
+  },
   "clients": [
     {
       "id": "1",
       "name": "Tech Solutions S.A.S",
+      "repLegal": "Juan Pérez",
       "phone": "+57 310 1234567",
-      "nit": "900123456-7",
-      "address": "Cra 10 #15-30, Bogotá",
+      "nitcc": "900123456-7",
+      "address": "Cra 10 #15-30",
+      "city": "Bogotá",
+      "email": "contacto@techsolutions.com",
       "joinedDate": 1652145600000
     },
     {
       "id": "2",
       "name": "Innovatech Ltda.",
+      "repLegal": "María Gómez",
       "phone": "+57 320 2345678",
-      "nit": "901234567-8",
-      "address": "Calle 45 #20-50, Bogotá",
+      "nitcc": "901234567-8",
+      "address": "Calle 45 #20-50",
+      "city": "Bogotá",
+      "email": "info@innovatech.com",
       "joinedDate": 1692050400000
     },
     {
       "id": "3",
       "name": "DigitalWeb S.A.",
+      "repLegal": "Carlos Rodríguez",
       "phone": "+57 300 3456789",
-      "nit": "902345678-9",
-      "address": "Av. Caracas #30-40, Bogotá",
+      "nitcc": "902345678-9",
+      "address": "Av. Caracas #30-40",
+      "city": "Bogotá",
+      "email": "support@digitalweb.com",
       "joinedDate": 1637366400000
     },
     {
       "id": "4",
       "name": "DataCorp S.A.S.",
+      "repLegal": "Ana Martínez",
       "phone": "+57 311 4567890",
-      "nit": "903456789-0",
-      "address": "Cra 50 #10-20, Bogotá",
+      "nitcc": "903456789-0",
+      "address": "Cra 50 #10-20",
+      "city": "Bogotá",
+      "email": "contact@datacorp.com",
       "joinedDate": 1583116800000
     },
     {
       "id": "5",
       "name": "SoftDev Ltda",
+      "repLegal": "Fernando López",
       "phone": "+57 312 5678901",
-      "nit": "904567890-1",
-      "address": "Calle 80 #25-35, Bogotá",
+      "nitcc": "904567890-1",
+      "address": "Calle 80 #25-35",
+      "city": "Bogotá",
+      "email": "info@softdev.com",
       "joinedDate": 1704854400000
     },
     {
       "id": "6",
       "name": "CloudTech S.A.S.",
+      "repLegal": "Sofía Ramírez",
       "phone": "+57 313 6789012",
-      "nit": "905678901-2",
-      "address": "Av. Suba #100-50, Bogotá",
+      "nitcc": "905678901-2",
+      "address": "Av. Suba #100-50",
+      "city": "Bogotá",
+      "email": "support@cloudtech.com",
       "joinedDate": 1612137600000
     },
     {
       "id": "7",
       "name": "AI Solutions S.A.",
+      "repLegal": "Javier Castro",
       "phone": "+57 314 7890123",
-      "nit": "906789012-3",
-      "address": "Calle 170 #15-60, Bogotá",
+      "nitcc": "906789012-3",
+      "address": "Calle 170 #15-60",
+      "city": "Bogotá",
+      "email": "ai@aisolutions.com",
       "joinedDate": 1596403200000
     },
     {
       "id": "8",
       "name": "RedNet Ltda.",
+      "repLegal": "Paula Torres",
       "phone": "+57 315 8901234",
-      "nit": "907890123-4",
-      "address": "Cra 7 #45-55, Bogotá",
+      "nitcc": "907890123-4",
+      "address": "Cra 7 #45-55",
+      "city": "Bogotá",
+      "email": "contact@rednet.com",
       "joinedDate": 1625318400000
     },
     {
       "id": "9",
       "name": "CyberTech S.A.S.",
+      "repLegal": "Andrés Vega",
       "phone": "+57 316 9012345",
-      "nit": "908901234-5",
-      "address": "Av. Boyacá #90-40, Bogotá",
+      "nitcc": "908901234-5",
+      "address": "Av. Boyacá #90-40",
+      "city": "Bogotá",
+      "email": "support@cybertech.com",
       "joinedDate": 1662998400000
     },
     {
       "id": "10",
       "name": "Ecommerce Pro Ltda.",
+      "repLegal": "Verónica Herrera",
       "phone": "+57 317 0123456",
-      "nit": "909012345-6",
-      "address": "Calle 26 #30-20, Bogotá",
+      "nitcc": "909012345-6",
+      "address": "Calle 26 #30-20",
+      "city": "Bogotá",
+      "email": "info@ecommercepro.com",
       "joinedDate": 1642012800000
-    },
-    {
-      "id": ":r23:",
-      "name": "Amorcito",
-      "phone": "3123123",
-      "nit": "123123",
-      "address": "12312312",
-      "joinedDate": 1739058676171
     }
   ],
   "lawyers": [
     {
       "id": "1",
-      "firstName": "Carlos",
-      "lastName": "Martínez",
+      "name": "Carlos Martínez",
       "phone": "3123456789",
-      "cc": 1234567890,
+      "cc": "1234567890",
       "email": "carlos.martinez@firma.com",
-      "joinedDate": 1617552000000
+      "position": "Senior Lawyer",
+      "address": "Calle 123, Bogotá",
+      "entryDate": 1617552000000
     },
     {
       "id": "2",
-      "firstName": "Ana",
-      "lastName": "González",
+      "name": "Ana González",
       "phone": "3109876543",
-      "cc": 9876543210,
+      "cc": "9876543210",
       "email": "ana.gonzalez@firma.com",
-      "joinedDate": 1620057600000
+      "position": "Associate Lawyer",
+      "address": "Carrera 45, Medellín",
+      "entryDate": 1620057600000
     },
     {
       "id": "3",
-      "firstName": "Luis",
-      "lastName": "Ramírez",
+      "name": "Luis Ramírez",
       "phone": "3001234567",
-      "cc": 1928374650,
+      "cc": "1928374650",
       "email": "luis.ramirez@firma.com",
-      "joinedDate": 1630464000000
+      "position": "Junior Lawyer",
+      "address": "Avenida 10, Cali",
+      "entryDate": 1630464000000
     },
     {
       "id": "4",
-      "firstName": "Sofía",
-      "lastName": "Pérez",
+      "name": "Sofía Pérez",
       "phone": "3056789012",
-      "cc": 1122334455,
+      "cc": "1122334455",
       "email": "sofia.perez@firma.com",
-      "joinedDate": 1640995200000
+      "position": "Legal Advisor",
+      "address": "Calle 22, Barranquilla",
+      "entryDate": 1640995200000
     },
     {
       "id": "5",
-      "firstName": "Pedro",
-      "lastName": "López",
+      "name": "Pedro López",
       "phone": "3176543210",
-      "cc": 5678901234,
+      "cc": "5678901234",
       "email": "pedro.lopez@firma.com",
-      "joinedDate": 1651411200000
+      "position": "Partner",
+      "address": "Calle 50, Cartagena",
+      "entryDate": 1651411200000
     },
     {
       "id": "6",
-      "firstName": "Marta",
-      "lastName": "Sánchez",
+      "name": "Marta Sánchez",
       "phone": "3123456789",
-      "cc": 1239876543,
+      "cc": "1239876543",
       "email": "marta.sanchez@firma.com",
-      "joinedDate": 1654027200000
+      "position": "Corporate Lawyer",
+      "address": "Carrera 7, Bucaramanga",
+      "entryDate": 1654027200000
     },
     {
       "id": "7",
-      "firstName": "José",
-      "lastName": "Martínez",
+      "name": "José Martínez",
       "phone": "3198765432",
-      "cc": 3456789012,
+      "cc": "3456789012",
       "email": "jose.martinez@firma.com",
-      "joinedDate": 1664534400000
+      "position": "Litigation Lawyer",
+      "address": "Calle 80, Pereira",
+      "entryDate": 1664534400000
     },
     {
       "id": "8",
-      "firstName": "Claudia",
-      "lastName": "Fernández",
+      "name": "Claudia Fernández",
       "phone": "3198765432",
-      "cc": 2345678901,
+      "cc": "2345678901",
       "email": "claudia.fernandez@firma.com",
-      "joinedDate": 1674124800000
+      "position": "Family Lawyer",
+      "address": "Carrera 15, Manizales",
+      "entryDate": 1674124800000
     },
     {
       "id": "9",
-      "firstName": "Fernando",
-      "lastName": "Díaz",
+      "name": "Fernando Díaz",
       "phone": "3145678901",
-      "cc": 7654321098,
+      "cc": "7654321098",
       "email": "fernando.diaz@firma.com",
-      "joinedDate": 1685654400000
+      "position": "Tax Lawyer",
+      "address": "Calle 60, Cúcuta",
+      "entryDate": 1685654400000
     },
     {
       "id": "10",
-      "firstName": "Isabel",
-      "lastName": "García",
+      "name": "Isabel García",
       "phone": "3176549870",
-      "cc": 9876541230,
+      "cc": "9876541230",
       "email": "isabel.garcia@firma.com",
-      "joinedDate": 1696435200000
+      "position": "Environmental Lawyer",
+      "address": "Carrera 12, Villavicencio",
+      "entryDate": 1696435200000
     }
   ],
   "expensesConcepts": [

@@ -6,8 +6,10 @@ import { HomePage } from "../components/pages/HomePage";
 import { ClientsPage } from "../components/pages/ClientsPage";
 import { LawyersPage } from "../components/pages/LawyersPage";
 import { ConceptsPage } from "../components/pages/ExpensesPage/ConceptsPage";
-import { ManagePage } from "../components/pages/ExpensesPage/ManagePage";
+import { OperatingPage } from "../components/pages/ExpensesPage/OperatingPage";
 import { StatsPage } from "../components/pages/StatsPage";
+import { SettingsPage } from "../components/pages/SettingsPage";
+import { FeesPage } from "../components/pages/ExpensesPage/FeesPage";
 
 export const router = createBrowserRouter(
   [
@@ -20,6 +22,11 @@ export const router = createBrowserRouter(
     {
       path: "/home",
       element: <HomePage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/settings",
+      element: <SettingsPage />,
       loader: restrictAccess,
     },
     {
@@ -38,8 +45,13 @@ export const router = createBrowserRouter(
       loader: restrictAccess,
     },
     {
-      path: "/expenses/manage",
-      element: <ManagePage />,
+      path: "/expenses/operating",
+      element: <OperatingPage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/expenses/fees",
+      element: <FeesPage />,
       loader: restrictAccess,
     },
     {

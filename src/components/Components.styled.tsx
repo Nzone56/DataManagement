@@ -56,6 +56,7 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
   backgroundColor: theme.palette.primary.dark,
   borderRadius: "10px",
+  fontSize: "1.3rem",
   "&:hover": {
     backgroundColor: theme.palette.primary.main,
   },

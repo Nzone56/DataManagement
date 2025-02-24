@@ -1,10 +1,29 @@
-import { Box, Chip, IconButton, Paper, styled, TableCell, TableFooter, TableHead } from "@mui/material";
+import {
+  Box,
+  Chip,
+  IconButton,
+  Paper,
+  styled,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  Typography,
+} from "@mui/material";
+import { Theme } from "@mui/material/styles";
+
+const getResponsiveFontSize = (theme: Theme) => ({
+  fontSize: "0.95rem",
+  [theme.breakpoints.up("md")]: { fontSize: "1.1rem" },
+  [theme.breakpoints.up("lg")]: { fontSize: "1.25rem" },
+  [theme.breakpoints.up("xl")]: { fontSize: "1.4rem" },
+});
 
 export const ListLayoutContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,
-  padding: "1rem",
+  padding: "16px",
 });
 
 export const ListTitleContainer = styled(Box)({
@@ -12,9 +31,8 @@ export const ListTitleContainer = styled(Box)({
   justifyContent: "space-between",
 });
 
-export const ListTitle = styled("h2")({
-  fontSize: "1.8rem",
-  marginBottom: "1rem",
+export const ListTitle = styled(Typography)({
+  marginBottom: "16px",
   fontWeight: 600,
 });
 
@@ -25,7 +43,7 @@ export const FiltersContainer = styled(Box)({
 
 export const ListContainer = styled(Box)({
   display: "flex",
-  marginTop: "1rem",
+  marginTop: "16px",
   maxHeight: "calc(100vh - 200px)",
 });
 
@@ -51,6 +69,20 @@ export const TableCellStyled = styled(TableCell, {
     "&:hover": {
       fill: theme.palette.secondary.dark,
     },
+  },
+  fontSize: "0.95rem",
+  padding: "4px",
+  [theme.breakpoints.up("md")]: {
+    fontSize: "1.1rem",
+    padding: "8px",
+  },
+  [theme.breakpoints.up("lg")]: {
+    fontSize: "1.25rem",
+    padding: "12px",
+  },
+  [theme.breakpoints.up("xl")]: {
+    fontSize: "1.4rem",
+    padding: "16px",
   },
 }));
 
@@ -105,14 +137,33 @@ export const StyledTableFooter = styled(TableFooter)({
   border: "1px solid #e0e0e0",
 });
 
+export const StyledTablePagination = styled(TablePagination)({
+  "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
+    fontSize: "1.3rem",
+  },
+  "& .MuiTablePagination-select": {
+    fontSize: "1.3rem",
+  },
+  "& .MuiTablePagination-actions": {
+    fontSize: "1.3rem",
+  },
+  "& .MuiTablePagination-menuItem": {
+    fontSize: "1.2rem",
+  },
+});
+
+export const TableText = styled(Typography)(({ theme }) => ({
+  ...getResponsiveFontSize(theme),
+}));
+
 export const StyledChip = styled(Chip)<{ chipcolor: string; chiptextcolor: string }>(
-  ({ chipcolor, chiptextcolor }) => ({
+  ({ chipcolor, chiptextcolor, theme }) => ({
     backgroundColor: chipcolor,
     color: chiptextcolor,
     border: `1px solid ${chipcolor}`,
     "> span": {
       fontWeight: 500,
-      fontSize: "1rem",
+      ...getResponsiveFontSize(theme),
     },
   })
 );

@@ -15,6 +15,11 @@ export const localeDictionary = {
   date: "Fecha",
   description: "Descripción",
   color: "Color",
+  nitcc: "NIT / CC",
+  city: "Ciudad",
+  repLegal: "Representante Legal",
+  position: "Cargo",
+  entryDate: "Fecha de Ingreso",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

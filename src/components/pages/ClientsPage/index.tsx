@@ -5,26 +5,19 @@ import { getClients } from "../../../store/clients/clients.selector";
 import { addClient, fetchClients, removeClient, updateClient } from "../../../store/clients/clients.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { Client, ClientWorkLog } from "../../../models/interfaces/Client/IClient";
+import { Client } from "../../../models/interfaces/Client/IClient";
 
 const InitialClient: Client = {
   id: "",
   name: "",
   phone: "",
-  nit: "",
+  repLegal: "",
+  identification: "",
   address: "",
+  city: "",
+  email: "",
   joinedDate: Date.now(),
 };
-
-const ClientWorkLogs: ClientWorkLog[] = [
-  {
-    id: "",
-    clientId: "",
-    hoursWorked: 0,
-    month: 0,
-    year: 0,
-  },
-];
 
 export const ClientsPage = () => {
   const { clients, loading } = useSelector(getClients);
@@ -45,7 +38,6 @@ export const ClientsPage = () => {
             title="Clientes"
             list={clients}
             initialDataItem={InitialClient}
-            data={ClientWorkLogs}
             header={Object.keys(clients[0])?.filter((headItem) => headItem !== "id")}
             addItem={addClient}
             updateItem={updateClient}

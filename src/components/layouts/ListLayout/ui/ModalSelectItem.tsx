@@ -32,7 +32,7 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
   }, []);
 
   return (
-    <ColumnJustifyFlex mt={2}>
+    <ColumnJustifyFlex mt={2} mr={4}>
       <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
       <Select
         value={managedItem[item as keyof T1]}

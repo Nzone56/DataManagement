@@ -3,6 +3,7 @@ import { userReducer } from "./user/user.reducer";
 import { clientsReducer } from "./clients/clients.reducer";
 import { lawyersReducer } from "./lawyers/lawyers.reducer";
 import { expensesReducer } from "./expenses/expenses.reducer";
+import { settingsReducer } from "./settings/settings.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     lawyers: lawyersReducer,
     user: userReducer,
     expenses: expensesReducer,
+    settings: settingsReducer,
   },
 });
 

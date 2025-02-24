@@ -11,25 +11,29 @@ export const ModalInnerContainer = styled(Box)({
   maxHeight: "800px",
   maxWidth: "650px",
   backgroundColor: "white",
-  boxShadow: "24",
-  padding: "1.5rem 2rem",
+  padding: "24px 32px",
   borderRadius: "15px",
   display: "flex",
   flexDirection: "column",
 });
 
+export const ModalHeader = styled(Box)({
+  display: "flex",
+  alignItems: "flex-start",
+  justifyContent: "space-between",
+  marginBottom: "12px",
+});
+
 export const ModalTitle = styled(Typography)({
-  fontSize: "1.4rem",
   fontWeight: "600",
 });
 
 export const ModalSubTitle = styled(Typography)({
-  fontSize: "0.9rem",
   color: theme.palette.secondary.dark,
 });
 
 export const ModalIcon = styled(Box)({
-  marginRight: "0.5rem",
+  marginRight: "8px",
   "& > svg": {
     width: "25px",
     height: "25px",
@@ -37,22 +41,20 @@ export const ModalIcon = styled(Box)({
 });
 
 export const ModalBody = styled(Box)({
-  marginTop: "0.5rem",
-  height: "calc(75vh - 140px)",
+  height: "calc(75vh - 150px)",
   overflowX: "auto",
   display: "flex",
   flexDirection: "column",
 });
 
 export const ModalFormTitle = styled(Typography)({
-  fontSize: "1rem",
   fontWeight: "500",
-  marginBottom: "0.25rem",
+  marginBottom: "4px",
 });
 
 export const ModalFooter = styled(Box)({
   alignSelf: "flex-end",
-  marginTop: "auto",
+  marginTop: "24px",
 });
 
 export const ModalPickerPrev = styled(Box)<{

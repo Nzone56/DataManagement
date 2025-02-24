@@ -17,7 +17,7 @@ export const ModalDatePicker = <T extends Record<string, unknown>>({
   onChangeItemValue,
 }: DatePickerProps<T>) => {
   return (
-    <ColumnJustifyFlex key={item} mt={2}>
+    <ColumnJustifyFlex key={item} mt={2} mr={4}>
       <ModalFormTitle mr={1}>{codeToText(item as keyof typeof localeDictionary)}:</ModalFormTitle>
       <Box>
         <DatePicker

@@ -4,10 +4,10 @@ export const TopBarContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  padding: "15px",
+  padding: "16px 16px 12px 16px",
   width: "100%",
   borderBottom: `1px solid ${theme.palette.secondary.light}`,
-  fontSize: "0.9rem",
+  fontSize: "1.4rem",
   color: theme.palette.secondary.dark,
 
   "& svg": {

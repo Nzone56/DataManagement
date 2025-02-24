@@ -40,7 +40,7 @@ export const ModalColorPicker = <T extends Record<string, unknown>>({
   }, [openPicker, handleClickOutside]);
 
   return (
-    <ColumnJustifyFlex key={item} mt={2}>
+    <ColumnJustifyFlex key={item} mt={2} mr={4}>
       <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
       <ModalPickerPrev color={String(managedItem[item as keyof T])} onClick={() => setOpenPicker((prev) => !prev)} />
       {openPicker ? (

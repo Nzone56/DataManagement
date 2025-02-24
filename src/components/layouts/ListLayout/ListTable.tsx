@@ -12,19 +12,22 @@ import {
   StyledTableHeader,
   TableIconButtonContainer,
   TableCellStyledIcon,
+  TableText,
+  StyledTablePagination,
 } from "./ListLayout.styled";
-import { TableContainer, Table, TableRow, TableBody, TablePagination, Menu, MenuItem, Typography } from "@mui/material";
+import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
-import { formatDate } from "../../../utils/dates";
+import { formatDateText, formatDateInternational } from "../../../utils/dates";
 import { useEffect, useState } from "react";
 import { TablePaginationActions } from "./ListPaginationActions";
 import { AsyncThunk } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 import { CenteredBox } from "../../Components.styled";
 import { ModalPickerPrev } from "./ListModal.styled";
 import { numberToCurrency } from "../../../utils/formatter";
 import { TableItemChip } from "./ui/TableItemChip";
+import { getSettings } from "../../../store/settings/settings.selector";
 
 interface ListTableProps<T> {
   list: T[];
@@ -44,12 +47,14 @@ export const ListTable = <T extends Record<string, string | number>>({
   removeItem,
 }: ListTableProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { dateFormat } = useSelector(getSettings);
+
+  // PAGINATION AND TABLE STATES
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredValues, setFilteredValues] = useState<T[]>([]);
   const [sortedHeader, setSortedHeader] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null;
   }>({});
@@ -131,12 +136,12 @@ export const ListTable = <T extends Record<string, string | number>>({
                       sx={{ cursor: "pointer" }}
                     >
                       <CenteredBox>
-                        <Typography>{codeToText(rowHeader as keyof typeof localeDictionary)}</Typography>
+                        <TableText>{codeToText(rowHeader as keyof typeof localeDictionary)}</TableText>
                         {sortedHeader === rowHeader ? (
                           sortOrder === "asc" ? (
-                            <ArrowUpIcon sx={{ marginLeft: "0.5rem", marginBottom: "0.15rem" }} />
+                            <ArrowUpIcon sx={{ marginLeft: "8px", marginBottom: "2px" }} />
                           ) : (
-                            <ArrowDownIcon sx={{ marginLeft: "0.5rem" }} />
+                            <ArrowDownIcon sx={{ marginLeft: "8px" }} />
                           )
                         ) : null}
                       </CenteredBox>
@@ -179,18 +184,22 @@ export const ListTable = <T extends Record<string, string | number>>({
                     {header.map((headerItem, index) => (
                       <TableCellStyled key={index} cellwidth="" header={false}>
                         {headerItem.toLocaleLowerCase().includes("date") ? (
-                          <Typography>{formatDate(Number(filteredItem[headerItem]))}</Typography>
+                          <TableText>
+                            {dateFormat === "international"
+                              ? formatDateInternational(Number(filteredItem[headerItem]))
+                              : formatDateText(Number(filteredItem[headerItem]))}
+                          </TableText>
                         ) : headerItem.toLocaleLowerCase().includes("color") ? (
                           <CenteredBox>
                             <ModalPickerPrev color={String(filteredItem[headerItem])} />
-                            <Typography ml={1}>{filteredItem[headerItem]}</Typography>
+                            <TableText ml={1}>{filteredItem[headerItem]}</TableText>
                           </CenteredBox>
                         ) : headerItem.toLocaleLowerCase().includes("amount") ? (
-                          <Typography ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</Typography>
+                          <TableText ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</TableText>
                         ) : headerItem.toLocaleLowerCase().includes("id") ? (
                           <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
                         ) : (
-                          <Typography>{filteredItem[headerItem]}</Typography>
+                          <TableText>{filteredItem[headerItem]}</TableText>
                         )}
                       </TableCellStyled>
                     ))}
@@ -222,7 +231,7 @@ export const ListTable = <T extends Record<string, string | number>>({
           </TableBody>
           <StyledTableFooter>
             <TableRow>
-              <TablePagination
+              <StyledTablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
                 colSpan={header.length}
                 count={filteredValues.length}

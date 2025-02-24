@@ -4,5 +4,5 @@ export const HomeContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,
-  margin: "2rem",
+  margin: "32px",
 });

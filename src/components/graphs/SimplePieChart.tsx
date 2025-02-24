@@ -36,8 +36,8 @@ export const SimplePieChart: React.FC<PieProps> = ({ categories, series, colors 
   };
 
   return (
-    <ColumnAlignFlex style={{ fontSize: "25px" }}>
-      <AreaGraphDashboardTitle className="text-center text-lg font-bold mb-2">
+    <ColumnAlignFlex>
+      <AreaGraphDashboardTitle variant="h2" className="text-center text-lg font-bold mb-2">
         Gastos categorias
       </AreaGraphDashboardTitle>
       <Chart options={options} series={series} type="pie" width="500px" />

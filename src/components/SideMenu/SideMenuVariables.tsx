@@ -34,7 +34,8 @@ export const menuSections: MenuSectionType[] = [
         label: "Gastos",
         subItems: [
           { id: "6-1", route: "/expenses/concepts", label: "Conceptos" },
-          { id: "6-2", route: "/expenses/manage", label: "Administrar" },
+          { id: "6-2", route: "/expenses/operating", label: "Operativos" },
+          { id: "6-3", route: "/expenses/fees", label: "Honorarios" },
         ],
       },
     ],

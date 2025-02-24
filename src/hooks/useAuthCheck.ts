@@ -14,7 +14,7 @@ const useAuthCheck = () => {
     const selectedUserStorage = localStorage.getItem("selectedUser");
     const isHomePage = location.pathname === "/";
 
-    if (currentUser.uid) {
+    if (currentUser?.uid) {
       if (isHomePage) {
         navigate("/home");
       }

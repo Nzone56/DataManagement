@@ -3,6 +3,7 @@ import { MainContainer } from "../../MainContainer";
 import { SideMenu } from "../../SideMenu";
 import { MainContentContainer, MainLayoutContainer } from "./MainLayout.styled";
 import { TopBar } from "../TopBar";
+import useSettings from "../../../hooks/useSettings";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface MainLayoutProps {
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   useAuthCheck();
+  useSettings();
 
   return (
     <MainLayoutContainer>

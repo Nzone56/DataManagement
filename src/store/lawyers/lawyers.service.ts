@@ -19,7 +19,7 @@ const addLawyer = async (lawyer: Lawyer) => {
 };
 
 const updateLawyer = async (lawyer: Lawyer) => {
-  const response = await fetch(`http://localhost:3000/lawyers/${lawyer.id}`, {
+  const response = await fetch(`${API_URL}/${lawyer.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(lawyer),
@@ -29,7 +29,7 @@ const updateLawyer = async (lawyer: Lawyer) => {
 };
 
 const removeLawyer = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/lawyers/${id}`, { method: "DELETE" });
+  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
   return await response.json();
 };
 

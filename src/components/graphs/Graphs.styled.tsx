@@ -4,7 +4,7 @@ export const AreaGraphDashboardContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,
-  margin: "1rem",
+  margin: "16px",
   background: "#fff",
   color: "#000",
   borderRadius: "10px",
@@ -12,14 +12,12 @@ export const AreaGraphDashboardContainer = styled(Box)({
 });
 
 export const AreaGraphDashboardTitle = styled(Typography)({
-  fontSize: "25px",
   fontWeight: 600,
-  margin: "1rem 0 0 1.5rem",
+  margin: "16px 0 0 24px",
   lineHeight: "1.15",
 });
 
 export const AreaGraphDashboardSubTitle = styled(Typography)({
-  fontSize: "15px",
-  marginLeft: "1.5rem",
+  marginLeft: "24px",
   lineHeight: "1.15",
 });

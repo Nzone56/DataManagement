@@ -1,17 +1,24 @@
 import { Modal, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useId, useState } from "react";
-import { CenteredBox, ColumnJustifyFlex, PrimaryButton, StartBoxBetween } from "../../Components.styled";
+import { CenteredBox, ColumnJustifyFlex, PrimaryButton } from "../../Components.styled";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { ModalBody, ModalFooter, ModalIcon, ModalInnerContainer, ModalSubTitle, ModalTitle } from "./ListModal.styled";
-import { menuSections } from "../../SideMenu/SideMenuVariables";
-import { MenuOptionType } from "../../../models/interfaces/Other/IMenu";
+import {
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalIcon,
+  ModalInnerContainer,
+  ModalSubTitle,
+  ModalTitle,
+} from "./ListModal.styled";
 import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 import { ModalDatePicker } from "./ui/ModalDatePicker";
 import { ModalSimpleInput } from "./ui/ModalSimpleInput";
 import { ModalSelectItem } from "./ui/ModalSelectItem";
 import { ModalColorPicker } from "./ui/ModalColorPicker";
+import { useSideMenu } from "../../../hooks/useSideMenu";
 
 type CustomModalProps<T> = {
   show: boolean;
@@ -36,6 +43,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
 }: CustomModalProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
   const [managedItem, setManagedItem] = useState<T>(initialValue);
+  const { currentMenuOption } = useSideMenu();
 
   // We use it only when adding
   const id = useId();
@@ -70,13 +78,13 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
     <Modal open={show} onClose={onHide} aria-labelledby="modal-title">
       <ModalInnerContainer>
         {/* MODAL HEADER */}
-        <StartBoxBetween>
+        <ModalHeader>
           <CenteredBox>
-            <ModalIcon>
-              {menuSections[1].items.find((menu: MenuOptionType) => menu.label === title.concat("s"))?.component}
-            </ModalIcon>
+            <ModalIcon>{currentMenuOption.component}</ModalIcon>
             <ColumnJustifyFlex>
-              <ModalTitle id="modal-title">{modalType === "create" ? `Crear ${title}` : `Editar ${title}`}</ModalTitle>
+              <ModalTitle variant="h4" id="modal-title">
+                {modalType === "create" ? `Crear ${title}` : `Editar ${title}`}
+              </ModalTitle>
               <ModalSubTitle>
                 Llena el formulario para {modalType === "create" ? `crear` : `editar`} un {title}
               </ModalSubTitle>
@@ -86,7 +94,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
             <CloseIcon />
           </IconButton>
           {}
-        </StartBoxBetween>
+        </ModalHeader>
         {/* MODAL BODY  */}
 
         <ModalBody>

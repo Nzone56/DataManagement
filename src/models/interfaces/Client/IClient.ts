@@ -1,16 +1,11 @@
 export interface Client {
   id: string;
   name: string;
+  repLegal: string;
   phone: string;
-  nit: string;
+  identification: string;
   address: string;
+  city: string;
+  email: string;
   joinedDate: number;
-}
-
-export interface ClientWorkLog {
-  id: string;
-  clientId: string;
-  hoursWorked: number;
-  month: number; // 1-12 for months
-  year: number; // Example: 2025
 }

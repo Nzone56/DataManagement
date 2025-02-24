@@ -60,7 +60,7 @@ export const DashboardAreaChart: React.FC<DashboardAreaChartProps> = ({
       intersect: false, // Mostrar tooltip cuando se pasa sobre cualquier parte
       followCursor: true, // Seguir el cursor
       style: {
-        fontSize: "12px",
+        fontSize: "1.2rem",
         fontFamily: "Helvetica, Arial, sans-serif",
         background: "#333",
         color: "#000",
@@ -76,10 +76,10 @@ export const DashboardAreaChart: React.FC<DashboardAreaChartProps> = ({
 
   return (
     <AreaGraphDashboardContainer>
-      <AreaGraphDashboardTitle>
+      <AreaGraphDashboardTitle variant="h3">
         {numberToCurrency(series[0].data.reduce((acum: number, curr: number) => acum + curr, 0))}
       </AreaGraphDashboardTitle>
-      <AreaGraphDashboardSubTitle>{title}</AreaGraphDashboardSubTitle>
+      <AreaGraphDashboardSubTitle variant="h4">{title}</AreaGraphDashboardSubTitle>
       <Chart options={options} series={series} type="area" height={chartHeight} />
     </AreaGraphDashboardContainer>
   );

@@ -15,7 +15,7 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
   onChangeItemValue,
 }: SimpleInputProps<T>) => {
   return (
-    <ColumnJustifyFlex key={item} mt={2}>
+    <ColumnJustifyFlex key={item} mt={2} mr={4}>
       <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
       <TextField
         key={item}
