@@ -220,27 +220,86 @@
   "expensesConcepts": [
     {
       "id": "1",
-      "name": "Agua",
-      "type": "Servicios Públicos",
-      "color": "#1a64cd"
+      "name": "Legales",
+      "type": "Gastos Legales",
+      "color": "#1a64cd",
+      "subConcepts": [
+        "CÁMARA DE COMERCIO",
+        "SUPERINT DE IND Y CIO",
+        "SUPER NOTARIADO"
+      ]
     },
     {
       "id": "2",
-      "name": "Transporte",
-      "type": "Movilidad",
-      "color": "#f8e71c"
+      "name": "Suscripciones",
+      "type": "Gastos de Suscripción",
+      "color": "#f8e71c",
+      "subConcepts": [
+        "SUSCRIPCIONES Y CAPACITACIONES",
+        "COLSÁNITAS",
+        "MONOLEGAL",
+        "LA LUPA JURÍDICA",
+        "CRG",
+        "TIMEMANAGER",
+        "IMANAGE",
+        "TIRANT",
+        "NIMBUTECH",
+        "VABGUARD"
+      ]
     },
     {
-      "id": ":rh:",
-      "name": "NUEVO CONCEPTO ",
-      "type": "JIJIJIJI",
-      "color": "#d0021b"
+      "id": "3",
+      "name": "Servicios Públicos",
+      "type": "Servicios",
+      "color": "#d0021b",
+      "subConcepts": [
+        "ETB",
+        "CLARO MAESTRA",
+        "CLARO INTERNET",
+        "ACUEDUCTO",
+        "CODENSA",
+        "PROSEGUR",
+        "ADMINISTRACIÓN"
+      ]
     },
     {
-      "id": ":r8l:",
-      "name": "Gastos de limpieza",
-      "type": "Servicios de limpieza",
-      "color": "#0af34f"
+      "id": "4",
+      "name": "Arrendamientos",
+      "type": "Inmobiliario",
+      "color": "#0af34f",
+      "subConcepts": [
+        "ALIANZA FIDUCIARIA",
+        "ELENA MENDIVELSO"
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Impuestos",
+      "type": "Tributario",
+      "color": "#800080",
+      "subConcepts": [
+        "RETENCIÓN EN LA FUENTE",
+        "ICA",
+        "RETEICA",
+        "RENTA",
+        "IVA",
+        "CÁMARA DE COMERCIO"
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Administrativos",
+      "type": "Gastos Generales",
+      "color": "#008080",
+      "subConcepts": [
+        "CAFETERIA Y ASEO",
+        "ALMUERZOS EMPLEADOS",
+        "TRANSPORTE",
+        "HOTELES",
+        "PASAJES AEREOS",
+        "GASTOS NAVIDAD",
+        "FUNDACIÓN SALESIANA"
+      ]
     }
   ],
   "expenses": [
@@ -271,13 +330,6 @@
       "amount": 3000,
       "date": 1739236658976,
       "description": "Trasbordo"
-    },
-    {
-      "id": ":r9k:",
-      "conceptId": ":r8l:",
-      "amount": 100000,
-      "date": 1739934037296,
-      "description": "Servivcios de limpieza dia 18 de Febrero"
     }
   ]
 }

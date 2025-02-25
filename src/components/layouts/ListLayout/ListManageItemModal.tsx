@@ -19,6 +19,7 @@ import { ModalSimpleInput } from "./ui/ModalSimpleInput";
 import { ModalSelectItem } from "./ui/ModalSelectItem";
 import { ModalColorPicker } from "./ui/ModalColorPicker";
 import { useSideMenu } from "../../../hooks/useSideMenu";
+import { ModalOptions } from "./ui/ModalOptions";
 
 type CustomModalProps<T> = {
   show: boolean;
@@ -128,6 +129,10 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                   managedItem={managedItem}
                   onChangeItemValue={onChangeItemValue}
                 />
+              );
+            } else if (String(item.toLocaleLowerCase()).includes("sub")) {
+              return (
+                <ModalOptions key={item} item={item} managedItem={managedItem} onChangeItemValue={onChangeItemValue} />
               );
               // SIMPLE INPUT
             } else {

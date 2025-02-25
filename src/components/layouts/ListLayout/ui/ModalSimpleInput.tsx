@@ -24,7 +24,6 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
         size="small"
         onChange={(e) => onChangeItemValue(item as keyof T, e.target.value)}
         value={managedItem[item as keyof T]}
-        // label={codeToText(String(item) as keyof typeof localeDictionary)}
       />
     </ColumnJustifyFlex>
   );

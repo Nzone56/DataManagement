@@ -14,6 +14,7 @@ import {
   TableCellStyledIcon,
   TableText,
   StyledTablePagination,
+  StyledChip,
 } from "./ListLayout.styled";
 import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
@@ -28,6 +29,7 @@ import { ModalPickerPrev } from "./ListModal.styled";
 import { numberToCurrency } from "../../../utils/formatter";
 import { TableItemChip } from "./ui/TableItemChip";
 import { getSettings } from "../../../store/settings/settings.selector";
+import { getComplementaryColor } from "../../../utils/getters";
 
 interface ListTableProps<T> {
   list: T[];
@@ -38,7 +40,7 @@ interface ListTableProps<T> {
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
 }
 
-export const ListTable = <T extends Record<string, string | number>>({
+export const ListTable = <T extends Record<string, string | number | string[]>>({
   list,
   header,
   title,
@@ -166,7 +168,6 @@ export const ListTable = <T extends Record<string, string | number>>({
               .sort((a, b) => {
                 const valueA = a[sortedHeader];
                 const valueB = b[sortedHeader];
-
                 if (typeof valueA === "number" && typeof valueB === "number") {
                   return sortOrder === "desc" ? valueB - valueA : valueA - valueB;
                 } else if (typeof valueA === "string" && typeof valueB === "string") {
@@ -174,11 +175,13 @@ export const ListTable = <T extends Record<string, string | number>>({
                 }
                 return 0;
               })
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(
+                rowsPerPage === -1 ? 0 : page * rowsPerPage,
+                rowsPerPage === -1 ? undefined : page * rowsPerPage + rowsPerPage
+              )
               .map((filteredItem) => {
                 const itemId = String(filteredItem.id);
                 const open = Boolean(anchorEl[itemId]);
-
                 return (
                   <TableRow key={itemId}>
                     {header.map((headerItem, index) => (
@@ -198,6 +201,16 @@ export const ListTable = <T extends Record<string, string | number>>({
                           <TableText ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</TableText>
                         ) : headerItem.toLocaleLowerCase().includes("id") ? (
                           <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
+                        ) : headerItem.toLocaleLowerCase().includes("sub") ? (
+                          Array.isArray(filteredItem[headerItem]) &&
+                          filteredItem[headerItem].map((item) => (
+                            <StyledChip
+                              label={item}
+                              chipcolor={String(filteredItem.color)}
+                              chiptextcolor={getComplementaryColor(String(filteredItem.color))}
+                              sx={{ margin: "2px 4px" }}
+                            />
+                          ))
                         ) : (
                           <TableText>{filteredItem[headerItem]}</TableText>
                         )}

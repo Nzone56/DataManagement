@@ -11,7 +11,6 @@ const ThemedApp = () => {
   const { theme } = useSelector(getSettings);
 
   useEffect(() => {
-    console.log(theme);
     document.body.setAttribute("data-theme", theme);
   }, [theme]);
 

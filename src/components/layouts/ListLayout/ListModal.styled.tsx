@@ -1,5 +1,6 @@
 import { Box, styled, Typography } from "@mui/material";
 import { theme } from "../../../theme";
+import { Close } from "@mui/icons-material";
 
 export const ModalInnerContainer = styled(Box)({
   position: "absolute",
@@ -65,4 +66,8 @@ export const ModalPickerPrev = styled(Box)<{
   cursor: "pointer",
   width: "25px",
   height: "25px",
+}));
+
+export const CloseIcon = styled(Close)<{ xcolor: string }>(({ xcolor }) => ({
+  color: `${xcolor} !important`,
 }));
