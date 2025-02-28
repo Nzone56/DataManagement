@@ -10,6 +10,7 @@ import { OperatingPage } from "../components/pages/ExpensesPage/OperatingPage";
 import { StatsPage } from "../components/pages/StatsPage";
 import { SettingsPage } from "../components/pages/SettingsPage";
 import { FeesPage } from "../components/pages/ExpensesPage/FeesPage";
+import { TimeManagerPage } from "../components/pages/TimeManagerPage";
 
 export const router = createBrowserRouter(
   [
@@ -52,6 +53,11 @@ export const router = createBrowserRouter(
     {
       path: "/expenses/fees",
       element: <FeesPage />,
+      loader: restrictAccess,
+    },
+    {
+      path: "/worklog",
+      element: <TimeManagerPage />,
       loader: restrictAccess,
     },
     {

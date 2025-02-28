@@ -36,7 +36,7 @@ export const OperatingPage = () => {
   return (
     <>
       {loading || expenses.length === 0 ? (
-        <span> CARGANDO... </span>
+        <Typography> CARGANDO... </Typography>
       ) : (
         <MainLayout>
           <ListLayout

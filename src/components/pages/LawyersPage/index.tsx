@@ -30,7 +30,7 @@ export const LawyersPage = () => {
   return (
     <>
       {loading || lawyers.length === 0 ? (
-        <span> CARGANDO... </span>
+        <Typography> CARGANDO... </Typography>
       ) : (
         <MainLayout>
           <ListLayout

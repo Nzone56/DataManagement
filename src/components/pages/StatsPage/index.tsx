@@ -4,6 +4,7 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { StatsContainer } from "./Stats.styled";
 import { getExpenseConcepts, getExpenses } from "../../../store/expenses/expenses.selector";
 import { useMemo } from "react";
+import { Typography } from "@mui/material";
 
 export const StatsPage = () => {
   const { expensesConcepts } = useSelector(getExpenseConcepts);
@@ -33,7 +34,7 @@ export const StatsPage = () => {
     <MainLayout>
       <StatsContainer>
         {data.length === 0 ? (
-          <span>Cargando datos...</span>
+          <Typography>Cargando datos...</Typography>
         ) : (
           <SimplePieChart colors={colors} categories={categories} series={data} />
         )}

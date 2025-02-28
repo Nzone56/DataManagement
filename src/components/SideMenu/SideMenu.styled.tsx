@@ -105,7 +105,7 @@ export const MenuOption = styled(Box, {
     height: "25px",
   },
   // TEXT STYLES
-  "& span": {
+  "& Typography": {
     marginLeft: "16px",
     fontWeight: "500",
     fontSize: "1.4rem",
@@ -114,6 +114,13 @@ export const MenuOption = styled(Box, {
     transition: "opacity 0.5s ease-in-out",
   },
 }));
+
+export const MenuOptionLabel = styled(Typography)({
+  marginLeft: "12px",
+  fontWeight: "400",
+  fontSize: "1.4rem",
+  whiteSpace: "nowrap",
+});
 
 export const SideMenuPoint = styled(Box, {
   shouldForwardProp: (prop) => prop !== "active",

@@ -37,7 +37,7 @@ export const getComplementaryColor = (hexColor: string): string => {
 
 export const getSimpleOptions = (type: string) => {
   const optionsDictionary: Record<string, string[]> = {
-    feeConcept: ["Germán Ulloa", "Carlos Bermudez"],
+    feeConcept: ["Germán Ulloa", "Carlos Bermúdez"],
   };
 
   return optionsDictionary[type] || [];

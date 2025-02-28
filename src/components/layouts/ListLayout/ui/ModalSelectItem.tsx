@@ -44,10 +44,10 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
         {selectOptions?.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             {option.name}
-            <span style={{ color: String(option.color) }}>
+            <Typography style={{ color: String(option.color) }}>
               &nbsp;
               {option.type ? `(${option.type})` : ""}
-            </span>
+            </Typography>
           </MenuItem>
         ))}
       </Select>

@@ -46,7 +46,7 @@ export const updateExpense = createAsyncThunk<Expense, Expense, ThunkApiConfig>(
   (expense: Expense) => ExpenseService.updateExpense(expense)
 );
 
-// -- EXPENSES -- //
+// -- FEES -- //
 
 export const fetchFees = createAsyncThunk<Fee[]>("expenses/fetchFees", () => FeeService.fetchFees());
 

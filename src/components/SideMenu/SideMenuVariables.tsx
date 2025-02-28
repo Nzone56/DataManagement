@@ -44,7 +44,7 @@ export const menuSections: MenuSectionType[] = [
     id: "management",
     title: "Manejo de Información",
     items: [
-      { id: "10", route: "/work", component: <AccessIcon />, label: "Trabajo" },
+      { id: "10", route: "/worklog", component: <AccessIcon />, label: "Time Manager" },
       { id: "11", route: "/statistics", component: <BarChartIcon />, label: "Gráficas" },
       { id: "12", route: "/reports", component: <AssessmentIcon />, label: "Informes" },
     ],

@@ -20,8 +20,8 @@ const PlaceholderUser: User = {
   uid: "123",
   name: "Nubia",
   lastName: "Torres",
-  email: "nubiabermudez@bermudezyco.com.co",
-  company: "Bermudez & Co",
+  email: "nubiaBermúdez@Bermúdezyco.com.co",
+  company: "Bermúdez & Co",
 };
 
 export const LandingPage = () => {

@@ -52,7 +52,7 @@ const initialStateFees: FeesReducer = {
   error: null,
 };
 
-export const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) => {
+const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) => {
   builder
     // Fetch ExpenseConcepts
     .addCase(fetchExpenseConcepts.pending, (state) => ({
@@ -123,7 +123,7 @@ export const expensesConceptsReducer = createReducer(initialStateConcepts, (buil
     });
 });
 
-export const expensesManageReducer = createReducer(initialStateExpenses, (builder) => {
+const expensesManageReducer = createReducer(initialStateExpenses, (builder) => {
   builder
     // Fetch ExpenseConcepts
     .addCase(fetchExpenses.pending, (state) => ({
@@ -194,7 +194,7 @@ export const expensesManageReducer = createReducer(initialStateExpenses, (builde
     });
 });
 
-export const feesReducer = createReducer(initialStateFees, (builder) => {
+const feesReducer = createReducer(initialStateFees, (builder) => {
   builder
     // Fetch FeeConcepts
     .addCase(fetchFees.pending, (state) => ({

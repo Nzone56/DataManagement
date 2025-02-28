@@ -31,7 +31,7 @@ export const ClientsPage = () => {
   return (
     <>
       {loading || clients.length === 0 ? (
-        <span> CARGANDO... </span>
+        <Typography> CARGANDO... </Typography>
       ) : (
         <MainLayout>
           <ListLayout

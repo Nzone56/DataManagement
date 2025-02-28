@@ -161,7 +161,7 @@ export const StyledChip = styled(Chip)<{ chipcolor: string; chiptextcolor: strin
     backgroundColor: chipcolor,
     color: chiptextcolor,
     border: `1px solid ${chipcolor}`,
-    "> span": {
+    "> Typography": {
       fontWeight: 500,
       ...getResponsiveFontSize(theme),
     },

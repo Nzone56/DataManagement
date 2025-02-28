@@ -10,6 +10,7 @@ import {
   SideMenuSubTitle,
   SideMenuPoint,
   SideMenuLine,
+  MenuOptionLabel,
 } from "./SideMenu.styled";
 import {
   AcUnitOutlined as AcUnitIcon,
@@ -74,14 +75,14 @@ export const SideMenu = () => {
                     <CenteredBoxBetween>
                       <CenteredBox>
                         {item.component}
-                        <span>{item.label}</span>
+                        <MenuOptionLabel>{item.label}</MenuOptionLabel>
                       </CenteredBox>
                       {item.id === expandedMenuOption ? <ArrowUpIcon /> : <ArrowDownIcon />}
                     </CenteredBoxBetween>
                   ) : (
                     <>
                       {item.component}
-                      <span>{item.label}</span>
+                      <MenuOptionLabel>{item.label}</MenuOptionLabel>
                     </>
                   )}
                 </MenuOption>
@@ -93,7 +94,7 @@ export const SideMenu = () => {
                           <SideMenuPoint active={location.pathname === subitem.route} />
                         </ColumnJustifyFlex>
                         {subitem.component}
-                        <span>{subitem.label}</span>
+                        <MenuOptionLabel>{subitem.label}</MenuOptionLabel>
                       </MenuOption>
                     ))
                   : null}
