@@ -34,3 +34,11 @@ export const getComplementaryColor = (hexColor: string): string => {
   // Determinar el color del texto basado en la luminosidad
   return luminance > 150 ? "#000000" : "#FFFFFF"; // Negro si el fondo es claro, blanco si es oscuro
 };
+
+export const getSimpleOptions = (type: string) => {
+  const optionsDictionary: Record<string, string[]> = {
+    feeConcept: ["Germán Ulloa", "Carlos Bermudez"],
+  };
+
+  return optionsDictionary[type] || [];
+};

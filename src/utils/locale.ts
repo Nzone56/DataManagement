@@ -21,6 +21,7 @@ export const localeDictionary = {
   position: "Cargo",
   entryDate: "Fecha de Ingreso",
   subConcepts: "Sub-Categorias",
+  feeConcept: "Concepto",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

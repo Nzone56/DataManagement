@@ -3,7 +3,7 @@ import { ListLayout } from "../../layouts/ListLayout";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useEffect } from "react";
-import { AppDispatch } from "../../../store/store";
+
 import { Expense } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenses } from "../../../store/expenses/expenses.selector";
 import {
@@ -13,6 +13,7 @@ import {
   removeExpense,
   updateExpense,
 } from "../../../store/expenses/expenses.actions";
+import { AppDispatch } from "../../../store/store";
 
 const InitialExpense: Expense = {
   id: "",

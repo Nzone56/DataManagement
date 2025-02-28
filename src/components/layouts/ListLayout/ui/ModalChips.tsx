@@ -12,7 +12,7 @@ interface SimpleInputProps<T> {
   onChangeItemValue: (key: keyof T, value: unknown) => void;
 }
 
-export const ModalOptions = <T extends Record<string, unknown>>({
+export const ModalChips = <T extends Record<string, unknown>>({
   item,
   managedItem,
   onChangeItemValue,

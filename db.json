@@ -331,5 +331,49 @@
       "date": 1739236658976,
       "description": "Trasbordo"
     }
+  ],
+  "fees": [
+    {
+      "id": "1",
+      "feeConcept": "Germán Ulloa",
+      "amount": 100,
+      "date": 1709059200,
+      "description": "Pago inicial"
+    },
+    {
+      "id": "2",
+      "feeConcept": "Carlos Bermudez",
+      "amount": 200,
+      "date": 1709145600,
+      "description": "Honorarios legales"
+    },
+    {
+      "id": "3",
+      "feeConcept": "Germán Ulloa",
+      "amount": 150,
+      "date": 1709232000,
+      "description": "Sin descripción"
+    },
+    {
+      "id": "4",
+      "feeConcept": "Carlos Bermudez",
+      "amount": 300,
+      "date": 1709318400,
+      "description": "Asesoría financiera"
+    },
+    {
+      "id": "5",
+      "feeConcept": "Germán Ulloa",
+      "amount": 500,
+      "date": 1709404800,
+      "description": "Consulta legal"
+    },
+    {
+      "id": ":re:",
+      "feeConcept": "Carlos Bermudez",
+      "amount": 123213,
+      "date": 1740710634729,
+      "description": "asd"
+    }
   ]
 }

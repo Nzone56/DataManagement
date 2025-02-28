@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../store/lawyers/lawyers.actions";
 import { useEffect } from "react";
-import { AppDispatch } from "../../../store/store";
 import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
+import { AppDispatch } from "../../../store/store";
 
 const InitialLawyer: Lawyer = {
   id: "",

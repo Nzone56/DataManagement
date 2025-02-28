@@ -1,4 +1,4 @@
-import { Expense, ExpenseConcept } from "../../models/interfaces/Expense/IExpense";
+import { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
 
 // -- EXPENSE CONCECEPTS -- //
 // Base URL de json-server
@@ -41,7 +41,7 @@ export const ExpenseConceptService = {
   removeExpenseConcept,
 };
 
-// -- EXPENSEs -- //
+// -- EXPENSES -- //
 // Base URL de json-server
 const API_URL_EXPENSES = "http://localhost:3000/expenses";
 
@@ -80,4 +80,45 @@ export const ExpenseService = {
   addExpense,
   updateExpense,
   removeExpense,
+};
+
+// -- FEES -- //
+// Base URL de json-server
+const API_URL_FEES = "http://localhost:3000/fees";
+
+const fetchFees = async () => {
+  const response = await fetch(API_URL_FEES);
+  return (await response.json()) as Fee[];
+};
+
+const addFee = async (fee: Fee) => {
+  const response = await fetch(API_URL_FEES, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fee),
+  });
+
+  return await response.json();
+};
+
+const updateFee = async (fee: Fee) => {
+  const response = await fetch(`${API_URL_FEES}/${fee.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fee),
+  });
+
+  return await response.json();
+};
+
+const removeFee = async (id: string) => {
+  const response = await fetch(`${API_URL_FEES}/${id}`, { method: "DELETE" });
+  return await response.json();
+};
+
+export const FeeService = {
+  fetchFees,
+  addFee,
+  updateFee,
+  removeFee,
 };

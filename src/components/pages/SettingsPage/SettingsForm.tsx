@@ -7,8 +7,8 @@ import { CenteredBox, ColumnJustifyFlex, PrimaryButton } from "../../Components.
 import { formatDateInternational, formatDateText } from "../../../utils/dates";
 import { ISettings } from "../../../models/interfaces/Settings/ISettings";
 import { updateSettings } from "../../../store/settings/settings.actions";
-import { AppDispatch } from "../../../store/store";
 import { deepEqual } from "../../../utils/compare";
+import { AppDispatch } from "../../../store/store";
 
 const initialSettings: ISettings = {
   theme: "light",

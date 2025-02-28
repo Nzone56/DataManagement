@@ -16,7 +16,7 @@ export interface Expense {
 
 export interface Fee {
   id: string;
-  feeConcept: string;
+  feeConcept: "Germán Ulloa" | "Carlos Bermudez";
   amount: number;
   date: number;
   description?: string;
