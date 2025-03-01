@@ -34,6 +34,7 @@ export const SideMenuTitle = styled(Typography, {
   whiteSpace: "nowrap",
 }));
 
+//TODO: FIX ANIMATION
 export const SideMenuSubTitle = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "animate",
 })<{ animate: boolean }>(({ animate, theme }) => ({
@@ -41,8 +42,9 @@ export const SideMenuSubTitle = styled(Typography, {
   fontSize: "1.3rem",
   opacity: animate ? 1 : 0,
   animation: animate ? `${fadeInTitles} 0.3s ease-in-out` : "none",
-  transition: "opacity 0.5s ease-in-out",
+  transition: "opacity 5s ease-in-out",
   whiteSpace: "nowrap",
+  visibility: animate ? "visible" : "hidden",
 }));
 
 export const MenuHeader = styled(Box)({

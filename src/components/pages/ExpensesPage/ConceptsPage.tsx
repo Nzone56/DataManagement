@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { ExpenseConcept } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenseConcepts } from "../../../store/expenses/expenses.selector";
-import { Typography } from "@mui/material";
 
 const InitialExpenseConcept: ExpenseConcept = {
   id: "",
@@ -31,23 +30,17 @@ export const ConceptsPage = () => {
   }, []);
 
   return (
-    <>
-      {loading || expensesConcepts.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="Conceptos"
-            list={expensesConcepts}
-            initialDataItem={InitialExpenseConcept}
-            header={Object.keys(expensesConcepts[0])?.filter((headItem) => headItem !== "id")}
-            addItem={addExpenseConcept}
-            updateItem={updateExpenseConcept}
-            removeItem={removeExpenseConcept}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="Conceptos"
+        list={expensesConcepts}
+        initialDataItem={InitialExpenseConcept}
+        header={Object.keys(InitialExpenseConcept)?.filter((headItem) => headItem !== "id")}
+        addItem={addExpenseConcept}
+        updateItem={updateExpenseConcept}
+        removeItem={removeExpenseConcept}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };

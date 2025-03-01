@@ -16,7 +16,7 @@ import {
   StyledTablePagination,
   StyledChip,
 } from "./ListLayout.styled";
-import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem } from "@mui/material";
+import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem, TableCell } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { formatDateText, formatDateInternational } from "../../../utils/dates";
 import { useEffect, useState } from "react";
@@ -33,9 +33,11 @@ import { getComplementaryColor } from "../../../utils/getters";
 import { columnWidths } from "../../pages/TimeManagerPage/WorklogVariables";
 import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { getClients } from "../../../store/clients/clients.selector";
+import { Spinner } from "../../ui/spinner";
 
 interface ListTableProps<T> {
   list: T[];
+  loading: boolean;
   header: string[];
   title: string;
   searchState: string;
@@ -45,6 +47,7 @@ interface ListTableProps<T> {
 
 export const ListTable = <T extends Record<string, string | number | string[] | boolean>>({
   list,
+  loading,
   header,
   title,
   searchState,
@@ -169,6 +172,7 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                 );
               })}
               <TableCellStyledIcon header={true}>
+                {/* TODO: Fix settings column  */}
                 <TableIconButtonContainer>
                   <SettingsIcon />
                 </TableIconButtonContainer>
@@ -176,97 +180,107 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
             </TableRow>
           </StyledTableHeader>
           <TableBody>
-            {filteredValues
-              .sort((a, b) => {
-                const valueA = a[sortedHeader];
-                const valueB = b[sortedHeader];
-                if (typeof valueA === "number" && typeof valueB === "number") {
-                  return sortOrder === "desc" ? valueB - valueA : valueA - valueB;
-                } else if (typeof valueA === "string" && typeof valueB === "string") {
-                  return sortOrder === "desc" ? valueB.localeCompare(valueA) : valueA.localeCompare(valueB);
-                }
-                return 0;
-              })
-              .slice(
-                rowsPerPage === -1 ? 0 : page * rowsPerPage,
-                rowsPerPage === -1 ? undefined : page * rowsPerPage + rowsPerPage
-              )
-              .map((filteredItem) => {
-                const itemId = String(filteredItem.id);
-                const open = Boolean(anchorEl[itemId]);
-                return (
-                  <TableRow key={itemId}>
-                    {header.map((headerItem, index) => (
-                      <TableCellStyled key={index} cellwidth="" cellminwidth="" header={false} size="small">
-                        {headerItem.toLocaleLowerCase().includes("date") ? (
-                          <TableText>
-                            {dateFormat === "international"
-                              ? formatDateInternational(Number(filteredItem[headerItem]))
-                              : formatDateText(Number(filteredItem[headerItem]))}
-                          </TableText>
-                        ) : headerItem.toLocaleLowerCase().includes("color") ? (
-                          <CenteredBox>
-                            <ModalPickerPrev color={String(filteredItem[headerItem])} />
-                            <TableText ml={1}>{filteredItem[headerItem]}</TableText>
-                          </CenteredBox>
-                        ) : headerItem.toLocaleLowerCase().includes("amount") ? (
-                          <TableText ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</TableText>
-                        ) : headerItem === "conceptId" ? (
-                          <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
-                        ) : headerItem === "lawyerId" ? (
-                          <TableText>
-                            {lawyers.find((lawyer) => lawyer.id === filteredItem[headerItem])?.name || "No encontrado"}
-                          </TableText>
-                        ) : headerItem === "clientId" ? (
-                          <TableText>
-                            {clients.find((client) => client.id === filteredItem[headerItem])?.name || "No encontrado"}
-                          </TableText>
-                        ) : headerItem.toLocaleLowerCase().includes("sub") ? (
-                          Array.isArray(filteredItem[headerItem]) &&
-                          filteredItem[headerItem].map((item) => (
-                            <StyledChip
-                              label={item}
-                              chipcolor={String(filteredItem.color)}
-                              chiptextcolor={getComplementaryColor(String(filteredItem.color))}
-                              sx={{ margin: "2px 4px" }}
-                            />
-                          ))
-                        ) : (
-                          <TableText>
-                            {filteredItem[headerItem] === true
-                              ? "Si"
-                              : filteredItem[headerItem] === false
-                              ? "No"
-                              : `${filteredItem[headerItem] || "--"}`}
-                          </TableText>
-                        )}
-                      </TableCellStyled>
-                    ))}
-                    <TableCellStyledIcon header={false}>
-                      <TableIconButtonContainer
-                        aria-controls={open ? `menu-${itemId}` : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={(event) => handleOpenDropdown(event, itemId)}
-                      >
-                        <MoreVertIcon />
-                      </TableIconButtonContainer>
-                      <Menu
-                        id={`menu-${itemId}`}
-                        anchorEl={anchorEl[itemId]}
-                        open={open}
-                        onClose={() => handleCloseDropdown(itemId)}
-                        MenuListProps={{
-                          "aria-labelledby": "basic-button",
-                        }}
-                      >
-                        <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
-                        <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
-                      </Menu>
-                    </TableCellStyledIcon>
-                  </TableRow>
-                );
-              })}
+            {loading ? (
+              <TableRow key={"spinner-waiting"}>
+                <TableCell colSpan={8}>
+                  <Spinner size={50} thickness={5} />
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredValues
+                .sort((a, b) => {
+                  const valueA = a[sortedHeader];
+                  const valueB = b[sortedHeader];
+                  if (typeof valueA === "number" && typeof valueB === "number") {
+                    return sortOrder === "desc" ? valueB - valueA : valueA - valueB;
+                  } else if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOrder === "desc" ? valueB.localeCompare(valueA) : valueA.localeCompare(valueB);
+                  }
+                  return 0;
+                })
+                .slice(
+                  rowsPerPage === -1 ? 0 : page * rowsPerPage,
+                  rowsPerPage === -1 ? undefined : page * rowsPerPage + rowsPerPage
+                )
+                .map((filteredItem) => {
+                  const itemId = String(filteredItem.id);
+                  const open = Boolean(anchorEl[itemId]);
+                  return (
+                    <TableRow key={itemId}>
+                      {header.map((headerItem, index) => (
+                        <TableCellStyled key={index} cellwidth="" cellminwidth="" header={false} size="small">
+                          {headerItem.toLocaleLowerCase().includes("date") ? (
+                            <TableText>
+                              {dateFormat === "international"
+                                ? formatDateInternational(Number(filteredItem[headerItem]))
+                                : formatDateText(Number(filteredItem[headerItem]))}
+                            </TableText>
+                          ) : headerItem.toLocaleLowerCase().includes("color") ? (
+                            <CenteredBox>
+                              <ModalPickerPrev color={String(filteredItem[headerItem])} />
+                              <TableText ml={1}>{filteredItem[headerItem]}</TableText>
+                            </CenteredBox>
+                          ) : headerItem.toLocaleLowerCase().includes("amount") ? (
+                            <TableText ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</TableText>
+                          ) : headerItem === "conceptId" ? (
+                            <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
+                          ) : headerItem === "lawyerId" ? (
+                            <TableText>
+                              {lawyers.find((lawyer) => lawyer.id === filteredItem[headerItem])?.name ||
+                                "No encontrado"}
+                            </TableText>
+                          ) : headerItem === "clientId" ? (
+                            <TableText>
+                              {clients.find((client) => client.id === filteredItem[headerItem])?.name ||
+                                "No encontrado"}
+                            </TableText>
+                          ) : headerItem.toLocaleLowerCase().includes("sub") ? (
+                            Array.isArray(filteredItem[headerItem]) &&
+                            filteredItem[headerItem].map((item) => (
+                              <StyledChip
+                                label={item}
+                                chipcolor={String(filteredItem.color)}
+                                chiptextcolor={getComplementaryColor(String(filteredItem.color))}
+                                sx={{ margin: "2px 4px" }}
+                              />
+                            ))
+                          ) : (
+                            <TableText>
+                              {filteredItem[headerItem] === true
+                                ? "Si"
+                                : filteredItem[headerItem] === false
+                                ? "No"
+                                : `${filteredItem[headerItem] || "--"}`}
+                            </TableText>
+                          )}
+                        </TableCellStyled>
+                      ))}
+                      <TableCellStyledIcon header={false}>
+                        <TableIconButtonContainer
+                          aria-controls={open ? `menu-${itemId}` : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? "true" : undefined}
+                          onClick={(event) => handleOpenDropdown(event, itemId)}
+                        >
+                          <MoreVertIcon />
+                        </TableIconButtonContainer>
+                        <Menu
+                          id={`menu-${itemId}`}
+                          anchorEl={anchorEl[itemId]}
+                          open={open}
+                          onClose={() => handleCloseDropdown(itemId)}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                        >
+                          <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
+                          <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
+                        </Menu>
+                      </TableCellStyledIcon>
+                    </TableRow>
+                  );
+                })
+            )}
           </TableBody>
           <StyledTableFooter>
             <TableRow>

@@ -14,13 +14,11 @@ export const StatsPage = () => {
   const colors = useMemo(() => expensesConcepts.map((concept) => concept.color), [expensesConcepts]);
 
   const data = useMemo(() => {
-    // Crear un objeto con todos los conceptos inicializados en 0
     const expenseMap = expensesConcepts.reduce((acc, concept) => {
-      acc[concept.id] = 0; // Inicializa cada concepto en 0
+      acc[concept.id] = 0;
       return acc;
     }, {} as Record<string, number>);
 
-    // Sumar los gastos a los conceptos correspondientes
     expenses.forEach((expense) => {
       if (Object.prototype.hasOwnProperty.call(expenseMap, expense.conceptId)) {
         expenseMap[expense.conceptId] += expense.amount;

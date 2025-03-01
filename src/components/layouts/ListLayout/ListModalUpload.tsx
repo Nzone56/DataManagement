@@ -9,6 +9,7 @@ import { useTransformData } from "../../../hooks/useTransformData";
 import { useDispatch } from "react-redux";
 import { setWorklogs } from "../../../store/worklogs/worklogs.actions";
 import { AppDispatch } from "../../../store/store";
+import { toast } from "react-toastify";
 
 type CustomModalProps = {
   show: boolean;
@@ -60,7 +61,13 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
           msg: `Se han cargado satisfactoriamente ${jsonData.length} datos`,
         }));
       } catch (error) {
-        setState((prev) => ({ ...prev, error: true, msg: `Error al procesar el archivo: ${error}` }));
+        if (String(error).startsWith("TypeError:")) {
+          setState((prev) => ({
+            ...prev,
+            error: true,
+            msg: `Error al procesar el archivo: No tiene la estructura del TimeManager`,
+          }));
+        }
       }
     };
     reader.onerror = () => setState((prev) => ({ ...prev, error: true, msg: "Error al leer el archivo." }));
@@ -69,11 +76,10 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
 
   const handleUpload = async () => {
     try {
-      console.log(data);
       await dispatch(setWorklogs(data));
       onHide();
     } catch (error) {
-      console.error("Error al subir worklogs:", error);
+      toast.error(`Error al subir worklogs: ${error}`);
     }
   };
 
@@ -87,7 +93,6 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
     }
   }, [data, errorClients, errorLawyers]);
 
-  //TODO: CHECK DOUBLE ERROR, DUPLICATED AND NOT FIND CLIENT/LAWYER
   return (
     <Modal open={show} onClose={onHide} aria-labelledby="modal-title">
       <ModalInnerContainer>

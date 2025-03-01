@@ -7,7 +7,6 @@ import { getFees } from "../../../store/expenses/expenses.selector";
 import { addFee, fetchFees, removeFee, updateFee } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
 import { Fee } from "../../../models/interfaces/Expense/IExpense";
-import { Typography } from "@mui/material";
 
 const InitialFee: Fee = {
   id: "",
@@ -27,23 +26,17 @@ export const FeesPage = () => {
   }, []);
 
   return (
-    <>
-      {loading || fees.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="Honorarios"
-            list={fees}
-            initialDataItem={InitialFee}
-            header={Object.keys(fees[0])?.filter((headItem) => headItem !== "id")}
-            addItem={addFee}
-            updateItem={updateFee}
-            removeItem={removeFee}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="Honorarios"
+        list={fees}
+        initialDataItem={InitialFee}
+        header={Object.keys(InitialFee)?.filter((headItem) => headItem !== "id")}
+        addItem={addFee}
+        updateItem={updateFee}
+        removeItem={removeFee}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };

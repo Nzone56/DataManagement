@@ -3,6 +3,8 @@ import {
   Add as AddIcon,
   FilterAlt as FilterIcon,
   Search as SearchIcon,
+  Folder as FolderIcon,
+  Upload as UploadIcon,
 } from "@mui/icons-material";
 import { CenteredBox, IconBox, PrimaryButton } from "../../Components.styled";
 import {
@@ -36,7 +38,7 @@ export const ListLayout = <T extends { id: string }>({
   list,
   header,
   initialDataItem,
-  // loading,
+  loading,
   addItem,
   removeItem,
   updateItem,
@@ -93,13 +95,13 @@ export const ListLayout = <T extends { id: string }>({
             Añadir {title.replace(/s$/, "")}
           </PrimaryButton>
           <TableIconButtonContainer
-            aria-controls={open ? `menu}` : undefined}
+            aria-controls={open ? `menu` : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
             <IconBox ml={1}>
-              <DownloadIcon />
+              <FolderIcon />
             </IconBox>
           </TableIconButtonContainer>
           <Menu
@@ -111,8 +113,14 @@ export const ListLayout = <T extends { id: string }>({
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={() => setShowUploadModal(true)}>Subir</MenuItem>
-            <MenuItem disabled>Descargar</MenuItem>
+            <MenuItem onClick={() => setShowUploadModal(true)} disabled={title !== "TimeManager"}>
+              <UploadIcon />
+              <Typography ml={1}>Subir </Typography>
+            </MenuItem>
+            <MenuItem disabled>
+              <DownloadIcon />
+              <Typography ml={1}>Descargar </Typography>
+            </MenuItem>
           </Menu>
         </CenteredBox>
       </ListTitleContainer>
@@ -140,6 +148,7 @@ export const ListLayout = <T extends { id: string }>({
         />
       </FiltersContainer>
       <ListTable
+        loading={loading}
         list={list}
         header={header}
         title={title}

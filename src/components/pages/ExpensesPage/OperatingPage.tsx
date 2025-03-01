@@ -14,7 +14,6 @@ import {
   updateExpense,
 } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
-import { Typography } from "@mui/material";
 
 const InitialExpense: Expense = {
   id: "",
@@ -35,23 +34,17 @@ export const OperatingPage = () => {
   }, []);
 
   return (
-    <>
-      {loading || expenses.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="Gastos"
-            list={expenses}
-            initialDataItem={InitialExpense}
-            header={Object.keys(expenses[0])?.filter((headItem) => headItem !== "id")}
-            addItem={addExpense}
-            updateItem={updateExpense}
-            removeItem={removeExpense}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="Gastos"
+        list={expenses}
+        initialDataItem={InitialExpense}
+        header={Object.keys(InitialExpense)?.filter((headItem) => headItem !== "id")}
+        addItem={addExpense}
+        updateItem={updateExpense}
+        removeItem={removeExpense}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };

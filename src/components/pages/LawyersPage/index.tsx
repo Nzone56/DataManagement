@@ -6,7 +6,6 @@ import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../st
 import { useEffect } from "react";
 import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
 import { AppDispatch } from "../../../store/store";
-import { Typography } from "@mui/material";
 
 const InitialLawyer: Lawyer = {
   id: "",
@@ -29,23 +28,17 @@ export const LawyersPage = () => {
   }, []);
 
   return (
-    <>
-      {loading || lawyers.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="Abogados"
-            list={lawyers}
-            initialDataItem={InitialLawyer}
-            header={Object.keys(lawyers[0])?.filter((headItem) => headItem !== "id")}
-            addItem={addLawyer}
-            updateItem={updateLawyer}
-            removeItem={removeLawyer}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="Abogados"
+        list={lawyers}
+        initialDataItem={InitialLawyer}
+        header={Object.keys(InitialLawyer)?.filter((headItem) => headItem !== "id")}
+        addItem={addLawyer}
+        updateItem={updateLawyer}
+        removeItem={removeLawyer}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };

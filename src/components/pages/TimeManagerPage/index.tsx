@@ -2,7 +2,6 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { Typography } from "@mui/material";
 import { Worklog } from "../../../models/interfaces/TimeManager/IWorklog";
 import { getWorklogs } from "../../../store/worklogs/worklogs.selector";
 import { addWorklog, fetchWorklogs, removeWorklog, updateWorklog } from "../../../store/worklogs/worklogs.actions";
@@ -42,23 +41,17 @@ export const TimeManagerPage = () => {
   }, []);
 
   return (
-    <>
-      {loading || worklogs.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="TimeManager"
-            list={worklogs}
-            initialDataItem={InitialWorklog}
-            header={Object.keys(worklogs[0])}
-            addItem={addWorklog}
-            updateItem={updateWorklog}
-            removeItem={removeWorklog}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="TimeManager"
+        list={worklogs}
+        initialDataItem={InitialWorklog}
+        header={Object.keys(InitialWorklog)}
+        addItem={addWorklog}
+        updateItem={updateWorklog}
+        removeItem={removeWorklog}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };

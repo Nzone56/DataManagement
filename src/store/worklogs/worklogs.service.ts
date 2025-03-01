@@ -34,13 +34,14 @@ const removeWorklog = async (id: string) => {
 };
 
 const setWorklogs = async (worklogs: Worklog[]) => {
-  //TODO: SE ESTA ENVIANDO CON LA FORMA RARA
-  const response = await fetch(API_URL_WORKLOGS, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(worklogs),
-  });
-  return await response.json();
+  const requests = worklogs.map((worklog) =>
+    fetch(API_URL_WORKLOGS, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(worklog),
+    }).then((res) => res.json())
+  );
+  return Promise.all(requests);
 };
 
 export const WorklogService = {

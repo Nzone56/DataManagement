@@ -6,7 +6,6 @@ import { addClient, fetchClients, removeClient, updateClient } from "../../../st
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { Client } from "../../../models/interfaces/Client/IClient";
-import { Typography } from "@mui/material";
 
 const InitialClient: Client = {
   id: "",
@@ -23,30 +22,23 @@ const InitialClient: Client = {
 export const ClientsPage = () => {
   const { clients, loading } = useSelector(getClients);
   const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
     dispatch(fetchClients());
     //eslint-disable-next-line
   }, []);
 
   return (
-    <>
-      {loading || clients.length === 0 ? (
-        <Typography> CARGANDO... </Typography>
-      ) : (
-        <MainLayout>
-          <ListLayout
-            title="Clientes"
-            list={clients}
-            initialDataItem={InitialClient}
-            header={Object.keys(clients[0])?.filter((headItem) => headItem !== "id")}
-            addItem={addClient}
-            updateItem={updateClient}
-            removeItem={removeClient}
-            loading={loading}
-          />
-        </MainLayout>
-      )}
-    </>
+    <MainLayout>
+      <ListLayout
+        title="Clientes"
+        list={clients}
+        initialDataItem={InitialClient}
+        header={Object.keys(InitialClient)?.filter((headItem) => headItem !== "id")}
+        addItem={addClient}
+        updateItem={updateClient}
+        removeItem={removeClient}
+        loading={loading}
+      />
+    </MainLayout>
   );
 };
