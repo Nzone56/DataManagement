@@ -6,6 +6,7 @@ import { addClient, fetchClients, removeClient, updateClient } from "../../../st
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { Client } from "../../../models/interfaces/Client/IClient";
+import { Typography } from "@mui/material";
 
 const InitialClient: Client = {
   id: "",

@@ -24,6 +24,7 @@ export const ListLayoutContainer = styled(Box)({
   flexDirection: "column",
   flexGrow: 1,
   padding: "16px",
+  overflowX: "hidden",
 });
 
 export const ListTitleContainer = styled(Box)({
@@ -56,16 +57,18 @@ export const TableCellStyled = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== "header",
 })<{
   cellwidth: string;
+  cellminwidth: string;
   header: boolean;
-}>(({ cellwidth, header, theme }) => ({
+}>(({ cellwidth, cellminwidth, header, theme }) => ({
   width: cellwidth ? `${cellwidth}%` : "auto",
+  minWidth: cellminwidth ? `${cellminwidth}px` : "",
   border: "1px solid #e0e0e0",
   color: header ? "white" : "black",
   "& svg": {
     cursor: "pointer",
     fill: header ? "white" : "black",
-    width: "22px",
-    height: "22px",
+    width: "20px",
+    height: "20px",
     "&:hover": {
       fill: theme.palette.secondary.dark,
     },
@@ -161,9 +164,7 @@ export const StyledChip = styled(Chip)<{ chipcolor: string; chiptextcolor: strin
     backgroundColor: chipcolor,
     color: chiptextcolor,
     border: `1px solid ${chipcolor}`,
-    "> Typography": {
-      fontWeight: 500,
-      ...getResponsiveFontSize(theme),
-    },
+    fontWeight: 500,
+    ...getResponsiveFontSize(theme),
   })
 );

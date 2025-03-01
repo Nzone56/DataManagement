@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { addWorklog, fetchWorklogs, removeWorklog, updateWorklog } from "./worklogs.actions";
+import { addWorklog, fetchWorklogs, removeWorklog, setWorklogs, updateWorklog } from "./worklogs.actions";
 import { toast } from "react-toastify";
 import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
 
@@ -83,5 +83,25 @@ export const worklogsReducer = createReducer(initialStateWorklogs, (builder) => 
       state.loading = false;
       state.error = action.error.message || "Error al actualizar el concepto de Worklog";
       toast.error(state.error);
+    })
+
+    // Set Worklog
+    .addCase(setWorklogs.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(setWorklogs.fulfilled, (state, action: PayloadAction<Worklog[]>) => {
+      state.loading = false;
+      state.worklogs = [...state.worklogs, ...Object.values(action.payload)];
+      toast.success("Worklogs añadidos con éxito");
+    })
+    .addCase(setWorklogs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al subir los worklogs";
+      toast.error(state.error);
     });
+
+  // .addCase(setWorklogs, (state, action) => {
+  //   toast.success("Worklogs añadidos con éxito");
+  //   state.worklogs = [...state.worklogs, ...action.payload];
+  // });
 });

@@ -28,7 +28,7 @@ import { MenuOptionType } from "../../models/interfaces/Other/IMenu";
 export const SideMenu = () => {
   const [expandedMenu, setExpandedMenu] = useState<boolean>(false);
   const [expandedMenuOption, setExpandedMenuOption] = useState<string>("");
-
+  //TODO: TITULOS ESTAN APLICANDO EL HOVER
   const user = useSelector(getCurrentUser);
   const navigate = useNavigate();
 

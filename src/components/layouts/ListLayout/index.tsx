@@ -5,13 +5,20 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { CenteredBox, IconBox, PrimaryButton } from "../../Components.styled";
-import { FiltersContainer, ListLayoutContainer, ListTitle, ListTitleContainer } from "./ListLayout.styled";
-import { InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  FiltersContainer,
+  ListLayoutContainer,
+  ListTitle,
+  ListTitleContainer,
+  TableIconButtonContainer,
+} from "./ListLayout.styled";
+import { InputAdornment, Menu, MenuItem, TextField, Typography } from "@mui/material";
 import { ListTable } from "./ListTable";
 import { useState } from "react";
 import { ListManageItemModal } from "./ListManageItemModal";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../../../store/store";
+import { ListModalUpload } from "./ListModalUpload";
 
 interface ListLayoutProps<T extends { id: string }> {
   title: string;
@@ -35,6 +42,7 @@ export const ListLayout = <T extends { id: string }>({
   updateItem,
 }: ListLayoutProps<T>) => {
   const [searchState, setSearchState] = useState<string>("");
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [modalState, setModalState] = useState<{
     open: boolean;
     mode: "create" | "edit";
@@ -43,6 +51,8 @@ export const ListLayout = <T extends { id: string }>({
     open: false,
     mode: "create",
   });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const handleOpenModal = (mode: "create" | "edit", data?: T) => {
     setModalState({ open: true, mode, data });
@@ -50,6 +60,13 @@ export const ListLayout = <T extends { id: string }>({
 
   const handleCloseModal = () => {
     setModalState({ open: false, mode: "create", data: undefined });
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -66,15 +83,37 @@ export const ListLayout = <T extends { id: string }>({
           updateItem={updateItem}
         />
       ) : null}
+      {showUploadModal ? (
+        <ListModalUpload show={showUploadModal} onHide={() => setShowUploadModal(false)} title={title} />
+      ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>
         <CenteredBox>
           <PrimaryButton variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenModal("create")}>
             Añadir {title.replace(/s$/, "")}
           </PrimaryButton>
-          <IconBox ml={1}>
-            <DownloadIcon />
-          </IconBox>
+          <TableIconButtonContainer
+            aria-controls={open ? `menu}` : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <IconBox ml={1}>
+              <DownloadIcon />
+            </IconBox>
+          </TableIconButtonContainer>
+          <Menu
+            id={`menu`}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={() => setShowUploadModal(true)}>Subir</MenuItem>
+            <MenuItem disabled>Descargar</MenuItem>
+          </Menu>
         </CenteredBox>
       </ListTitleContainer>
       <FiltersContainer>

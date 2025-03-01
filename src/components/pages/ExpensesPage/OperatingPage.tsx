@@ -14,6 +14,7 @@ import {
   updateExpense,
 } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
+import { Typography } from "@mui/material";
 
 const InitialExpense: Expense = {
   id: "",

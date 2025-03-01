@@ -9,6 +9,7 @@ export const MainLayoutContainer = styled(Box)({
 export const MainContentContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
+  overflow: "hidden",
   marginLeft: "55px",
   flexBasis: 0,
   flexGrow: 1,

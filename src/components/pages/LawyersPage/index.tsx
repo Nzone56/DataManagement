@@ -6,6 +6,7 @@ import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../st
 import { useEffect } from "react";
 import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
 import { AppDispatch } from "../../../store/store";
+import { Typography } from "@mui/material";
 
 const InitialLawyer: Lawyer = {
   id: "",

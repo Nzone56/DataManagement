@@ -30,6 +30,9 @@ import { numberToCurrency } from "../../../utils/formatter";
 import { TableItemChip } from "./ui/TableItemChip";
 import { getSettings } from "../../../store/settings/settings.selector";
 import { getComplementaryColor } from "../../../utils/getters";
+import { columnWidths } from "../../pages/TimeManagerPage/WorklogVariables";
+import { getLawyers } from "../../../store/lawyers/lawyers.selector";
+import { getClients } from "../../../store/clients/clients.selector";
 
 interface ListTableProps<T> {
   list: T[];
@@ -40,7 +43,7 @@ interface ListTableProps<T> {
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
 }
 
-export const ListTable = <T extends Record<string, string | number | string[]>>({
+export const ListTable = <T extends Record<string, string | number | string[] | boolean>>({
   list,
   header,
   title,
@@ -50,6 +53,8 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
 }: ListTableProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
   const { dateFormat } = useSelector(getSettings);
+  const { lawyers } = useSelector(getLawyers);
+  const { clients } = useSelector(getClients);
 
   // PAGINATION AND TABLE STATES
   const [page, setPage] = useState(0);
@@ -132,10 +137,12 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
                   return (
                     <TableCellStyled
                       cellwidth={((100 - 5) / header.length).toString()}
+                      cellminwidth={title === "TimeManager" ? String(columnWidths[rowHeader]) : ""}
                       header={true}
                       key={rowHeader}
                       onClick={() => handleSortHeader(rowHeader)}
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: "pointer", maxHeight: "50px" }}
+                      size="small"
                     >
                       <CenteredBox>
                         <TableText>{codeToText(rowHeader as keyof typeof localeDictionary)}</TableText>
@@ -151,7 +158,12 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
                   );
                 }
                 return (
-                  <TableCellStyled cellwidth={((100 - 5) / header.length).toString()} header={true}>
+                  <TableCellStyled
+                    cellminwidth={title === "TimeManager" ? String(columnWidths[rowHeader]) : ""}
+                    size="small"
+                    cellwidth={((100 - 5) / header.length).toString()}
+                    header={true}
+                  >
                     Desconocido
                   </TableCellStyled>
                 );
@@ -185,7 +197,7 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
                 return (
                   <TableRow key={itemId}>
                     {header.map((headerItem, index) => (
-                      <TableCellStyled key={index} cellwidth="" header={false}>
+                      <TableCellStyled key={index} cellwidth="" cellminwidth="" header={false} size="small">
                         {headerItem.toLocaleLowerCase().includes("date") ? (
                           <TableText>
                             {dateFormat === "international"
@@ -199,8 +211,16 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
                           </CenteredBox>
                         ) : headerItem.toLocaleLowerCase().includes("amount") ? (
                           <TableText ml={1}>{numberToCurrency(Number(filteredItem[headerItem]))}</TableText>
-                        ) : headerItem.toLocaleLowerCase().includes("id") ? (
+                        ) : headerItem === "conceptId" ? (
                           <TableItemChip id={String(filteredItem[headerItem])} title={headerItem} />
+                        ) : headerItem === "lawyerId" ? (
+                          <TableText>
+                            {lawyers.find((lawyer) => lawyer.id === filteredItem[headerItem])?.name || "No encontrado"}
+                          </TableText>
+                        ) : headerItem === "clientId" ? (
+                          <TableText>
+                            {clients.find((client) => client.id === filteredItem[headerItem])?.name || "No encontrado"}
+                          </TableText>
                         ) : headerItem.toLocaleLowerCase().includes("sub") ? (
                           Array.isArray(filteredItem[headerItem]) &&
                           filteredItem[headerItem].map((item) => (
@@ -212,7 +232,13 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
                             />
                           ))
                         ) : (
-                          <TableText>{filteredItem[headerItem]}</TableText>
+                          <TableText>
+                            {filteredItem[headerItem] === true
+                              ? "Si"
+                              : filteredItem[headerItem] === false
+                              ? "No"
+                              : `${filteredItem[headerItem] || "--"}`}
+                          </TableText>
                         )}
                       </TableCellStyled>
                     ))}
@@ -246,7 +272,7 @@ export const ListTable = <T extends Record<string, string | number | string[]>>(
             <TableRow>
               <StyledTablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
-                colSpan={header.length}
+                colSpan={title === "TimeManager" ? 5 : header.length}
                 count={filteredValues.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
