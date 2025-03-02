@@ -167,12 +167,13 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                     cellwidth={((100 - 5) / header.length).toString()}
                     header={true}
                   >
-                    Desconocido
+                    {rowHeader}
                   </TableCellStyled>
                 );
               })}
               <TableCellStyledIcon header={true}>
                 {/* TODO: Fix settings column  */}
+                {/* TODO: Fix search bar  */}
                 <TableIconButtonContainer>
                   <SettingsIcon />
                 </TableIconButtonContainer>

@@ -8,6 +8,7 @@ interface PieProps {
   colors: string[];
 }
 export const SimplePieChart: React.FC<PieProps> = ({ categories, series, colors }) => {
+  console.log(categories, series, colors);
   const options = {
     labels: categories,
     colors: colors,

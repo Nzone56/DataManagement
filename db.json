@@ -535,66 +535,6 @@
   ],
   "lawyers": [
     {
-      "id": "1",
-      "name": "Carlos Martínez",
-      "phone": "3123456789",
-      "cc": "1234567890",
-      "email": "carlos.martinez@firma.com",
-      "position": "Senior Lawyer",
-      "address": "Calle 123, Bogotá",
-      "entryDate": 1617552000000
-    },
-    {
-      "id": "2",
-      "name": "Ana González",
-      "phone": "3109876543",
-      "cc": "9876543210",
-      "email": "ana.gonzalez@firma.com",
-      "position": "Associate Lawyer",
-      "address": "Carrera 45, Medellín",
-      "entryDate": 1620057600000
-    },
-    {
-      "id": "3",
-      "name": "Luis Ramírez",
-      "phone": "3001234567",
-      "cc": "1928374650",
-      "email": "luis.ramirez@firma.com",
-      "position": "Junior Lawyer",
-      "address": "Avenida 10, Cali",
-      "entryDate": 1630464000000
-    },
-    {
-      "id": "4",
-      "name": "Sofía Pérez",
-      "phone": "3056789012",
-      "cc": "1122334455",
-      "email": "sofia.perez@firma.com",
-      "position": "Legal Advisor",
-      "address": "Calle 22, Barranquilla",
-      "entryDate": 1640995200000
-    },
-    {
-      "id": "5",
-      "name": "Pedro López",
-      "phone": "3176543210",
-      "cc": "5678901234",
-      "email": "pedro.lopez@firma.com",
-      "position": "Partner",
-      "address": "Calle 50, Cartagena",
-      "entryDate": 1651411200000
-    },
-    {
-      "id": "6",
-      "name": "Marta Sánchez",
-      "phone": "3123456789",
-      "cc": "1239876543",
-      "email": "marta.sanchez@firma.com",
-      "position": "Corporate Lawyer",
-      "address": "Carrera 7, Bucaramanga",
-      "entryDate": 1654027200000
-    },
-    {
       "id": "7",
       "name": "José Martínez",
       "phone": "3198765432",
@@ -711,7 +651,7 @@
       "name": "Legales",
       "type": "Gastos Legales",
       "color": "#1a64cd",
-      "subConcepts": [
+      "categories": [
         "CÁMARA DE COMERCIO",
         "SUPERINT DE IND Y CIO",
         "SUPER NOTARIADO"
@@ -722,7 +662,7 @@
       "name": "Suscripciones",
       "type": "Gastos de Suscripción",
       "color": "#f8e71c",
-      "subConcepts": [
+      "categories": [
         "SUSCRIPCIONES Y CAPACITACIONES",
         "COLSÁNITAS",
         "MONOLEGAL",
@@ -740,7 +680,7 @@
       "name": "Servicios Públicos",
       "type": "Servicios",
       "color": "#d0021b",
-      "subConcepts": [
+      "categories": [
         "ETB",
         "CLARO MAESTRA",
         "CLARO INTERNET",
@@ -755,7 +695,7 @@
       "name": "Arrendamientos",
       "type": "Inmobiliario",
       "color": "#0af34f",
-      "subConcepts": [
+      "categories": [
         "ALIANZA FIDUCIARIA",
         "ELENA MENDIVELSO"
       ]
@@ -765,7 +705,7 @@
       "name": "Impuestos",
       "type": "Tributario",
       "color": "#800080",
-      "subConcepts": [
+      "categories": [
         "RETENCIÓN EN LA FUENTE",
         "ICA",
         "RETEICA",
@@ -779,7 +719,7 @@
       "name": "Administrativos",
       "type": "Gastos Generales",
       "color": "#008080",
-      "subConcepts": [
+      "categories": [
         "CAFETERIA Y ASEO",
         "ALMUERZOS EMPLEADOS",
         "TRANSPORTE",
@@ -788,36 +728,51 @@
         "GASTOS NAVIDAD",
         "FUNDACIÓN SALESIANA"
       ]
+    },
+    {
+      "id": ":r1k:",
+      "name": "test",
+      "type": "asdasd",
+      "color": "#8b572a",
+      "categories": [
+        "1",
+        "12",
+        "123"
+      ]
     }
   ],
   "expenses": [
     {
       "id": "101",
       "conceptId": "1",
+      "categoryId": "CÁMARA DE COMERCIO",
       "amount": 400000,
       "date": 1685654400000,
-      "description": "Recibo del agua del mes de Febrero"
+      "description": "Papeles"
     },
     {
       "id": "102",
-      "conceptId": "2",
+      "conceptId": "3",
+      "categoryId": "ETB",
       "amount": 20000,
       "date": 1685654400000,
-      "description": "Uber a casa"
+      "description": "ETB mes de Febrero"
     },
     {
       "id": ":rb:",
       "conceptId": "1",
+      "categoryId": "CÁMARA DE COMERCIO",
       "amount": 70000,
       "date": 1739236658976,
-      "description": "Pago reconexión servicio"
+      "description": "Papeles"
     },
     {
       "id": ":ru:",
-      "conceptId": "2",
+      "conceptId": "3",
+      "categoryId": "ACUEDUCTO",
       "amount": 3000,
       "date": 1739236658976,
-      "description": "Trasbordo"
+      "description": "Acueducto mes de Febrero"
     }
   ],
   "fees": [

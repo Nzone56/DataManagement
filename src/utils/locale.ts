@@ -20,7 +20,7 @@ export const localeDictionary = {
   repLegal: "Representante Legal",
   position: "Cargo",
   entryDate: "Fecha de Ingreso",
-  subConcepts: "Sub-Categorias",
+  categories: "Sub-Categorias",
   feeConcept: "Concepto",
   topic: "Asunto",
   area: "Area",
@@ -42,6 +42,7 @@ export const localeDictionary = {
   source: "Origen",
   lawyerId: "Abogado",
   clientId: "Cliente",
+  categoryId: "Categoria",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

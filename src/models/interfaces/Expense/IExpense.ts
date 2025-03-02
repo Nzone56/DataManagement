@@ -3,12 +3,13 @@ export interface ExpenseConcept {
   name: string;
   type: string;
   color: string;
-  subConcepts: string[];
+  categories: string[];
 }
 
 export interface Expense {
   id: string;
   conceptId: string;
+  categoryId: string;
   amount: number;
   date: number;
   description?: string;

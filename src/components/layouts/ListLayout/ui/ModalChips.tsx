@@ -50,8 +50,9 @@ export const ModalChips = <T extends Record<string, unknown>>({
       </CenteredBoxBetween>
       <CenteredBox mt={2}>
         {Array.isArray(managedItem[item]) &&
-          managedItem[item].map((item: string) => (
+          managedItem[item].map((item: string, index: number) => (
             <Chip
+              key={`${item}_${index}`}
               label={item}
               onDelete={() => handleDelete(item)}
               sx={{

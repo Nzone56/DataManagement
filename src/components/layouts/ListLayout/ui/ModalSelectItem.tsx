@@ -1,11 +1,11 @@
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, Typography } from "@mui/material";
 import { ColumnJustifyFlex } from "../../../Components.styled";
 import { codeToText, localeDictionary } from "../../../../utils/locale";
 import { ModalFormTitle } from "../ListModal.styled";
 import { useSelector } from "react-redux";
 import { getExpenseConcepts } from "../../../../store/expenses/expenses.selector";
 import { useEffect, useState } from "react";
-import { getOptionsType } from "../../../../utils/getters";
+import { getOptionsType, getPropById } from "../../../../utils/getters";
 
 interface SelectItemProps<T1> {
   item: string;
@@ -18,18 +18,27 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
   managedItem,
   onChangeItemValue,
 }: SelectItemProps<T1>) => {
-  const [selectOptions, setSelectOptions] = useState<{ id: string; name: string; type?: string; color: string }[]>();
-  const concepts = useSelector(getExpenseConcepts);
+  const [selectOptions, setSelectOptions] = useState<{ id: string; name: string; type?: string; color?: string }[]>();
+  const { expensesConcepts } = useSelector(getExpenseConcepts);
 
   const getSelectOptions = () => {
     const type = getOptionsType(item);
-    if (type === "concept") setSelectOptions(concepts.expensesConcepts);
+    if (type === "concept") setSelectOptions(expensesConcepts);
+    if (type === "category") {
+      const expensedConceptID = getPropById(String(managedItem.conceptId), expensesConcepts, "categories");
+      setSelectOptions(
+        expensedConceptID.split(",").map((item) => ({
+          id: item.trim(),
+          name: item.trim(),
+        }))
+      );
+    }
   };
 
   useEffect(() => {
     getSelectOptions();
     //eslint-disable-next-line
-  }, []);
+  }, [managedItem]);
 
   return (
     <ColumnJustifyFlex mt={2} mr={4}>
@@ -44,10 +53,12 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
         {selectOptions?.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             {option.name}
-            <Typography style={{ color: String(option.color) }}>
-              &nbsp;
-              {option.type ? `(${option.type})` : ""}
-            </Typography>
+            {option.type ? (
+              <Typography style={{ color: String(option.color), display: "inline" }}>
+                &nbsp;
+                {`(${option.type})`}
+              </Typography>
+            ) : null}
           </MenuItem>
         ))}
       </Select>

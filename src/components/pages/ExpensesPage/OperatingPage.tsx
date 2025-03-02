@@ -18,6 +18,7 @@ import { AppDispatch } from "../../../store/store";
 const InitialExpense: Expense = {
   id: "",
   conceptId: "",
+  categoryId: "",
   amount: 0,
   date: Date.now(),
   description: "",

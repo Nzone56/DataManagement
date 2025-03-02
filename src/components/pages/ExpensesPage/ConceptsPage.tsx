@@ -17,7 +17,7 @@ const InitialExpenseConcept: ExpenseConcept = {
   name: "",
   type: "",
   color: "",
-  subConcepts: [],
+  categories: [],
 };
 
 export const ConceptsPage = () => {

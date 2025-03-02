@@ -1,4 +1,4 @@
-export const getPropById = <T extends { id: string; color: string }>(id: string, array: T[], prop: keyof T): string => {
+export const getPropById = <T extends { id: string }>(id: string, array: T[], prop: keyof T): string => {
   const item = array?.find((item) => item.id === id);
   return String(item?.[prop] ?? "");
 };

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   LogoMenu,
   MenuHeader,
@@ -20,7 +20,7 @@ import {
 import { useSelector } from "react-redux";
 
 import { CenteredBox, CenteredBoxBetween, ColumnJustifyFlex } from "../Components.styled";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { menuSections } from "./SideMenuVariables";
 import { getCurrentUser } from "../../store/user/user.selector";
 import { MenuOptionType } from "../../models/interfaces/Other/IMenu";
@@ -31,6 +31,7 @@ export const SideMenu = () => {
   const user = useSelector(getCurrentUser);
   const navigate = useNavigate();
 
+  const location = useLocation();
   const handleNavigateMenu = (item: MenuOptionType) => {
     if (!item.subItems) {
       navigate(`${item.route}`);
@@ -38,6 +39,24 @@ export const SideMenu = () => {
       setExpandedMenuOption(expandedMenuOption === item.id ? "" : item.id);
     }
   };
+
+  useEffect(() => {
+    const isReload = sessionStorage.getItem("isReload");
+    if (!isReload) {
+      setExpandedMenu(true);
+    }
+
+    sessionStorage.removeItem("isReload");
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem("isReload", "true");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
 
   return (
     <SideMenuContainer
