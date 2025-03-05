@@ -33,7 +33,7 @@ import { getComplementaryColor } from "../../../utils/getters";
 import { columnWidths } from "../../pages/TimeManagerPage/WorklogVariables";
 import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { getClients } from "../../../store/clients/clients.selector";
-import { Spinner } from "../../ui/spinner";
+import { Spinner } from "../../ui/Spinner";
 
 interface ListTableProps<T> {
   list: T[];

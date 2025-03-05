@@ -5,7 +5,7 @@ import { ModalFormTitle } from "../ListModal.styled";
 import { useSelector } from "react-redux";
 import { getExpenseConcepts } from "../../../../store/expenses/expenses.selector";
 import { useEffect, useState } from "react";
-import { getOptionsType, getPropById } from "../../../../utils/getters";
+import { getArrayPropById, getOptionsType } from "../../../../utils/getters";
 
 interface SelectItemProps<T1> {
   item: string;
@@ -25,9 +25,9 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
     const type = getOptionsType(item);
     if (type === "concept") setSelectOptions(expensesConcepts);
     if (type === "category") {
-      const expensedConceptID = getPropById(String(managedItem.conceptId), expensesConcepts, "categories");
+      const expensedConceptID = getArrayPropById(String(managedItem.conceptId), expensesConcepts, "categories");
       setSelectOptions(
-        expensedConceptID.split(",").map((item) => ({
+        expensedConceptID.map((item) => ({
           id: item.trim(),
           name: item.trim(),
         }))

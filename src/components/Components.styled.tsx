@@ -17,6 +17,11 @@ export const CenteredBox = styled(Box)({
   alignItems: "center",
 });
 
+export const FullCenterBox = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
 export const CenteredBoxBetween = styled(Box)({
   display: "flex",
   alignItems: "center",

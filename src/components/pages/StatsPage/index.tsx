@@ -1,15 +1,17 @@
 import { useSelector } from "react-redux";
 // import { SimplePieChart } from "../../graphs/SimplePieChart";
 import { MainLayout } from "../../layouts/MainLayout";
-import { StatsContainer } from "./Stats.styled";
+import { MainAccordionSummary, StatsContainer } from "./Stats.styled";
 import { getExpenseConcepts, getExpenses } from "../../../store/expenses/expenses.selector";
-import { useMemo } from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
+import { Fragment, useMemo, useState } from "react";
+import { Accordion, AccordionDetails, Typography, Select, MenuItem } from "@mui/material";
 import { ExpandMore as ExpandIcon } from "@mui/icons-material";
 import { StatCard } from "./StatCard";
 import { getWorklogs } from "../../../store/worklogs/worklogs.selector";
 import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { getClients } from "../../../store/clients/clients.selector";
+import { getArrayPropById } from "../../../utils/getters";
+import { CenteredBox } from "../../Components.styled";
 
 // Tipo para cada gráfico dentro de una categoría
 interface StatChart {
@@ -20,6 +22,7 @@ interface StatChart {
   series: number[];
   colors?: string[];
   formatter: string;
+  selectOptions?: { id: string; name: string }[];
 }
 
 interface StatcategoryId {
@@ -28,6 +31,7 @@ interface StatcategoryId {
 }
 
 export const StatsPage = () => {
+  const [chartSelect, setChartSelect] = useState<string>("all");
   const { expensesConcepts } = useSelector(getExpenseConcepts);
   const { expenses } = useSelector(getExpenses);
   const { worklogs } = useSelector(getWorklogs);
@@ -55,10 +59,22 @@ export const StatsPage = () => {
   // Datos procesados para cada gráfico
   const expenseData = useMemo(
     () =>
-      expensesConcepts.map((c) => expenses.filter((e) => e.conceptId === c.id).reduce((sum, e) => sum + e.amount, 0)),
-    [expenses, expensesConcepts]
+      chartSelect === "all"
+        ? expensesConcepts.map((c) =>
+            expenses.filter((e) => e.conceptId === c.id).reduce((sum, e) => sum + e.amount, 0)
+          )
+        : getArrayPropById(chartSelect, expensesConcepts, "categories").map((c) =>
+            expenses.filter((e) => e.categoryId === c).reduce((sum, e) => sum + e.amount, 0)
+          ),
+    [expenses, expensesConcepts, chartSelect]
   );
-  const expenseByConcept = useMemo(() => expensesConcepts.map((c) => c.name), [expensesConcepts]);
+  const expenseByConcept = useMemo(
+    () =>
+      chartSelect === "all"
+        ? expensesConcepts.map((c) => c.name)
+        : getArrayPropById(chartSelect, expensesConcepts, "categories"),
+    [expensesConcepts, chartSelect]
+  );
 
   const lawyerHours = useMemo(
     () =>
@@ -71,7 +87,7 @@ export const StatsPage = () => {
 
   const clientsData = useMemo(() => clients.map(() => 1), [clients]);
 
-  const worklogEarnings = useMemo(() => worklogs.map((w) => w.total), [worklogs]);
+  // const worklogEarnings = useMemo(() => worklogs.map((w) => w.total), [worklogs]);
 
   const statCategories: Record<string, StatcategoryId> = {
     expenses: {
@@ -85,6 +101,7 @@ export const StatsPage = () => {
           series: expenseData,
           colors: colorsConcepts,
           formatter: "money",
+          selectOptions: expensesConcepts.map((expenseC) => ({ id: expenseC.id, name: expenseC.name })),
         },
         {
           id: "expensesTotalBar",
@@ -144,20 +161,45 @@ export const StatsPage = () => {
         {/* <SimplePieChart colors={colorsConcepts} categories={conceptsCategories} series={data} /> */}
         {Object.entries(statCategories).map(([key, { title, charts }]) => (
           <Accordion key={key} defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandIcon fontSize="large" />}>
+            <MainAccordionSummary expandIcon={<ExpandIcon fontSize="large" />}>
               <Typography variant="h3">{title.toLocaleUpperCase()}</Typography>
-            </AccordionSummary>
+            </MainAccordionSummary>
             <AccordionDetails>
-              {charts.map(({ id, title, type, categories, series, colors, formatter }) => (
-                <StatCard
-                  key={id}
-                  title={title}
-                  type={type}
-                  categories={categories}
-                  series={series}
-                  colors={colors || []}
-                  formatter={formatter}
-                />
+              {charts.map(({ id, title, type, categories, series, colors, formatter, selectOptions = [] }) => (
+                <Fragment key={id}>
+                  {selectOptions?.length > 0 ? (
+                    <CenteredBox mb={2}>
+                      <Typography variant="h6" mr={1}>
+                        Concepto de Gasto:{" "}
+                      </Typography>
+                      <Select
+                        value={chartSelect}
+                        onChange={(e) => setChartSelect(e.target.value)}
+                        size="small"
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        <MenuItem value="all">Todos</MenuItem>
+                        {selectOptions.map((option) => (
+                          <MenuItem value={option.id} key={option.id}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </CenteredBox>
+                  ) : null}
+
+                  <StatCard
+                    key={id}
+                    title={title}
+                    type={type}
+                    categories={categories}
+                    series={series}
+                    colors={colors || []}
+                    formatter={formatter}
+                    chartSelect={chartSelect}
+                  />
+                </Fragment>
               ))}
             </AccordionDetails>
           </Accordion>

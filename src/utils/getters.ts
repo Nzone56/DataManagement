@@ -42,3 +42,8 @@ export const getSimpleOptions = (type: string) => {
 
   return optionsDictionary[type] || [];
 };
+
+export const getArrayPropById = <T extends { id: string }>(id: string, array: T[], prop: keyof T): string[] => {
+  const stringProps = getPropById(id, array, prop);
+  return stringProps.split(",");
+};
