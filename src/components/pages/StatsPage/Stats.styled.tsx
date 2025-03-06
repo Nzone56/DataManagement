@@ -23,3 +23,12 @@ export const SecondaryAccordionSummary = styled(AccordionSummary)({
   backgroundColor: "#ffc107",
   borderRadius: "10px",
 });
+
+export const AccordionsContainer = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  gap: "15px",
+  marginTop: "20px",
+  padding: "10px",
+});

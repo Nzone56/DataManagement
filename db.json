@@ -535,46 +535,6 @@
   ],
   "lawyers": [
     {
-      "id": "7",
-      "name": "José Martínez",
-      "phone": "3198765432",
-      "cc": "3456789012",
-      "email": "jose.martinez@firma.com",
-      "position": "Litigation Lawyer",
-      "address": "Calle 80, Pereira",
-      "entryDate": 1664534400000
-    },
-    {
-      "id": "8",
-      "name": "Claudia Fernández",
-      "phone": "3198765432",
-      "cc": "2345678901",
-      "email": "claudia.fernandez@firma.com",
-      "position": "Family Lawyer",
-      "address": "Carrera 15, Manizales",
-      "entryDate": 1674124800000
-    },
-    {
-      "id": "9",
-      "name": "Fernando Díaz",
-      "phone": "3145678901",
-      "cc": "7654321098",
-      "email": "fernando.diaz@firma.com",
-      "position": "Tax Lawyer",
-      "address": "Calle 60, Cúcuta",
-      "entryDate": 1685654400000
-    },
-    {
-      "id": "10",
-      "name": "Isabel García",
-      "phone": "3176549870",
-      "cc": "9876541230",
-      "email": "isabel.garcia@firma.com",
-      "position": "Environmental Lawyer",
-      "address": "Carrera 12, Villavicencio",
-      "entryDate": 1696435200000
-    },
-    {
       "id": "11",
       "name": "Juan Sebastián Martínez",
       "phone": "",
@@ -651,11 +611,7 @@
       "name": "Legales",
       "type": "Gastos Legales",
       "color": "#1a64cd",
-      "categories": [
-        "CÁMARA DE COMERCIO",
-        "SUPERINT DE IND Y CIO",
-        "SUPER NOTARIADO"
-      ]
+      "categories": ["CÁMARA DE COMERCIO", "SUPERINT DE IND Y CIO", "SUPER NOTARIADO"]
     },
     {
       "id": "2",
@@ -680,39 +636,21 @@
       "name": "Servicios Públicos",
       "type": "Servicios",
       "color": "#d0021b",
-      "categories": [
-        "ETB",
-        "CLARO MAESTRA",
-        "CLARO INTERNET",
-        "ACUEDUCTO",
-        "CODENSA",
-        "PROSEGUR",
-        "ADMINISTRACIÓN"
-      ]
+      "categories": ["ETB", "CLARO MAESTRA", "CLARO INTERNET", "ACUEDUCTO", "CODENSA", "PROSEGUR", "ADMINISTRACIÓN"]
     },
     {
       "id": "4",
       "name": "Arrendamientos",
       "type": "Inmobiliario",
       "color": "#0af34f",
-      "categories": [
-        "ALIANZA FIDUCIARIA",
-        "ELENA MENDIVELSO"
-      ]
+      "categories": ["ALIANZA FIDUCIARIA", "ELENA MENDIVELSO"]
     },
     {
       "id": "6",
       "name": "Impuestos",
       "type": "Tributario",
       "color": "#800080",
-      "categories": [
-        "RETENCIÓN EN LA FUENTE",
-        "ICA",
-        "RETEICA",
-        "RENTA",
-        "IVA",
-        "CÁMARA DE COMERCIO"
-      ]
+      "categories": ["RETENCIÓN EN LA FUENTE", "ICA", "RETEICA", "RENTA", "IVA", "CÁMARA DE COMERCIO"]
     },
     {
       "id": "7",
@@ -809,29 +747,6 @@
     }
   ],
   "worklogs": [
-    {
-      "id": "1",
-      "lawyerId": "8",
-      "clientId": "1",
-      "topic": "Asesoría corporativa",
-      "area": "Consultoría",
-      "billingMode": "Monto Fijo Mensual",
-      "billingResponsible": "Germán Ulloa",
-      "reportedTime": 2,
-      "workedTime": 1.8,
-      "date": 1652145600000,
-      "concept": "Revisión de documentación",
-      "hourlyRate": 415000,
-      "currency": "COP",
-      "total": 1245000,
-      "billed": false,
-      "status": "Activo",
-      "billable": true,
-      "documentNumber": "FE2049",
-      "lastModifiedDate": 1652145600000,
-      "creationDate": 1652145600000,
-      "source": "Web"
-    },
     {
       "id": "46870",
       "lawyerId": "11",

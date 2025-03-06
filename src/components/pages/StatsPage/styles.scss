@@ -1,0 +1,52 @@
+// Estilos para react-datepicker
+.react-datepicker__input-container input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+  margin-right: 10px;
+  color: black;
+}
+
+.react-datepicker__input-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+  max-width: 150px;
+  margin-right: 20px;
+}
+
+.react-datepicker {
+  font-family: "Arial", sans-serif;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+// Opcional: Estilo del calendario
+.react-datepicker__header {
+  background-color: #002a8f !important;
+  border-bottom: 1px solid #002a8f !important;
+  h2,
+  div {
+    color: white !important;
+  }
+}
+
+.react-datepicker__day--selected {
+  background-color: #002a8f !important;
+  color: white !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #002a8f !important;
+  color: white !important;
+}
