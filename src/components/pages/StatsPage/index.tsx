@@ -32,36 +32,35 @@ export const StatsPage = () => {
           isDateInFilter={isDateInFilter}
         />
         <AccordionsContainer>
-          {Object.entries(statCategories).map(([key, { title, charts }]) => (
+          {Object.entries(statCategories).map(([key, { title, charts, selectOptions = [] }]) => (
             <Accordion key={key}>
               <MainAccordionSummary expandIcon={<ExpandIcon fontSize="large" />}>
                 <Typography variant="h3">{title.toLocaleUpperCase()}</Typography>
               </MainAccordionSummary>
               <AccordionDetails>
-                {charts.map(({ id, title, type, categories, series, colors, formatter, selectOptions = [] }) => (
-                  <Fragment key={id}>
-                    {selectOptions?.length > 0 ? (
-                      <CenteredBox mb={2}>
-                        <Typography variant="h6" mr={1}>
-                          Concepto de Gasto:{" "}
-                        </Typography>
-                        <Select
-                          value={chartSelect}
-                          onChange={(e) => setChartSelect(e.target.value)}
-                          size="small"
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                        >
-                          <MenuItem value="all">Todos</MenuItem>
-                          {selectOptions.map((option) => (
-                            <MenuItem value={option.id} key={option.id}>
-                              {option.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </CenteredBox>
-                    ) : null}
-
+                <Fragment key={title}>
+                  {selectOptions?.length > 0 ? (
+                    <CenteredBox mb={2}>
+                      <Typography variant="h6" mr={1}>
+                        Concepto de Gasto:{" "}
+                      </Typography>
+                      <Select
+                        value={chartSelect}
+                        onChange={(e) => setChartSelect(e.target.value)}
+                        size="small"
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                      >
+                        <MenuItem value="all">Todos</MenuItem>
+                        {selectOptions.map((option) => (
+                          <MenuItem value={option.id} key={option.id}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </CenteredBox>
+                  ) : null}
+                  {charts.map(({ id, title, type, categories, series, colors, formatter }) => (
                     <StatCard
                       key={id}
                       title={title}
@@ -72,8 +71,8 @@ export const StatsPage = () => {
                       formatter={formatter}
                       chartSelect={chartSelect}
                     />
-                  </Fragment>
-                ))}
+                  ))}
+                </Fragment>
               </AccordionDetails>
             </Accordion>
           ))}

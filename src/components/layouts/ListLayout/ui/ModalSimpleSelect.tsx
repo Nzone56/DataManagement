@@ -27,7 +27,7 @@ export const ModalSimpleSelect = <T1 extends Record<string, unknown>>({
     <ColumnJustifyFlex mt={2} mr={4}>
       <ModalFormTitle>{codeToText(String(item) as keyof typeof localeDictionary)}:</ModalFormTitle>
       <Select
-        value={managedItem[item as keyof T1]}
+        value={selectOptions.includes(managedItem[item as keyof T1] as string) ? managedItem[item as keyof T1] : ""}
         onChange={(e) => onChangeItemValue(item as keyof T1, e.target.value)}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}

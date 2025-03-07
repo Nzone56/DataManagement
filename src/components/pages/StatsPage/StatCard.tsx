@@ -26,14 +26,11 @@ export const StatCard: React.FC<StatCardProps> = ({
   formatter,
   chartSelect,
 }) => {
-  const [chartReady, setChartReady] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
+
   const options = getTableOptions(categories, type, formatter, colors, series);
-  useEffect(() => {
-    setChartReady(false);
-    setTimeout(() => {
-      setChartReady(true);
-    }, 1000);
-  }, [chartSelect]);
 
   const formattedSeries =
     type === "pie"
@@ -41,7 +38,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       : type === "bar-line"
       ? (series as ApexAxisChartSeries) // Bar-line necesita una estructura con { name, type, data }
       : [{ name: "Total", data: series as number[] }]; // Bar requiere un array de objetos
-  console.log(typeof series === "object");
+
   const isThereData =
     type === "pie"
       ? series.some((value) => Number(value) > 0)
@@ -49,33 +46,62 @@ export const StatCard: React.FC<StatCardProps> = ({
       ? Object.values(series).some((value) => value > 0)
       : (series as multiSeries[]).some((serie) => serie.data.some((value) => value > 0));
 
+  // Spinner when chartSelect changes or the graph render
+  useEffect(() => {
+    if (isExpanded) {
+      setIsLoading(true);
+      setTimeout(() => setIsLoading(false), 500); // Spinner por 800ms
+    }
+  }, [chartSelect, isExpanded]);
+
+  // Delya naimation when the accordion closes
+  useEffect(() => {
+    if (isExpanded) {
+      setIsChartVisible(true);
+    } else {
+      setTimeout(() => setIsChartVisible(false), 300); // Espera 300ms antes de ocultar la gráfica
+    }
+  }, [isExpanded]);
+
   return (
-    <Accordion sx={{ mb: 2, borderRadius: "10px" }}>
+    <Accordion
+      sx={{ mb: 2, borderRadius: "10px" }}
+      expanded={isExpanded}
+      onChange={() => setIsExpanded((prev) => !prev)}
+    >
       <SecondaryAccordionSummary expandIcon={<ExpandIcon />}>
         <Typography variant="h5" fontWeight={500}>
           {title}
         </Typography>
       </SecondaryAccordionSummary>
-      <AccordionDetails>
-        <ColumnJustifyFlex>
-          {!chartReady ? (
-            <Spinner />
-          ) : isThereData ? (
-            <Chart
-              options={options}
-              series={formattedSeries}
-              type={type === "bar-line" ? "line" : type}
-              height={300}
-              width="100%"
-            />
-          ) : (
-            <FullCenterBox>
-              <Typography variant="h5" margin={2}>
-                No hay suficientes datos para generar una grafica
-              </Typography>
-            </FullCenterBox>
-          )}
-        </ColumnJustifyFlex>
+      <AccordionDetails sx={{ overflowX: "auto" }}>
+        {isChartVisible && (
+          <ColumnJustifyFlex
+            sx={{
+              transition: "opacity 0.3s",
+              opacity: isExpanded ? 1 : 0,
+              minWidth: categories.length > 15 ? "200%" : "",
+            }}
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : isThereData ? (
+              <Chart
+                options={options}
+                series={formattedSeries}
+                type={type === "bar-line" ? "line" : type}
+                height={type !== "pie" ? 400 : 300}
+                width={categories.length > 15 ? "200%" : "100%"}
+              />
+            ) : (
+              <FullCenterBox>
+                <Typography variant="h5" margin={2}>
+                  No hay suficientes datos para generar una gráfica
+                </Typography>
+              </FullCenterBox>
+            )}
+          </ColumnJustifyFlex>
+        )}
       </AccordionDetails>
     </Accordion>
   );

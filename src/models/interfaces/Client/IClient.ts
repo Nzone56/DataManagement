@@ -3,7 +3,7 @@ export interface Client {
   name: string;
   repLegal: string;
   phone: string;
-  identification: string;
+  nitcc: string;
   address: string;
   city: string;
   email: string;

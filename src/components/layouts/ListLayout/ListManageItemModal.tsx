@@ -142,7 +142,6 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                 />
               );
             } else if (String(item.toLocaleLowerCase()) === "categories") {
-              console.log(String(item.toLocaleLowerCase()) === "categories");
               return (
                 <ModalChips key={item} item={item} managedItem={managedItem} onChangeItemValue={onChangeItemValue} />
               );

@@ -11,10 +11,26 @@ export const getTableOptions = (
   colors: string[],
   series: number[] | multiSeries[]
 ) => {
+  //  Función para formatear números (dinero o valores normales)
+  const formatNumber = (value: number) => {
+    return formatter === "money"
+      ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(value)
+      : value.toString();
+  };
+
+  // Si hay muchas categorías, reducir la fuente y permitir scroll
+  const isLargeCategorySet = categories.length > 15;
+
   return {
     series: series,
     labels: categories,
-    colors: colors,
+    colors: type === "bar-line" ? ["#008FFB", "#FF4560"] : colors,
+    stroke: {
+      width: type === "bar-line" ? [0, 4] : [4], // 0 para barras, 4 para líneas
+    },
+    markers: {
+      size: type === "bar-line" ? [0, 5] : [5], // 0 para barras, 5 para línea
+    },
     noData: {
       text: "No hay datos disponibles",
       align: "center" as const,
@@ -34,7 +50,7 @@ export const getTableOptions = (
       ): string {
         if (type === "pie") {
           const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
-          const seriesValue = w.globals.series[seriesIndex] ?? 0; // Asegura que seriesValue sea un número
+          const seriesValue = w.globals.series[seriesIndex] ?? 0;
           return total ? ((seriesValue / total) * 100).toFixed(1) + "%" : "0%";
         } else {
           return formatter === "money"
@@ -47,39 +63,41 @@ export const getTableOptions = (
     },
     yaxis: {
       labels: {
-        formatter: function (value: number) {
-          if (formatter === "money") {
-            return new Intl.NumberFormat("es-CO", {
-              style: "currency",
-              currency: "COP",
-              maximumFractionDigits: 0,
-            }).format(value);
-          } else {
-            return value.toString();
-          }
-        },
+        formatter: formatNumber,
       },
     },
     tooltip: {
       theme: "light",
+      x: {
+        formatter: (_: number, opts: { dataPointIndex: number }) => categories[opts.dataPointIndex], // Muestra el nombre completo en el tooltip
+      },
       y: {
-        formatter: function (value: number) {
-          if (formatter === "money") {
-            return new Intl.NumberFormat("es-CO", {
-              style: "currency",
-              currency: "COP",
-              maximumFractionDigits: 0,
-            }).format(value);
-          } else {
-            return value.toString();
-          }
-        },
+        formatter: formatNumber,
       },
     },
     plotOptions: {
       bar: {
-        columnWidth: "45%",
-        distributed: true,
+        columnWidth: "75%",
+        distributed: type !== "bar-line",
+      },
+    },
+    xaxis: {
+      categories,
+      labels: {
+        formatter: (val: string) => (val?.length > 5 ? val.slice(0, 5) + "..." : val),
+        style: {
+          fontSize: "12px",
+        },
+        rotate: isLargeCategorySet ? -90 : 0,
+      },
+      tickPlacement: isLargeCategorySet ? "on" : "between",
+    },
+    chart: {
+      toolbar: {
+        show: true,
+      },
+      zoom: {
+        enabled: isLargeCategorySet,
       },
     },
   };

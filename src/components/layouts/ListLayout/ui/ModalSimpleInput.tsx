@@ -20,7 +20,7 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
       <TextField
         key={item}
         variant="outlined"
-        placeholder={`${codeToText(String(item) as keyof typeof localeDictionary).toLocaleLowerCase()}...`}
+        placeholder={`${codeToText(String(item) as keyof typeof localeDictionary)?.toLocaleLowerCase()}...`}
         size="small"
         onChange={(e) => onChangeItemValue(item as keyof T, e.target.value)}
         value={managedItem[item as keyof T]}

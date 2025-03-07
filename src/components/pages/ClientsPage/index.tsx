@@ -12,7 +12,7 @@ const InitialClient: Client = {
   name: "",
   phone: "",
   repLegal: "",
-  identification: "",
+  nitcc: "",
   address: "",
   city: "",
   email: "",

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { multiSeries } from "../utils/getTableOptions";
 import { useSelector } from "react-redux";
-import { getExpenseConcepts, getExpenses } from "../store/expenses/expenses.selector";
+import { getExpenseConcepts, getExpenses, getFees } from "../store/expenses/expenses.selector";
 import { getWorklogs } from "../store/worklogs/worklogs.selector";
 import { getLawyers } from "../store/lawyers/lawyers.selector";
 import { getClients } from "../store/clients/clients.selector";
@@ -16,12 +16,12 @@ interface StatChart {
   series: number[] | multiSeries[];
   colors?: string[];
   formatter: string;
-  selectOptions?: { id: string; name: string }[];
 }
 
 interface StatcategoryId {
   title: string;
   charts: StatChart[];
+  selectOptions?: { id: string; name: string }[];
 }
 
 export interface useChartsProps {
@@ -36,9 +36,22 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
   const { worklogs } = useSelector(getWorklogs);
   const { lawyers } = useSelector(getLawyers);
   const { clients } = useSelector(getClients);
+  const { fees } = useSelector(getFees);
   const colorsConcepts = useMemo(() => expensesConcepts.map((concept) => concept.color), [expensesConcepts]);
 
-  // Datos procesados para cada gráfico
+  // ----- SERIES ----- //
+  const expenseByConcept = useMemo(
+    () =>
+      chartSelect === "all"
+        ? expensesConcepts.map((c) => c.name)
+        : getArrayPropById(chartSelect, expensesConcepts, "categories"),
+    [expensesConcepts, chartSelect]
+  );
+  const feesCategories = ["Germán Ulloa", "Carlos Bermúdez"];
+  const lawyerNames = useMemo(() => lawyers.map((lawyer) => lawyer.name), [lawyers]);
+  const clientNames = useMemo(() => clients.map((client) => client.name), [clients]);
+
+  // ----- CATEGORIES ----- /
   const expenseData = useMemo(
     () =>
       chartSelect === "all"
@@ -55,13 +68,20 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     //eslint-disable-next-line
     [expenses, expensesConcepts, chartSelect, filters]
   );
-  const expenseByConcept = useMemo(
-    () =>
-      chartSelect === "all"
-        ? expensesConcepts.map((c) => c.name)
-        : getArrayPropById(chartSelect, expensesConcepts, "categories"),
-    [expensesConcepts, chartSelect]
-  );
+
+  const feesData = useMemo(() => {
+    return fees.reduce(
+      (acc, d) => {
+        if (isDateInFilter(d.date, filters)) {
+          if (d.feeConcept === "Germán Ulloa") acc[0] += d.amount;
+          else if (d.feeConcept === "Carlos Bermúdez") acc[1] += d.amount;
+        }
+        return acc;
+      },
+      [0, 0]
+    );
+    //eslint-disable-next-line
+  }, [fees, filters]);
 
   const lawyerMinutesWorked = useMemo(
     () =>
@@ -88,7 +108,7 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
   const lawyerMinutesBilledvsWorked = useMemo(
     () => [
       {
-        name: "Facturadas",
+        name: "Facturados",
         type: "column",
         data:
           lawyers.map((lawyer) =>
@@ -100,7 +120,7 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
           ) || 0,
       },
       {
-        name: "Trabajadas",
+        name: "Trabajados",
         type: "line",
         data:
           lawyers.map((lawyer) =>
@@ -114,14 +134,165 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     [worklogs, lawyers, filters]
   );
 
-  const lawyerNames = useMemo(() => lawyers.map((lawyer) => lawyer.name), [lawyers]);
-  const clientsData = useMemo(() => clients.map(() => 1), [clients]);
+  const lawyerRevenueWorked = useMemo(
+    () =>
+      lawyers.map((lawyer) =>
+        worklogs
+          .filter((w) => w.lawyerId === lawyer.id && isDateInFilter(w.dateWork, filters))
+          .reduce((sum, w) => sum + w.total, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, lawyers, filters]
+  );
+
+  const lawyerRevenueBilled = useMemo(
+    () =>
+      lawyers.map((lawyer) =>
+        worklogs
+          .filter((w) => w.lawyerId === lawyer.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado")
+          .reduce((sum, w) => sum + w.total, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, lawyers, filters]
+  );
+
+  const lawyerRevenueBilledvsWorked = useMemo(
+    () => [
+      {
+        name: "Facturado",
+        type: "column",
+        data:
+          lawyers.map((lawyer) =>
+            worklogs
+              .filter(
+                (w) => w.lawyerId === lawyer.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado"
+              )
+              .reduce((sum, w) => sum + w.total, 0)
+          ) || 0,
+      },
+      {
+        name: "Generado",
+        type: "line",
+        data:
+          lawyers.map((lawyer) =>
+            worklogs
+              .filter((w) => w.lawyerId === lawyer.id && isDateInFilter(w.dateWork, filters))
+              .reduce((sum, w) => sum + w.total, 0)
+          ) || 0,
+      },
+    ],
+    //eslint-disable-next-line
+    [worklogs, lawyers, filters]
+  );
+
+  const clientMinutesWorked = useMemo(
+    () =>
+      clients.map((client) =>
+        worklogs
+          .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters))
+          .reduce((sum, w) => sum + w.workedTime, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
+
+  const clientMinutesBilled = useMemo(
+    () =>
+      clients.map((client) =>
+        worklogs
+          .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado")
+          .reduce((sum, w) => sum + w.workedTime, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
+
+  const clientMinutesBilledvsWorked = useMemo(
+    () => [
+      {
+        name: "Facturados",
+        type: "column",
+        data:
+          clients.map((client) =>
+            worklogs
+              .filter(
+                (w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado"
+              )
+              .reduce((sum, w) => sum + w.workedTime, 0)
+          ) || 0,
+      },
+      {
+        name: "Trabajados",
+        type: "line",
+        data:
+          clients.map((client) =>
+            worklogs
+              .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters))
+              .reduce((sum, w) => sum + w.workedTime, 0)
+          ) || 0,
+      },
+    ],
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
+
+  const clientRevenueWorked = useMemo(
+    () =>
+      clients.map((client) =>
+        worklogs
+          .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters))
+          .reduce((sum, w) => sum + w.total, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
+
+  const clientRevenueBilled = useMemo(
+    () =>
+      clients.map((client) =>
+        worklogs
+          .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado")
+          .reduce((sum, w) => sum + w.total, 0)
+      ),
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
+
+  const clientRevenueBilledvsWorked = useMemo(
+    () => [
+      {
+        name: "Facturado",
+        type: "column",
+        data:
+          clients.map((client) =>
+            worklogs
+              .filter(
+                (w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters) && w.status === "Facturado"
+              )
+              .reduce((sum, w) => sum + w.total, 0)
+          ) || 0,
+      },
+      {
+        name: "Generado",
+        type: "line",
+        data:
+          clients.map((client) =>
+            worklogs
+              .filter((w) => w.clientId === client.id && isDateInFilter(w.dateWork, filters))
+              .reduce((sum, w) => sum + w.total, 0)
+          ) || 0,
+      },
+    ],
+    //eslint-disable-next-line
+    [worklogs, clients, filters]
+  );
 
   // const worklogEarnings = useMemo(() => worklogs.map((w) => w.total), [worklogs]);
 
   const statCategories: Record<string, StatcategoryId> = {
     expenses: {
       title: "Gastos",
+      selectOptions: expensesConcepts.map((expenseC) => ({ id: expenseC.id, name: expenseC.name })),
       charts: [
         {
           id: "expensesTotalPie",
@@ -131,7 +302,6 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
           series: expenseData,
           colors: colorsConcepts,
           formatter: "money",
-          selectOptions: expensesConcepts.map((expenseC) => ({ id: expenseC.id, name: expenseC.name })),
         },
         {
           id: "expensesTotalBar",
@@ -140,6 +310,22 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
           categories: expenseByConcept,
           series: expenseData,
           colors: colorsConcepts,
+          formatter: "money",
+        },
+        {
+          id: "feesTotalPie",
+          title: "Honorarios (%)",
+          type: "pie",
+          categories: feesCategories,
+          series: feesData,
+          formatter: "money",
+        },
+        {
+          id: "feesTotalBar",
+          title: "Honorarios (Total)",
+          type: "bar",
+          categories: feesCategories,
+          series: feesData,
           formatter: "money",
         },
       ],
@@ -171,18 +357,82 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
           series: lawyerMinutesBilledvsWorked,
           formatter: "time",
         },
+        {
+          id: "lawyerRevenueWorked",
+          title: "Total generado",
+          type: "bar",
+          categories: lawyerNames,
+          series: lawyerRevenueWorked,
+          formatter: "money",
+        },
+        {
+          id: "lawyerRevenueBilled",
+          title: "Total facturado",
+          type: "bar",
+          categories: lawyerNames,
+          series: lawyerRevenueBilled,
+          formatter: "money",
+        },
+        {
+          id: "lawyerRevenueBilledvsWorked",
+          title: "Total Facturado vs Generado",
+          type: "bar-line",
+          categories: lawyerNames,
+          series: lawyerRevenueBilledvsWorked,
+          formatter: "money",
+        },
       ],
     },
     clients: {
       title: "Clientes",
       charts: [
         {
-          id: "clientsCount",
-          title: "Clientes Activos",
-          type: "pie",
-          categories: ["Clientes"],
-          series: [clientsData.length],
-          formatter: "total",
+          id: "clientMinutesWorked",
+          title: "Minutos Trabajados por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientMinutesWorked,
+          formatter: "time",
+        },
+        {
+          id: "clientMinutesBilled",
+          title: "Minutos Facturados por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientMinutesBilled,
+          formatter: "time",
+        },
+        {
+          id: "clientMinutesBilledvsWorked",
+          title: "Minutos Facturados vs Trabajados por Cliente",
+          type: "bar-line",
+          categories: clientNames,
+          series: clientMinutesBilledvsWorked,
+          formatter: "time",
+        },
+        {
+          id: "clientRevenueWorked",
+          title: "Total generado por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientRevenueWorked,
+          formatter: "money",
+        },
+        {
+          id: "clientRevenueBilled",
+          title: "Total facturado por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientRevenueBilled,
+          formatter: "money",
+        },
+        {
+          id: "clientRevenueBilledvsWorked",
+          title: "Total Facturado vs Generado por Cliente",
+          type: "bar-line",
+          categories: clientNames,
+          series: clientRevenueBilledvsWorked,
+          formatter: "money",
         },
       ],
     },

@@ -164,6 +164,7 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                   <TableCellStyled
                     cellminwidth={title === "TimeManager" ? String(columnWidths[rowHeader]) : ""}
                     size="small"
+                    key={rowHeader}
                     cellwidth={((100 - 5) / header.length).toString()}
                     header={true}
                   >
@@ -274,8 +275,22 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                             "aria-labelledby": "basic-button",
                           }}
                         >
-                          <MenuItem onClick={() => handleOpenModal("edit", filteredItem)}>Editar</MenuItem>
-                          <MenuItem onClick={() => handleDeleteItem(itemId)}>Eliminar</MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              handleOpenModal("edit", filteredItem);
+                              handleCloseDropdown(itemId);
+                            }}
+                          >
+                            Editar
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              handleDeleteItem(itemId);
+                              handleCloseDropdown(itemId);
+                            }}
+                          >
+                            Eliminar
+                          </MenuItem>
                         </Menu>
                       </TableCellStyledIcon>
                     </TableRow>
