@@ -34,10 +34,10 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   const formattedSeries =
     type === "pie"
-      ? (series as number[]) // Pie requiere un array de números
+      ? (series as number[])
       : type === "bar-line"
-      ? (series as ApexAxisChartSeries) // Bar-line necesita una estructura con { name, type, data }
-      : [{ name: "Total", data: series as number[] }]; // Bar requiere un array de objetos
+      ? (series as ApexAxisChartSeries)
+      : [{ name: "Total", data: series as number[] }];
 
   const isThereData =
     type === "pie"
@@ -59,7 +59,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     if (isExpanded) {
       setIsChartVisible(true);
     } else {
-      setTimeout(() => setIsChartVisible(false), 300); // Espera 300ms antes de ocultar la gráfica
+      setTimeout(() => setIsChartVisible(false), 300); // Wait 300ms before hidding the graph
     }
   }, [isExpanded]);
 

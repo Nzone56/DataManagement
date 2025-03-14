@@ -1,6 +1,6 @@
 import { MainLayout } from "../../layouts/MainLayout";
 import { AccordionsContainer, MainAccordionSummary, StatsContainer } from "./Stats.styled";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Accordion, AccordionDetails, Typography, Select, MenuItem } from "@mui/material";
 import { ExpandMore as ExpandIcon } from "@mui/icons-material";
 import { StatCard } from "./StatCard";
@@ -8,19 +8,54 @@ import { CenteredBox } from "../../Components.styled";
 import { StatsFilters } from "./StatsFilters";
 import { useDateFilters } from "../../../hooks/useDateFilters";
 import { useCharts } from "../../../hooks/useCharts";
+import FilterMenu from "./FilterMenu";
 
-// Tipo para cada gráfico dentro de una categoría
+type FilterCategory = {
+  name: string;
+  enabled: boolean;
+};
 
+//TODO: NO PERMITIR DATOS CON EL MISMO NOMBRE / ID
 export const StatsPage = () => {
   const [chartSelect, setChartSelect] = useState<string>("all");
+  const [hideZeros, setHideZeros] = useState(false);
   const { filters, handleDateFilterChange, handleChangeFilterProp, handleChangeDate, isDateInFilter } =
     useDateFilters();
-
-  const statCategories = useCharts({
+  const { statCategories, filterChartData } = useCharts({
     filters,
     chartSelect,
     isDateInFilter,
   });
+
+  const [localCategories, setLocalCategories] = useState<FilterCategory[]>([]);
+  const prevStatCategories = useRef(statCategories);
+
+  useEffect(() => {
+    if (JSON.stringify(prevStatCategories.current) === JSON.stringify(statCategories)) {
+      return; // No hacer nada si no cambió
+    }
+
+    prevStatCategories.current = statCategories; // Guardar nueva referencia
+
+    const allCategories: FilterCategory[] = [];
+
+    Object.values(statCategories).forEach(({ charts, filterCategories }) => {
+      if (filterCategories) {
+        charts.forEach(({ categories }) => {
+          if (categories) {
+            categories.forEach((category: string) => {
+              if (!allCategories.some((c) => c.name === category)) {
+                allCategories.push({ name: category, enabled: true });
+              }
+            });
+          }
+        });
+      }
+    });
+
+    setLocalCategories(allCategories);
+  }, [statCategories]);
+
   return (
     <MainLayout>
       <StatsContainer>
@@ -29,53 +64,69 @@ export const StatsPage = () => {
           handleChangeDate={handleChangeDate}
           handleDateFilterChange={handleDateFilterChange}
           handleChangeFilterProp={handleChangeFilterProp}
-          isDateInFilter={isDateInFilter}
+          hideZeros={hideZeros}
+          setHideZeros={setHideZeros}
         />
         <AccordionsContainer>
-          {Object.entries(statCategories).map(([key, { title, charts, selectOptions = [] }]) => (
-            <Accordion key={key}>
-              <MainAccordionSummary expandIcon={<ExpandIcon fontSize="large" />}>
-                <Typography variant="h3">{title.toLocaleUpperCase()}</Typography>
-              </MainAccordionSummary>
-              <AccordionDetails>
-                <Fragment key={title}>
-                  {selectOptions?.length > 0 ? (
-                    <CenteredBox mb={2}>
-                      <Typography variant="h6" mr={1}>
-                        Concepto de Gasto:{" "}
-                      </Typography>
-                      <Select
-                        value={chartSelect}
-                        onChange={(e) => setChartSelect(e.target.value)}
-                        size="small"
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                      >
-                        <MenuItem value="all">Todos</MenuItem>
-                        {selectOptions.map((option) => (
-                          <MenuItem value={option.id} key={option.id}>
-                            {option.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </CenteredBox>
-                  ) : null}
-                  {charts.map(({ id, title, type, categories, series, colors, formatter }) => (
-                    <StatCard
-                      key={id}
-                      title={title}
-                      type={type}
-                      categories={categories}
-                      series={series}
-                      colors={colors || []}
-                      formatter={formatter}
-                      chartSelect={chartSelect}
-                    />
-                  ))}
-                </Fragment>
-              </AccordionDetails>
-            </Accordion>
-          ))}
+          {Object.entries(statCategories).map(
+            ([key, { title, charts, selectOptions = [], filterCategories = false }]) => (
+              <Accordion key={key}>
+                <MainAccordionSummary expandIcon={<ExpandIcon fontSize="large" />}>
+                  <Typography variant="h3">{title.toLocaleUpperCase()}</Typography>
+                </MainAccordionSummary>
+                <AccordionDetails>
+                  <Fragment key={title}>
+                    {selectOptions?.length > 0 ? (
+                      <CenteredBox mb={2}>
+                        <Typography variant="h6" mr={1}>
+                          Filtro de Gasto:
+                        </Typography>
+                        <Select
+                          value={chartSelect}
+                          onChange={(e) => setChartSelect(e.target.value)}
+                          size="small"
+                          displayEmpty
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          <MenuItem value="all">Todos</MenuItem>
+                          {selectOptions.map((option) => (
+                            <MenuItem value={option.id} key={option.id}>
+                              {option.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </CenteredBox>
+                    ) : null}
+                    {filterCategories ? (
+                      <FilterMenu localCategories={localCategories} setLocalCategories={setLocalCategories} />
+                    ) : null}
+                    {charts.map(({ id, title, type, categories, series, colors, formatter }) => {
+                      const { finalCategories, filteredSeries } = filterChartData({
+                        categories,
+                        series,
+                        filterCategories,
+                        localCategories,
+                        hideZeros,
+                      });
+
+                      return (
+                        <StatCard
+                          key={id}
+                          title={title}
+                          type={type}
+                          categories={finalCategories}
+                          series={filteredSeries}
+                          colors={colors || []}
+                          formatter={formatter}
+                          chartSelect={chartSelect}
+                        />
+                      );
+                    })}
+                  </Fragment>
+                </AccordionDetails>
+              </Accordion>
+            )
+          )}
         </AccordionsContainer>
       </StatsContainer>
     </MainLayout>

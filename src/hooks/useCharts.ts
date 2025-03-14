@@ -21,12 +21,22 @@ interface StatChart {
 interface StatcategoryId {
   title: string;
   charts: StatChart[];
+  filterCategories?: boolean;
   selectOptions?: { id: string; name: string }[];
 }
+
+type FilterParams = {
+  categories: string[];
+  series: number[] | multiSeries[];
+  filterCategories: boolean;
+  localCategories: { name: string; enabled: boolean }[];
+  hideZeros: boolean;
+};
 
 export interface useChartsProps {
   filters: Filters;
   chartSelect: string;
+  filteredCategories?: boolean;
   isDateInFilter: (eventTime: number, filters: Filters) => boolean;
 }
 
@@ -49,6 +59,7 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
   );
   const feesCategories = ["Germán Ulloa", "Carlos Bermúdez"];
   const lawyerNames = useMemo(() => lawyers.map((lawyer) => lawyer.name), [lawyers]);
+
   const clientNames = useMemo(() => clients.map((client) => client.name), [clients]);
 
   // ----- CATEGORIES ----- /
@@ -385,6 +396,7 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     },
     clients: {
       title: "Clientes",
+      filterCategories: true,
       charts: [
         {
           id: "clientMinutesWorked",
@@ -451,5 +463,81 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     // },
   };
 
-  return statCategories;
+  const filterChartData = ({ categories, series, filterCategories, localCategories, hideZeros }: FilterParams) => {
+    // Filtrar categorías si se aplica filterCategories
+    let filteredCategories = filterCategories
+      ? categories.filter((c) => localCategories.some((cat) => cat.name === c && cat.enabled))
+      : categories;
+
+    // Obtener los índices de las categorías activas
+    let activeIndexes = categories
+      .map((cat, index) => (filteredCategories.includes(cat) ? index : -1))
+      .filter((index) => index !== -1);
+
+    // Filtrar categorías sin valores si HideZeros es true
+    if (hideZeros) {
+      activeIndexes = activeIndexes.filter((index) =>
+        Array.isArray(series)
+          ? series.every((s) => typeof s === "object" && "data" in s)
+            ? series.some((s) => s.data[index] !== 0) // Para multiSeries
+            : series[index] !== 0 // Para array numérico
+          : false
+      );
+    }
+
+    // Obtener las categorías finales
+    filteredCategories = activeIndexes.map((index) => categories[index]);
+
+    // Filtrar series según los índices activos
+    const filteredSeries = Array.isArray(series)
+      ? series.every((s) => typeof s === "object" && "data" in s)
+        ? series.map((serie) => ({
+            ...serie,
+            data: activeIndexes.map((index) => serie.data[index]), // Filtrar data en base a los índices activos
+          }))
+        : activeIndexes.map((index) => (series as number[])[index]) // Para series numéricas
+      : series;
+
+    // Ordenar los datos antes de retornarlos
+    const { sortedCategories, sortedSeries } = sortChartData(filteredCategories, filteredSeries);
+
+    return { finalCategories: sortedCategories, filteredSeries: sortedSeries };
+  };
+
+  const sortChartData = (categories: string[], series: number[] | multiSeries[]) => {
+    // Si es un array numérico, ordenar directamente
+    if (Array.isArray(series) && series.every((s) => typeof s === "number")) {
+      const combined = categories.map((cat, index) => ({ cat, value: series[index] }));
+      combined.sort((a, b) => b.value - a.value);
+
+      return {
+        sortedCategories: combined.map((item) => item.cat),
+        sortedSeries: combined.map((item) => item.value),
+      };
+    }
+
+    // Si es un multiSeries, ordenar basado en la suma de cada categoría
+    if (Array.isArray(series) && series.every((s) => typeof s === "object" && "data" in s)) {
+      const sums = categories.map((cat, index) => ({
+        cat,
+        sum: series.reduce((acc, serie) => acc + serie.data[index], 0),
+        index,
+      }));
+
+      sums.sort((a, b) => b.sum - a.sum);
+      const sortedIndexes = sums.map((item) => item.index);
+
+      return {
+        sortedCategories: sums.map((item) => item.cat),
+        sortedSeries: series.map((serie) => ({
+          ...serie,
+          data: sortedIndexes.map((index) => serie.data[index]),
+        })),
+      };
+    }
+
+    return { sortedCategories: categories, sortedSeries: series };
+  };
+
+  return { statCategories, filterChartData };
 };

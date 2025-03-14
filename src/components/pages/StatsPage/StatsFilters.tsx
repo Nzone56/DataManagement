@@ -1,14 +1,19 @@
-import { Box, MenuItem, Select, Typography, Button, SelectChangeEvent } from "@mui/material";
+import { Box, MenuItem, Select, Typography, SelectChangeEvent } from "@mui/material";
 import DatePicker from "react-datepicker";
 import { Filters } from "../../../hooks/useDateFilters";
 import "./styles.scss";
+import { format, subDays } from "date-fns";
+import { es } from "date-fns/locale";
+import { FilterCheckbox } from "./Stats.styled";
+import { CenteredBox, ColumnJustifyFlex } from "../../Components.styled";
 
 interface StatsFiltersProps {
   filters: Filters;
   handleDateFilterChange: (event: SelectChangeEvent<string>) => void;
   handleChangeFilterProp: (prop: string, event: SelectChangeEvent<string>) => void;
   handleChangeDate: (prop: "startDate" | "endDate", date: Date | null) => void;
-  isDateInFilter: (eventTime: number, filters: Filters) => void;
+  hideZeros: boolean;
+  setHideZeros: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const StatsFilters: React.FC<StatsFiltersProps> = ({
@@ -16,12 +21,9 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
   handleDateFilterChange,
   handleChangeFilterProp,
   handleChangeDate,
-  isDateInFilter,
+  hideZeros,
+  setHideZeros,
 }) => {
-  const handleApplyFilters = () => {
-    console.log(isDateInFilter(1740848400000, filters), filters);
-  };
-
   const years = Array.from({ length: 10 }, (_, i) => (2025 - i).toString());
   const months = [
     { id: "1", name: "Enero" },
@@ -38,15 +40,47 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
     { id: "12", name: "Diciembre" },
   ];
 
+  const formatDate = (date: Date | null | undefined): string => {
+    return date ? format(date, "dd 'de' MMMM 'de' yyyy", { locale: es }) : "";
+  };
+
+  const getDateFilterText = (filters: Filters): string => {
+    if (filters.dateFilter === "today") {
+      return formatDate(new Date());
+    }
+    if (filters.dateFilter === "yesterday") {
+      return formatDate(subDays(new Date(), 1));
+    }
+    if (filters.dateFilter === "last7") {
+      return `${formatDate(subDays(new Date(), 7))} - ${formatDate(new Date())}`;
+    }
+    if (filters.dateFilter === "range") {
+      return filters.startDate && filters.endDate
+        ? `${formatDate(filters.startDate)} - ${formatDate(filters.endDate)}`
+        : "Rango de fechas no especificado";
+    }
+    if (filters.dateFilter === "month") {
+      return `${filters.selectedMonth} de ${filters.selectedYear}`;
+    }
+    if (filters.dateFilter === "year") {
+      return filters.selectedYear;
+    }
+    if (filters.dateFilter === "all") {
+      return "Todas las fechas";
+    }
+    return "Filtro no válido";
+  };
+
   return (
-    <Box>
-      <Typography mb={1}>FILTROS POR FECHA:</Typography>
+    <ColumnJustifyFlex>
+      <Typography mb={1}>{`FILTROS POR FECHA: ${getDateFilterText(filters)}`}</Typography>
       <Select
         value={filters.dateFilter}
         onChange={handleDateFilterChange}
         size="small"
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
+        sx={{ maxWidth: "150px" }}
       >
         <MenuItem value="all">Todos</MenuItem>
         <MenuItem value="today">Hoy</MenuItem>
@@ -104,11 +138,10 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
           </Box>
         </Box>
       )}
-      <Box mt={2}>
-        <Button variant="contained" color="primary" onClick={handleApplyFilters}>
-          Aplicar Filtros
-        </Button>
-      </Box>
-    </Box>
+      <CenteredBox mt={2}>
+        <Typography>Ocultar items sin valores en las gráficas:</Typography>
+        <FilterCheckbox checked={hideZeros} onClick={() => setHideZeros((prev) => !prev)} />
+      </CenteredBox>
+    </ColumnJustifyFlex>
   );
 };
