@@ -33,6 +33,13 @@ type CustomModalProps<T> = {
   updateItem: AsyncThunk<T, T, ThunkApiConfig>;
 };
 
+type Errors = {
+  name: boolean;
+  id: boolean;
+  nitcc: boolean;
+  cc: boolean;
+};
+
 export const ListManageItemModal = <T extends Record<string, unknown>>({
   show,
   onHide,
@@ -46,7 +53,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   const dispatch = useDispatch<AppDispatch>();
   const [managedItem, setManagedItem] = useState<T>(initialValue);
   const { currentMenuOption } = useSideMenu();
-
+  const [errors, setErrors] = useState<Errors>({ name: false, id: false, cc: false, nitcc: false });
   // We use it only when adding
   const id = useId();
 
@@ -95,7 +102,6 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
           <IconButton onClick={onHide}>
             <CloseIcon />
           </IconButton>
-          {}
         </ModalHeader>
         {/* MODAL BODY  */}
 
@@ -122,7 +128,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                 />
               );
               // SELECT WITH TYPE
-            } else if (String(item.toLocaleLowerCase()).includes("id")) {
+            } else if (String(item.toLocaleLowerCase()).includes("id") && String(item.toLocaleLowerCase()) !== "id") {
               return (
                 <ModalSelectItem
                   key={item}
@@ -151,19 +157,23 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
                 <ModalSimpleInput
                   key={item}
                   item={item}
+                  title={title}
                   managedItem={managedItem}
                   onChangeItemValue={onChangeItemValue}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               );
             }
           })}
         </ModalBody>
-
         {/* M0DAL FOOTER */}
         <ModalFooter>
           <PrimaryButton
             onClick={modalType === "create" ? handleAddItem : handleUpdateItem}
-            disabled={!Object.values(managedItem).every((prop, index) => prop || index === 0)}
+            disabled={
+              !Object.values(managedItem).every((prop, index) => prop || index === 0) || errors.name || errors.id
+            }
           >
             {modalType === "create" ? `Crear ` : `Editar`}
           </PrimaryButton>

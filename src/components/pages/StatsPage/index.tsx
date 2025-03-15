@@ -15,7 +15,6 @@ type FilterCategory = {
   enabled: boolean;
 };
 
-//TODO: NO PERMITIR DATOS CON EL MISMO NOMBRE / ID
 export const StatsPage = () => {
   const [chartSelect, setChartSelect] = useState<string>("all");
   const [hideZeros, setHideZeros] = useState(false);

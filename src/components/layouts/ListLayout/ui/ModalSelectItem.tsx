@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { getExpenseConcepts } from "../../../../store/expenses/expenses.selector";
 import { useEffect, useState } from "react";
 import { getArrayPropById, getOptionsType } from "../../../../utils/getters";
+import { getLawyers } from "../../../../store/lawyers/lawyers.selector";
+import { getClients } from "../../../../store/clients/clients.selector";
 
 interface SelectItemProps<T1> {
   item: string;
@@ -20,6 +22,8 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
 }: SelectItemProps<T1>) => {
   const [selectOptions, setSelectOptions] = useState<{ id: string; name: string; type?: string; color?: string }[]>();
   const { expensesConcepts } = useSelector(getExpenseConcepts);
+  const { lawyers } = useSelector(getLawyers);
+  const { clients } = useSelector(getClients);
 
   const getSelectOptions = () => {
     const type = getOptionsType(item);
@@ -33,6 +37,8 @@ export const ModalSelectItem = <T1 extends Record<string, unknown>>({
         }))
       );
     }
+    if (type === "lawyer") setSelectOptions(lawyers);
+    if (type === "client") setSelectOptions(clients);
   };
 
   useEffect(() => {
