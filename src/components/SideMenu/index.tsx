@@ -93,14 +93,14 @@ export const SideMenu = () => {
                     <CenteredBoxBetween>
                       <CenteredBox>
                         {item.component}
-                        <MenuOptionLabel>{item.label}</MenuOptionLabel>
+                        <MenuOptionLabel animate={expandedMenu}>{item.label}</MenuOptionLabel>
                       </CenteredBox>
                       {item.id === expandedMenuOption ? <ArrowUpIcon /> : <ArrowDownIcon />}
                     </CenteredBoxBetween>
                   ) : (
                     <>
                       {item.component}
-                      <MenuOptionLabel>{item.label}</MenuOptionLabel>
+                      <MenuOptionLabel animate={expandedMenu}>{item.label}</MenuOptionLabel>
                     </>
                   )}
                 </MenuOption>
@@ -112,7 +112,7 @@ export const SideMenu = () => {
                           <SideMenuPoint active={location.pathname === subitem.route} />
                         </ColumnJustifyFlex>
                         {subitem.component}
-                        <MenuOptionLabel>{subitem.label}</MenuOptionLabel>
+                        <MenuOptionLabel animate={expandedMenu}>{subitem.label}</MenuOptionLabel>
                       </MenuOption>
                     ))
                   : null}
