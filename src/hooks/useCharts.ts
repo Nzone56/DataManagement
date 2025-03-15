@@ -18,7 +18,7 @@ interface StatChart {
   formatter: string;
 }
 
-interface StatcategoryId {
+export interface StatcategoryId {
   title: string;
   charts: StatChart[];
   filterCategories?: boolean;

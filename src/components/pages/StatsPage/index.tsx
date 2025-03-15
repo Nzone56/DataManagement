@@ -7,7 +7,7 @@ import { StatCard } from "./StatCard";
 import { CenteredBox } from "../../Components.styled";
 import { StatsFilters } from "./StatsFilters";
 import { useDateFilters } from "../../../hooks/useDateFilters";
-import { useCharts } from "../../../hooks/useCharts";
+import { StatcategoryId, useCharts } from "../../../hooks/useCharts";
 import FilterMenu from "./FilterMenu";
 
 type FilterCategory = {
@@ -27,10 +27,15 @@ export const StatsPage = () => {
   });
 
   const [localCategories, setLocalCategories] = useState<FilterCategory[]>([]);
-  const prevStatCategories = useRef(statCategories);
+  const prevStatCategories = useRef<Record<string, StatcategoryId> | null>(null);
 
   useEffect(() => {
-    if (JSON.stringify(prevStatCategories.current) === JSON.stringify(statCategories)) {
+    if (!statCategories || Object.keys(statCategories).length === 0) {
+      return; // Evitar ejecutar si statCategories aún no está disponible
+    }
+
+    // Comparar correctamente evitando la primera ejecución errónea
+    if (prevStatCategories.current && JSON.stringify(prevStatCategories.current) === JSON.stringify(statCategories)) {
       return; // No hacer nada si no cambió
     }
 
