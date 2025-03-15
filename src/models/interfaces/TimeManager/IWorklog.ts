@@ -16,9 +16,9 @@ export interface Worklog {
   hourlyRate: number;
   currency: string;
   total: number;
-  billed: boolean;
+  billed?: boolean;
   status: string;
-  billable: boolean;
+  billable?: boolean;
   documentNumber: string;
   lastModifiedDate: number;
   creationDate: number;

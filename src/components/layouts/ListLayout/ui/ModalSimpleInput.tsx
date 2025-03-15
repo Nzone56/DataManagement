@@ -43,6 +43,7 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
   const { worklogs } = useSelector(getWorklogs);
 
   const removeSpaces = (str: string) => String(str).replace(/\s+/g, "");
+
   useEffect(() => {
     type DataMap = {
       [key: string]: { list: EntityList; keys: string[] };
@@ -58,12 +59,19 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
     if (title in dataMap && dataMap[title].keys.includes(item)) {
       const { list } = dataMap[title];
 
-      const exists = list.some(
-        (entry) =>
-          removeSpaces(
-            String(entry[item as keyof (Client | Lawyer | ExpenseConcept | Worklog)] ?? "")
-          ).toLocaleLowerCase() === removeSpaces(String(managedItem[item] ?? "")).toLocaleLowerCase()
-      );
+      const exists = list.some((entry) => {
+        const entryValue = removeSpaces(
+          String(entry[item as keyof (Client | Lawyer | ExpenseConcept | Worklog)] ?? "")
+        ).toLocaleLowerCase();
+        const managedValue = removeSpaces(String(managedItem[item] ?? "")).toLocaleLowerCase();
+
+        // Si la entidad tiene un id y es el mismo, no se considera duplicado
+        if ("id" in entry && entry.id === managedItem.id) {
+          return false;
+        }
+
+        return entryValue === managedValue;
+      });
 
       setErrors((prev: Errors) => ({ ...prev, [item]: exists }));
     }
@@ -78,8 +86,13 @@ export const ModalSimpleInput = <T extends Record<string, unknown>>({
         variant="outlined"
         placeholder={`${codeToText(String(item) as keyof typeof localeDictionary)?.toLocaleLowerCase()}...`}
         size="small"
-        onChange={(e) => onChangeItemValue(item as keyof T, e.target.value)}
+        onChange={(e) => {
+          const value = managedItem[item as keyof T];
+          const newValue = typeof value === "number" ? e.target.value.replace(/\D/g, "") : e.target.value;
+          onChangeItemValue(item as keyof T, newValue);
+        }}
         value={managedItem[item as keyof T]}
+        inputMode={typeof managedItem[item as keyof T] === "number" ? "numeric" : "text"}
       />
       {errors[item as keyof Errors] && (
         <Typography variant="body1" color="error">
