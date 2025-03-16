@@ -2,12 +2,14 @@ import {
   HomeOutlined as HomeIcon,
   SettingsOutlined as SettingsIcon,
   InfoOutlined as InfoIcon,
-  Person3Outlined as Lawyers,
-  CreditCardOutlined as Expenses,
-  Business as Customers,
+  Person3Outlined as LawyersIcon,
+  CreditCardOutlined as ExpensesIcon,
+  Business as CustomersIcon,
   AccessTime as AccessIcon,
   BarChart as BarChartIcon,
   Assessment as AssessmentIcon,
+  Receipt as ReceiptIcon,
+  AccountBalanceWalletOutlined as AccountBalanceIcon,
 } from "@mui/icons-material";
 import { MenuSectionType } from "../../models/interfaces/Other/IMenu";
 
@@ -25,12 +27,12 @@ export const menuSections: MenuSectionType[] = [
     id: "data",
     title: "Datos Generales",
     items: [
-      { id: "4", route: "/clients", component: <Customers />, label: "Clientes" },
-      { id: "5", route: "/lawyers", component: <Lawyers />, label: "Abogados" },
+      { id: "4", route: "/clients", component: <CustomersIcon />, label: "Clientes" },
+      { id: "5", route: "/lawyers", component: <LawyersIcon />, label: "Abogados" },
       {
         id: "6",
         route: "/expenses",
-        component: <Expenses />,
+        component: <AccountBalanceIcon />,
         label: "Gastos",
         subItems: [
           { id: "6-1", route: "/expenses/concepts", label: "Conceptos" },
@@ -45,6 +47,14 @@ export const menuSections: MenuSectionType[] = [
     title: "Manejo de Información",
     items: [
       { id: "10", route: "/worklog", component: <AccessIcon />, label: "Time Manager" },
+      { id: "13", route: "/billing", component: <ReceiptIcon />, label: "Facturación" },
+      { id: "14", route: "/payments", component: <ExpensesIcon />, label: "Pagos" },
+    ],
+  },
+  {
+    id: "analysis",
+    title: "Análisis y Reportes",
+    items: [
       { id: "11", route: "/statistics", component: <BarChartIcon />, label: "Gráficas" },
       { id: "12", route: "/reports", component: <AssessmentIcon />, label: "Informes" },
     ],
