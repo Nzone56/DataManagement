@@ -9,6 +9,7 @@ import { ISettings } from "../../../models/interfaces/Settings/ISettings";
 import { updateSettings } from "../../../store/settings/settings.actions";
 import { deepEqual } from "../../../utils/compare";
 import { AppDispatch } from "../../../store/store";
+import { toZonedTime } from "date-fns-tz";
 
 const initialSettings: ISettings = {
   theme: "light",
@@ -75,8 +76,10 @@ export const SettingsForm = () => {
             displayEmpty
             inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value="text">{formatDateText(Date.now())}</MenuItem>
-            <MenuItem value="international">{formatDateInternational(Date.now())}</MenuItem>
+            <MenuItem value="text">{formatDateText(toZonedTime(new Date(), "America/Bogota").getTime())}</MenuItem>
+            <MenuItem value="international">
+              {formatDateInternational(toZonedTime(new Date(), "America/Bogota").getTime())}
+            </MenuItem>
           </Select>
         </CenteredBox>
       </ColumnJustifyFlex>

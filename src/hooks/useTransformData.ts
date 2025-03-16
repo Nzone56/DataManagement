@@ -4,6 +4,8 @@ import { getLawyers } from "../store/lawyers/lawyers.selector";
 import { getClients } from "../store/clients/clients.selector";
 import { useState } from "react";
 import { getWorklogs } from "../store/worklogs/worklogs.selector";
+import { parseISO } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
 export const useTransformData = () => {
   const { lawyers } = useSelector(getLawyers);
@@ -14,7 +16,7 @@ export const useTransformData = () => {
   const [errorClients, setErrorClients] = useState<string[]>([]);
   const [duplicatedData, setDuplicated] = useState<string[]>([]);
   const removeSpaces = (str: string) => String(str).replace(/\s+/g, "");
-
+  //TODO: FIX DATES
   const mapHeadersToWorklog = (data: RawWorklog[]): Worklog[] => {
     const mappedData = data.map((row) => ({
       id: String(row.ID || "").trim(),
@@ -38,7 +40,7 @@ export const useTransformData = () => {
       billingResponsible: String(row["Responsable Facturación"] || "").trim(),
       reportedTime: Number(row["Tiempo Reportado (Minutos)"]) || 0,
       workedTime: Number(row["Tiempo Trabajado (Minutos)"]) || 0,
-      dateWork: new Date(row["Fecha Trabajo"] || "").getTime() || 0,
+      dateWork: row["Fecha Trabajo"] ? toZonedTime(parseISO(row["Fecha Trabajo"]), "UTC").getTime() : 0,
       concept: String(row.Concepto || "").trim(),
       hourlyRate: Number(row["Tarifa Horaria"]) || 0,
       currency: String(row.Moneda || "").trim(),

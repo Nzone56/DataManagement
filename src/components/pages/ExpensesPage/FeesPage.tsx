@@ -6,12 +6,13 @@ import { getFees } from "../../../store/expenses/expenses.selector";
 import { addFee, fetchFees, removeFee, updateFee } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
 import { Fee } from "../../../models/interfaces/Expense/IExpense";
+import { toZonedTime } from "date-fns-tz";
 
 const InitialFee: Fee = {
   id: "",
   feeConcept: "Carlos Bermúdez",
   amount: 0,
-  date: Date.now(),
+  date: toZonedTime(new Date(), "America/Bogota").getTime(),
   description: "",
 };
 

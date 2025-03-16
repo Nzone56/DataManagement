@@ -14,13 +14,14 @@ import {
   updateExpense,
 } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
+import { toZonedTime } from "date-fns-tz";
 
 const InitialExpense: Expense = {
   id: "",
   conceptId: "",
   categoryId: "",
   amount: 0,
-  date: Date.now(),
+  date: toZonedTime(new Date(), "America/Bogota").getTime(),
   description: "",
 };
 

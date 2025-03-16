@@ -1,7 +1,9 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
+import { subDays, isSameDay, isWithinInterval, getYear, getMonth } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
-// VOLVERLO UN REDUCER DE REDUX
+// TODO: VOLVERLO UN REDUCER DE REDUX
 export interface Filters {
   dateFilter: string;
   startDate?: Date | null;
@@ -45,35 +47,37 @@ export const useDateFilters = () => {
   };
 
   const isDateInFilter = (eventTime: number, filters: Filters): boolean => {
-    const filterFunctions: Record<string, (eventTime: number) => boolean> = {
-      today: () => {
-        const today = new Date();
-        return new Date(eventTime).toDateString() === today.toDateString();
-      },
-      yesterday: () => {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        return new Date(eventTime).toDateString() === yesterday.toDateString();
-      },
-      last7: () => {
-        const last7Days = new Date();
-        last7Days.setDate(last7Days.getDate() - 7);
-        return eventTime >= last7Days.getTime();
-      },
-      year: () => new Date(eventTime).getFullYear().toString() === filters.selectedYear,
+    const timeZone = "America/Bogota"; // Zona horaria correcta
+    const eventDate = toZonedTime(new Date(eventTime), timeZone);
+    const now = toZonedTime(new Date(), timeZone);
+
+    const filterFunctions: Record<string, (eventDate: Date) => boolean> = {
+      today: () => isSameDay(eventDate, now),
+
+      yesterday: () => isSameDay(eventDate, toZonedTime(subDays(now, 1), timeZone)),
+
+      last7: () => eventDate.getTime() >= subDays(now, 7).getTime(),
+
+      year: () => getYear(eventDate).toString() === filters.selectedYear,
+
       month: () =>
-        new Date(eventTime).getFullYear().toString() === filters.selectedYear &&
-        (new Date(eventTime).getMonth() + 1).toString() === filters.selectedMonth,
+        getYear(eventDate).toString() === filters.selectedYear &&
+        (getMonth(eventDate) + 1).toString() === filters.selectedMonth,
+
       range: () =>
         !!(
           filters.startDate &&
           filters.endDate &&
-          eventTime >= new Date(filters.startDate).getTime() &&
-          eventTime <= new Date(filters.endDate).getTime()
+          isWithinInterval(eventDate, {
+            start: toZonedTime(new Date(filters.startDate), timeZone), // Convertimos correctamente
+            end: toZonedTime(new Date(filters.endDate), timeZone),
+          })
         ),
+
       all: () => true,
     };
-    return filterFunctions[filters.dateFilter]?.(eventTime) ?? true;
+
+    return filterFunctions[filters.dateFilter]?.(eventDate) ?? true;
   };
 
   return { filters, handleDateFilterChange, isDateInFilter, handleChangeFilterProp, handleChangeDate };

@@ -16,7 +16,7 @@ import {
   StyledTablePagination,
   StyledChip,
 } from "./ListLayout.styled";
-import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem, TableCell } from "@mui/material";
+import { TableContainer, Table, TableRow, TableBody, Menu, MenuItem, TableCell, Typography } from "@mui/material";
 import { codeToText, localeDictionary } from "../../../utils/locale";
 import { formatDateText, formatDateInternational } from "../../../utils/dates";
 import { useEffect, useState } from "react";
@@ -186,6 +186,14 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
               <TableRow key={"spinner-waiting"}>
                 <TableCell colSpan={8}>
                   <Spinner size={50} thickness={5} />
+                </TableCell>
+              </TableRow>
+            ) : filteredValues.length === 0 ? (
+              <TableRow key={"spinner-waiting"}>
+                <TableCell colSpan={8}>
+                  <Typography variant="h4" textAlign={"center"}>
+                    No hay datos para mostrar
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (

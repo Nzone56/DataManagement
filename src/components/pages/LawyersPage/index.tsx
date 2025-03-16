@@ -6,6 +6,7 @@ import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../st
 import { useEffect } from "react";
 import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
 import { AppDispatch } from "../../../store/store";
+import { toZonedTime } from "date-fns-tz";
 
 const InitialLawyer: Lawyer = {
   id: "",
@@ -15,7 +16,7 @@ const InitialLawyer: Lawyer = {
   email: "",
   position: "",
   address: "",
-  entryDate: Date.now(),
+  entryDate: toZonedTime(new Date(), "America/Bogota").getTime(),
 };
 
 export const LawyersPage = () => {

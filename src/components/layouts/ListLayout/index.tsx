@@ -1,7 +1,6 @@
 import {
   Download as DownloadIcon,
   Add as AddIcon,
-  FilterAlt as FilterIcon,
   Search as SearchIcon,
   Folder as FolderIcon,
   Upload as UploadIcon,
@@ -67,6 +66,7 @@ export const ListLayout = <T extends { id: string }>({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -90,6 +90,21 @@ export const ListLayout = <T extends { id: string }>({
       ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>
+      </ListTitleContainer>
+      <FiltersContainer>
+        <TextField
+          variant="outlined"
+          placeholder="Buscar..."
+          size="small"
+          onChange={(e) => setSearchState(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
         <CenteredBox>
           <PrimaryButton variant="contained" startIcon={<AddIcon />} onClick={() => handleOpenModal("create")}>
             Añadir {title.replace(/s$/, "")}
@@ -123,29 +138,6 @@ export const ListLayout = <T extends { id: string }>({
             </MenuItem>
           </Menu>
         </CenteredBox>
-      </ListTitleContainer>
-      <FiltersContainer>
-        <CenteredBox>
-          <Typography>Last activity date</Typography>
-          <Typography>Created date</Typography>
-          <Typography>Advanced Filters</Typography>
-          <IconBox ml={1}>
-            <FilterIcon />
-          </IconBox>
-        </CenteredBox>
-        <TextField
-          variant="outlined"
-          placeholder="Buscar..."
-          size="small"
-          onChange={(e) => setSearchState(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
       </FiltersContainer>
       <ListTable
         loading={loading}

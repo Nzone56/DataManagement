@@ -8,7 +8,7 @@ export const columnWidths: Record<string, number> = {
   billingResponsible: 200,
   reportedTime: 120,
   workedTime: 120,
-  date: 180,
+  dateWork: 180,
   concept: 220,
   hourlyRate: 150,
   currency: 80,

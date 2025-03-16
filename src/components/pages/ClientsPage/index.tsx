@@ -6,6 +6,7 @@ import { addClient, fetchClients, removeClient, updateClient } from "../../../st
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { Client } from "../../../models/interfaces/Client/IClient";
+import { toZonedTime } from "date-fns-tz";
 
 const InitialClient: Client = {
   id: "",
@@ -16,7 +17,7 @@ const InitialClient: Client = {
   address: "",
   city: "",
   email: "",
-  joinedDate: Date.now(),
+  joinedDate: toZonedTime(new Date(), "America/Bogota").getTime(),
 };
 
 export const ClientsPage = () => {
