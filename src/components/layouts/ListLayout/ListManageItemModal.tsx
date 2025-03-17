@@ -1,6 +1,6 @@
 import { Modal, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { CenteredBox, ColumnJustifyFlex, PrimaryButton } from "../../Components.styled";
 import { AsyncThunk } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
@@ -55,11 +55,15 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   const { currentMenuOption } = useSideMenu();
   const [errors, setErrors] = useState<Errors>({ name: false, id: false, cc: false, nitcc: false });
   // We use it only when adding
-  const id = useId();
+  const id = crypto.randomUUID();
 
   // Add Item
   const handleAddItem = () => {
-    dispatch(addItem({ ...managedItem, id }));
+    if (title === "TimeManager") {
+      dispatch(addItem({ ...managedItem }));
+    } else {
+      dispatch(addItem({ ...managedItem, id }));
+    }
     onHide();
   };
 

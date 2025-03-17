@@ -1,36 +1,33 @@
 import { Client } from "../../models/interfaces/Client/IClient";
+import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
+import { db } from "../../server/firebase";
+import { COLLECTION_CLIENTS } from "../../server/collections";
 
-// Base URL de json-server
-const API_URL = "http://localhost:3000/clients";
-
-const fetchClients = async () => {
-  const response = await fetch(API_URL);
-  return (await response.json()) as Client[];
+// Obtener todos los clientes
+const fetchClients = async (): Promise<Client[]> => {
+  const querySnapshot = await getDocs(collection(db, COLLECTION_CLIENTS));
+  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Client));
 };
 
 const addClient = async (client: Client) => {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(client),
-  });
-
-  return await response.json();
+  const clientRef = doc(db, COLLECTION_CLIENTS, client.id);
+  await setDoc(clientRef, client);
+  return client;
 };
 
-const updateClient = async (client: Client) => {
-  const response = await fetch(`http://localhost:3000/clients/${client.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(client),
-  });
+const updateClient = async (client: Client): Promise<Client> => {
+  const { id, ...clientData } = client;
+  const clientRef = doc(db, COLLECTION_CLIENTS, id);
+  console.log(clientRef);
+  await updateDoc(clientRef, clientData as Partial<Client>);
 
-  return await response.json();
+  return client;
 };
 
-const removeClient = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/clients/${id}`, { method: "DELETE" });
-  return await response.json();
+// Eliminar un cliente
+const removeClient = async (id: string): Promise<void> => {
+  const clientRef = doc(db, COLLECTION_CLIENTS, id);
+  await deleteDoc(clientRef);
 };
 
 export const ClientService = {

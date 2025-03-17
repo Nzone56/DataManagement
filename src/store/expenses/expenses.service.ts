@@ -1,37 +1,29 @@
 import { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
+import { collection, getDocs, updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { db } from "../../server/firebase";
+import { COLLECTION_CONCEPTS, COLLECTION_EXPENSES, COLLECTION_FEES } from "../../server/collections";
 
-// -- EXPENSE CONCECEPTS -- //
-// Base URL de json-server
-const API_URL_CONCEPTS = "http://localhost:3000/expensesConcepts";
-
+// -- EXPENSE CONCEPTS -- //
 const fetchExpensesConcepts = async () => {
-  const response = await fetch(API_URL_CONCEPTS);
-  return (await response.json()) as ExpenseConcept[];
+  const querySnapshot = await getDocs(collection(db, COLLECTION_CONCEPTS));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ExpenseConcept[];
 };
 
 const addExpenseConcept = async (expensesConcept: ExpenseConcept) => {
-  const response = await fetch(API_URL_CONCEPTS, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(expensesConcept),
-  });
-
-  return await response.json();
+  const addExpenseConceptRef = doc(db, COLLECTION_CONCEPTS, expensesConcept.id);
+  await setDoc(addExpenseConceptRef, expensesConcept);
+  return expensesConcept;
 };
 
 const updateExpenseConcept = async (expensesConcept: ExpenseConcept) => {
-  const response = await fetch(`${API_URL_CONCEPTS}/${expensesConcept.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(expensesConcept),
-  });
-
-  return await response.json();
+  const docRef = doc(db, COLLECTION_CONCEPTS, expensesConcept.id);
+  await updateDoc(docRef, { ...expensesConcept });
+  return expensesConcept;
 };
 
 const removeExpenseConcept = async (id: string) => {
-  const response = await fetch(`${API_URL_CONCEPTS}/${id}`, { method: "DELETE" });
-  return await response.json();
+  await deleteDoc(doc(db, COLLECTION_CONCEPTS, id));
+  return { id };
 };
 
 export const ExpenseConceptService = {
@@ -42,37 +34,26 @@ export const ExpenseConceptService = {
 };
 
 // -- EXPENSES -- //
-// Base URL de json-server
-const API_URL_EXPENSES = "http://localhost:3000/expenses";
-
 const fetchExpenses = async () => {
-  const response = await fetch(API_URL_EXPENSES);
-  return (await response.json()) as Expense[];
+  const querySnapshot = await getDocs(collection(db, COLLECTION_EXPENSES));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Expense[];
 };
 
 const addExpense = async (expense: Expense) => {
-  const response = await fetch(API_URL_EXPENSES, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(expense),
-  });
-
-  return await response.json();
+  const addExpenseRef = doc(db, COLLECTION_EXPENSES, expense.id);
+  await setDoc(addExpenseRef, expense);
+  return expense;
 };
 
 const updateExpense = async (expense: Expense) => {
-  const response = await fetch(`${API_URL_EXPENSES}/${expense.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(expense),
-  });
-
-  return await response.json();
+  const docRef = doc(db, COLLECTION_EXPENSES, expense.id);
+  await updateDoc(docRef, { ...expense });
+  return expense;
 };
 
 const removeExpense = async (id: string) => {
-  const response = await fetch(`${API_URL_EXPENSES}/${id}`, { method: "DELETE" });
-  return await response.json();
+  await deleteDoc(doc(db, COLLECTION_EXPENSES, id));
+  return { id };
 };
 
 export const ExpenseService = {
@@ -83,37 +64,26 @@ export const ExpenseService = {
 };
 
 // -- FEES -- //
-// Base URL de json-server
-const API_URL_FEES = "http://localhost:3000/fees";
-
 const fetchFees = async () => {
-  const response = await fetch(API_URL_FEES);
-  return (await response.json()) as Fee[];
+  const querySnapshot = await getDocs(collection(db, COLLECTION_FEES));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Fee[];
 };
 
 const addFee = async (fee: Fee) => {
-  const response = await fetch(API_URL_FEES, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(fee),
-  });
-
-  return await response.json();
+  const addFeeRef = doc(db, COLLECTION_FEES, fee.id);
+  await setDoc(addFeeRef, fee);
+  return fee;
 };
 
 const updateFee = async (fee: Fee) => {
-  const response = await fetch(`${API_URL_FEES}/${fee.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(fee),
-  });
-
-  return await response.json();
+  const docRef = doc(db, COLLECTION_FEES, fee.id);
+  await updateDoc(docRef, { ...fee });
+  return fee;
 };
 
 const removeFee = async (id: string) => {
-  const response = await fetch(`${API_URL_FEES}/${id}`, { method: "DELETE" });
-  return await response.json();
+  await deleteDoc(doc(db, COLLECTION_FEES, id));
+  return { id };
 };
 
 export const FeeService = {

@@ -12,6 +12,7 @@ import { AppDispatch } from "../../../store/store";
 import { toZonedTime } from "date-fns-tz";
 
 const initialSettings: ISettings = {
+  id: "nubiatorres",
   theme: "light",
   dateFormat: "international",
 };
@@ -45,6 +46,7 @@ export const SettingsForm = () => {
             value={localSettings?.theme}
             onChange={(e) =>
               setLocalSettings((prev) => ({
+                ...prev,
                 theme: e.target.value as "light" | "dark",
                 dateFormat: prev?.dateFormat || "text",
               }))
@@ -69,6 +71,7 @@ export const SettingsForm = () => {
             value={localSettings?.dateFormat}
             onChange={(e) =>
               setLocalSettings((prev) => ({
+                ...prev,
                 theme: prev?.theme || "light",
                 dateFormat: e.target.value as "text" | "international",
               }))

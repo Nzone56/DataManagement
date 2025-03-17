@@ -1,36 +1,28 @@
+import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
-
-// Base URL de json-server
-const API_URL = "http://localhost:3000/lawyers";
+import { db } from "../../server/firebase";
+import { COLLECTION_LAWYERS } from "../../server/collections";
 
 const fetchLawyers = async () => {
-  const response = await fetch(API_URL);
-  return (await response.json()) as Lawyer[];
+  const querySnapshot = await getDocs(collection(db, COLLECTION_LAWYERS));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Lawyer[];
 };
 
 const addLawyer = async (lawyer: Lawyer) => {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(lawyer),
-  });
-
-  return await response.json();
+  const lawyerRef = doc(db, COLLECTION_LAWYERS, lawyer.id);
+  await setDoc(lawyerRef, lawyer);
+  return lawyer;
 };
 
 const updateLawyer = async (lawyer: Lawyer) => {
-  const response = await fetch(`${API_URL}/${lawyer.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(lawyer),
-  });
-
-  return await response.json();
+  const docRef = doc(db, COLLECTION_LAWYERS, lawyer.id);
+  await updateDoc(docRef, { ...lawyer });
+  return lawyer;
 };
 
 const removeLawyer = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  return await response.json();
+  await deleteDoc(doc(db, COLLECTION_LAWYERS, id));
+  return { id };
 };
 
 export const LawyerService = {

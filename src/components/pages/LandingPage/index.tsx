@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { User } from "../../../models/interfaces/User/IUser";
 import { getCurrentUser } from "../../../store/user/user.selector";
 import { setCurrentUser } from "../../../store/user/user.actions";
 import {
@@ -15,31 +14,43 @@ import {
 import { ColumnJustifyFlex, PrimaryButton } from "../../Components.styled";
 import { ModalFormTitle } from "../../layouts/ListLayout/ListModal.styled";
 import { TextField } from "@mui/material";
-
-const PlaceholderUser: User = {
-  uid: "123",
-  name: "Nubia",
-  lastName: "Torres",
-  email: "nubiaBermúdez@Bermúdezyco.com.co",
-  company: "Bermúdez & Co",
-};
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../server/firebase";
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector(getCurrentUser);
 
-  const login = () => {
-    dispatch(setCurrentUser(PlaceholderUser));
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const login = async () => {
+    setError("");
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      dispatch(
+        setCurrentUser({
+          uid: user.uid,
+          name: user.displayName || "Usuario",
+          lastName: "Torres",
+          email: String(user.email),
+          company: "Bermúdez & Co", // Puedes modificar según corresponda
+        })
+      );
+    } catch (error) {
+      setError("Correo o contraseña incorrectos.");
+    }
   };
 
   useEffect(() => {
     if (currentUser?.uid) {
-      localStorage.setItem("selectedUser", JSON.stringify(PlaceholderUser));
+      localStorage.setItem("selectedUser", JSON.stringify(currentUser));
       navigate("/home");
     }
-    //eslint-disable-next-line
-  }, [currentUser]);
+  }, [currentUser, navigate]);
 
   return (
     <LandingPageContainer>
@@ -49,12 +60,26 @@ export const LandingPage = () => {
           <LandingPageSubTitle>Ingresa tus credenciales para acceder a tu cuenta</LandingPageSubTitle>
           <ColumnJustifyFlex mt={4} mb={1}>
             <ModalFormTitle>Correo:</ModalFormTitle>
-            <TextField variant="outlined" placeholder={`Usuario`} size="small" />
+            <TextField
+              variant="outlined"
+              placeholder="Usuario"
+              size="small"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </ColumnJustifyFlex>
           <ColumnJustifyFlex mb={2}>
             <ModalFormTitle>Contraseña:</ModalFormTitle>
-            <TextField variant="outlined" placeholder={`Contraseña`} size="small" type="password" />
+            <TextField
+              variant="outlined"
+              placeholder="Contraseña"
+              size="small"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </ColumnJustifyFlex>
+          {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
           <PrimaryButton variant="contained" onClick={login}>
             SIGN IN
           </PrimaryButton>

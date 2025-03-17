@@ -6,6 +6,14 @@ import { ThunkApiConfig } from "../store";
 export const fetchSettings = createAsyncThunk<ISettings>("settings/fetchSettings", () =>
   SettingsService.fetchSettings()
 );
+
+//TODO: better micromanagement settings
+//TODO: fix wrnings
+export const addSettings = createAsyncThunk<ISettings, ISettings, ThunkApiConfig>(
+  "settings/addSettings",
+  (settings: ISettings) => SettingsService.addSettings(settings)
+);
+
 export const updateSettings = createAsyncThunk<ISettings, ISettings, ThunkApiConfig>(
   "settings/updateSettings",
   (settings: ISettings) => SettingsService.updateSettings(settings)

@@ -1,46 +1,39 @@
 import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
+import { db } from "../../server/firebase";
+import { COLLECTION_WORKLOGS } from "../../server/collections";
 
-// Base URL de json-server
-const API_URL_WORKLOGS = "http://localhost:3000/worklogs";
-
-const fetchWorklogs = async () => {
-  const response = await fetch(API_URL_WORKLOGS);
-  return (await response.json()) as Worklog[];
+const fetchWorklogs = async (): Promise<Worklog[]> => {
+  const querySnapshot = await getDocs(collection(db, COLLECTION_WORKLOGS));
+  return querySnapshot.docs.map((docSnapshot) => ({ id: docSnapshot.id, ...docSnapshot.data() } as Worklog));
 };
 
 const addWorklog = async (worklog: Worklog) => {
-  const response = await fetch(API_URL_WORKLOGS, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(worklog),
-  });
-
-  return await response.json();
+  const worklogRef = doc(db, COLLECTION_WORKLOGS, worklog.id);
+  await setDoc(worklogRef, worklog);
+  return worklog;
 };
 
-const updateWorklog = async (worklog: Worklog) => {
-  const response = await fetch(`${API_URL_WORKLOGS}/${worklog.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(worklog),
-  });
-
-  return await response.json();
+const updateWorklog = async (worklog: Worklog): Promise<Worklog> => {
+  if (!worklog.id) {
+    throw new Error("Worklog document ID is missing");
+  }
+  const worklogRef = doc(db, COLLECTION_WORKLOGS, worklog.id);
+  const { id, ...worklogData } = worklog; // Remover el id para evitar conflictos
+  await updateDoc(worklogRef, worklogData);
+  return worklog;
 };
 
 const removeWorklog = async (id: string) => {
-  const response = await fetch(`${API_URL_WORKLOGS}/${id}`, { method: "DELETE" });
-  return await response.json();
+  await deleteDoc(doc(db, COLLECTION_WORKLOGS, id));
+  return id;
 };
 
-const setWorklogs = async (worklogs: Worklog[]) => {
-  const requests = worklogs.map((worklog) =>
-    fetch(API_URL_WORKLOGS, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(worklog),
-    }).then((res) => res.json())
-  );
+const setWorklogs = async (worklogs: Omit<Worklog, "id">[]) => {
+  const requests = worklogs.map(async (worklog) => {
+    const docRef = await addDoc(collection(db, COLLECTION_WORKLOGS), worklog);
+    return { id: docRef.id, ...worklog };
+  });
   return Promise.all(requests);
 };
 

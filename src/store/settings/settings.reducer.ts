@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { setSettings, fetchSettings, updateSettings } from "./settings.actions";
+import { setSettings, fetchSettings, updateSettings, addSettings } from "./settings.actions";
 import { ISettings } from "../../models/interfaces/Settings/ISettings";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,7 @@ interface SettingsReducer {
 }
 
 const initialState: SettingsReducer = {
-  settings: { theme: "light", dateFormat: "international" },
+  settings: { id: "datamanagement_nubia", theme: "light", dateFormat: "international" },
   loading: false,
   error: null,
 };
@@ -39,6 +39,21 @@ export const settingsReducer = createReducer(initialState, (builder) => {
       };
     })
 
+    // Add Settings
+    .addCase(addSettings.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(addSettings.fulfilled, (state, action: PayloadAction<ISettings>) => {
+      state.loading = false;
+      state.settings = action.payload;
+      toast.success("Settings añadido con éxito");
+    })
+    .addCase(addSettings.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al añadir abogado";
+      toast.error(state.error);
+    })
+
     // UPDATE SETTINGS
     .addCase(updateSettings.pending, (state) => ({
       ...state,
@@ -54,7 +69,7 @@ export const settingsReducer = createReducer(initialState, (builder) => {
 
     .addCase(updateSettings.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message || "Error al actualizar la configración";
+      state.error = action.error.message || "Error al actualizar la configuración";
       toast.error(state.error);
     })
 
