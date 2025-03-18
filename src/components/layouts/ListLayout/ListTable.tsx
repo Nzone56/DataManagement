@@ -84,6 +84,7 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
 
   // -- PAGINATION FUNCTIONS -- //
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    event?.preventDefault();
     setPage(newPage);
   };
 
