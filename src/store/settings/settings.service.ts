@@ -1,9 +1,9 @@
 import { ISettings } from "../../models/interfaces/Settings/ISettings";
-import { collection, getDocs, updateDoc, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_SETTINGS } from "../../server/collections";
 
-const fetchSettings = async (): Promise<ISettings | null> => {
+const fetchSettings = async (): Promise<ISettings> => {
   const querySnapshot = await getDocs(collection(db, COLLECTION_SETTINGS));
 
   if (!querySnapshot.empty) {
@@ -23,13 +23,8 @@ const addSettings = async (settings: ISettings) => {
 const updateSettings = async (settings: ISettings) => {
   const settingsRef = doc(db, COLLECTION_SETTINGS, settings.id);
 
-  const docSnap = await getDoc(settingsRef);
-  if (!docSnap.exists()) {
-    return;
-  }
-
   await updateDoc(settingsRef, { ...settings });
-  return settings;
+  return settings || { id: "nubiatorres", theme: "light", dateFormat: "text" };
 };
 
 export const SettingsService = {

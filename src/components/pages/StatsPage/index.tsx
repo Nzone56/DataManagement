@@ -9,6 +9,9 @@ import { StatsFilters } from "./StatsFilters";
 import { useDateFilters } from "../../../hooks/useDateFilters";
 import { StatcategoryId, useCharts } from "../../../hooks/useCharts";
 import FilterMenu from "./FilterMenu";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
+import { fetchAllData } from "../../../store/actions";
 
 type FilterCategory = {
   name: string;
@@ -16,6 +19,7 @@ type FilterCategory = {
 };
 
 export const StatsPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [chartSelect, setChartSelect] = useState<string>("all");
   const [hideZeros, setHideZeros] = useState(false);
   const { filters, handleDateFilterChange, handleChangeFilterProp, handleChangeDate, isDateInFilter } =
@@ -59,6 +63,10 @@ export const StatsPage = () => {
 
     setLocalCategories(allCategories);
   }, [statCategories]);
+
+  useEffect(() => {
+    dispatch(fetchAllData());
+  }, []);
 
   return (
     <MainLayout>
