@@ -43,6 +43,7 @@ export const localeDictionary = {
   lawyerId: "Abogado",
   clientId: "Cliente",
   categoryId: "Categoria",
+  professionalCard: "Tarjeta Profesional",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

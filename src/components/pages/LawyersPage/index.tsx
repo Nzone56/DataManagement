@@ -16,6 +16,7 @@ const InitialLawyer: Lawyer = {
   email: "",
   position: "",
   address: "",
+  professionalCard: "",
   entryDate: toZonedTime(new Date(), "America/Bogota").getTime(),
 };
 
