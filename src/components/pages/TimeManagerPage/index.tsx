@@ -6,6 +6,8 @@ import { Worklog } from "../../../models/interfaces/TimeManager/IWorklog";
 import { getWorklogs } from "../../../store/worklogs/worklogs.selector";
 import { addWorklog, fetchWorklogs, removeWorklog, updateWorklog } from "../../../store/worklogs/worklogs.actions";
 import { ListLayout } from "../../layouts/ListLayout";
+import { fetchClients } from "../../../store/clients/clients.actions";
+import { fetchLawyers } from "../../../store/lawyers/lawyers.actions";
 
 const InitialWorklog: Worklog = {
   id: "",
@@ -37,6 +39,8 @@ export const TimeManagerPage = () => {
 
   useEffect(() => {
     dispatch(fetchWorklogs());
+    dispatch(fetchClients());
+    dispatch(fetchLawyers());
     //eslint-disable-next-line
   }, []);
 

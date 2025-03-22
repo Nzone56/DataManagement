@@ -67,3 +67,26 @@ body {
 .react-datepicker-ignore-onclickoutside {
   outline: none;
 }
+
+.react-datepicker__navigation {
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.react-datepicker__month-select,
+.react-datepicker__year-select {
+  margin-top: 1rem;
+  background-color: white;
+  color: black;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.react-datepicker__year-select::-webkit-scrollbar {
+  width: 5px;
+}
+
+.react-datepicker__year-select::-webkit-scrollbar-thumb {
+  background-color: #002a8f;
+  border-radius: 4px;
+}
