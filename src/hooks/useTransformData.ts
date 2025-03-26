@@ -85,7 +85,7 @@ export const useTransformData = () => {
 
   const mapHeadersToClient = (data: RawClient[]): Client[] => {
     const mappedData = data.map((row) => ({
-      id: String(crypto.randomUUID),
+      id: String(crypto.randomUUID()),
       name: String(row["Razón Social"] || "").trim(),
       repLegal: String(row.Representante || "").trim(),
       phone: String(row.Teléfono || "").trim(),

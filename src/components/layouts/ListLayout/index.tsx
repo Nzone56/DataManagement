@@ -88,10 +88,11 @@ export const ListLayout = <T extends { id: string }>({
           initialValue={modalState.data ? modalState.data : initialDataItem}
           addItem={addItem}
           updateItem={updateItem}
+          loading={loading}
         />
       ) : null}
       {showUploadModal ? (
-        <ListModalUpload show={showUploadModal} onHide={handleCloseModalUpload} title={title} />
+        <ListModalUpload show={showUploadModal} onHide={handleCloseModalUpload} title={title} loading={loading} />
       ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>

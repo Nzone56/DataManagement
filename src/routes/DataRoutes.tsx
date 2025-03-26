@@ -12,7 +12,7 @@ import { SettingsPage } from "../components/pages/SettingsPage";
 import { FeesPage } from "../components/pages/ExpensesPage/FeesPage";
 import { TimeManagerPage } from "../components/pages/TimeManagerPage";
 import { BillingsPage } from "../components/pages/BillingsPage";
-import { PaymentsPage } from "../components/pages/PaymentsPage";
+import { ReceiptsPage } from "../components/pages/ReceiptsPage";
 import { ReportsPage } from "../components/pages/ReportsPage";
 
 export const router = createBrowserRouter(
@@ -69,8 +69,8 @@ export const router = createBrowserRouter(
       loader: restrictAccess,
     },
     {
-      path: "/payments",
-      element: <PaymentsPage />,
+      path: "/receipts",
+      element: <ReceiptsPage />,
       loader: restrictAccess,
     },
     {

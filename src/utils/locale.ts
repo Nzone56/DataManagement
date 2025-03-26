@@ -44,6 +44,11 @@ export const localeDictionary = {
   clientId: "Cliente",
   categoryId: "Categoria",
   professionalCard: "Tarjeta Profesional",
+  billNumber: "Factura N°",
+  issueDate: "Fecha emisión",
+  expirationDate: "Fecha vencimiento",
+  totalValue: "Valor Total",
+  subject: "Asunto",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

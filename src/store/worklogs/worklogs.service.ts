@@ -1,5 +1,5 @@
 import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_WORKLOGS } from "../../server/collections";
 
@@ -29,11 +29,13 @@ const removeWorklog = async (id: string) => {
   return id;
 };
 
-const setWorklogs = async (worklogs: Omit<Worklog, "id">[]) => {
+const setWorklogs = async (worklogs: Worklog[]) => {
   const requests = worklogs.map(async (worklog) => {
-    const docRef = await addDoc(collection(db, COLLECTION_WORKLOGS), worklog);
-    return { id: docRef.id, ...worklog };
+    const docRef = doc(collection(db, COLLECTION_WORKLOGS), worklog.id);
+    await setDoc(docRef, worklog);
+    return worklog;
   });
+
   return Promise.all(requests);
 };
 

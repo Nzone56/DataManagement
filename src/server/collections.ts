@@ -5,3 +5,5 @@ export const COLLECTION_EXPENSES = "expenses";
 export const COLLECTION_FEES = "fees";
 export const COLLECTION_LAWYERS = "lawyers";
 export const COLLECTION_WORKLOGS = "worklogs";
+export const COLLECTION_BILLS = "bills";
+export const COLLECTION_RECEIPTS = "receipts";

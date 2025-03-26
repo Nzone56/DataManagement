@@ -48,7 +48,7 @@ export const menuSections: MenuSectionType[] = [
     items: [
       { id: "10", route: "/worklog", component: <AccessIcon />, label: "Time Manager" },
       { id: "13", route: "/billing", component: <ReceiptIcon />, label: "Facturación" },
-      { id: "14", route: "/payments", component: <ExpensesIcon />, label: "Pagos" },
+      { id: "14", route: "/receipts", component: <ExpensesIcon />, label: "Ingresos" },
     ],
   },
   {

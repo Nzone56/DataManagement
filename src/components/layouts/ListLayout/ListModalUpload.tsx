@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import { ModalBody, ModalFooter, ModalHeader, ModalInnerContainer, ModalTitle } from "./ListModal.styled";
 import { RawWorklog, Worklog } from "../../../models/interfaces/TimeManager/IWorklog";
 import { useEffect, useState } from "react";
-import { ColumnAlignFlex, PrimaryButton } from "../../Components.styled";
+import { CenteredBox, ColumnAlignFlex, PrimaryButton } from "../../Components.styled";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useTransformData } from "../../../hooks/useTransformData";
 import { useDispatch } from "react-redux";
@@ -13,14 +13,16 @@ import { toast } from "react-toastify";
 import { Client, RawClient } from "../../../models/interfaces/Client/IClient";
 import { setClients } from "../../../store/clients/clients.actions";
 import { isClientArray, isWorklogArray } from "../../../utils/compare";
+import { Spinner } from "../../ui/Spinner";
 
 type CustomModalProps = {
   show: boolean;
   onHide: () => void;
   title: string;
+  loading: boolean;
 };
 
-export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
+export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalProps) => {
   const [state, setState] = useState({
     loaded: false,
     error: false,
@@ -66,7 +68,6 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
           jsonData = XLSX.utils.sheet_to_json<RawWorklog>(sheet);
           transformedData = mapHeadersToWorklog(jsonData);
         }
-        console.log(title === "Clientes", jsonData, transformedData);
         setData(transformedData);
         setState((prev) => ({
           ...prev,
@@ -126,66 +127,84 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
         {/* MODAL BODY  */}
 
         <ModalBody alignItems={"center"}>
-          <ColumnAlignFlex mt={5}>
-            <Typography variant="body1">
-              {title === "TimeManager"
-                ? "⚠️ Nota Importante: Asegúrese de que los nombres de clientes y abogados estén correctamente añadidos y sean idénticos tanto en el archivo Excel como en la plataforma, sin variaciones ni errores de escritura."
-                : "⚠️ Nota Importante: Asegúrese de elegir el archivo xlsx de clientes correcto"}
-            </Typography>
-            <input type="file" accept=".xlsx" onChange={handleFileUpload} style={{ display: "none" }} id="file-input" />
-            <label htmlFor="file-input">
-              <IconButton component="span" color="primary" sx={{ fontSize: 250 }}>
-                <CloudUploadIcon fontSize="inherit" />
-              </IconButton>
-            </label>
-            {state.error ? (
-              state.msg === "missing" ? (
+          {loading ? (
+            <CenteredBox>
+              <Spinner />
+            </CenteredBox>
+          ) : (
+            <ColumnAlignFlex mt={5}>
+              <Typography variant="body1">
+                {title === "TimeManager"
+                  ? "⚠️ Nota Importante: Asegúrese de que los nombres de clientes y abogados estén correctamente añadidos y sean idénticos tanto en el archivo Excel como en la plataforma, sin variaciones ni errores de escritura."
+                  : "⚠️ Nota Importante: Asegúrese de elegir el archivo xlsx de clientes correcto"}
+              </Typography>
+              <input
+                type="file"
+                accept=".xlsx"
+                onChange={handleFileUpload}
+                style={{ display: "none" }}
+                id="file-input"
+              />
+              <label htmlFor="file-input">
+                <IconButton component="span" color="primary" sx={{ fontSize: 250 }}>
+                  <CloudUploadIcon fontSize="inherit" />
+                </IconButton>
+              </label>
+              {state.error ? (
+                state.msg === "missing" ? (
+                  <Box>
+                    <Typography color="error" variant="body1">
+                      No se encontraron los siguientes datos:
+                    </Typography>
+                    <List>
+                      {Array.from(errorLawyers).map((lawyer, index) => (
+                        <ListItem
+                          sx={{ color: "#d32f2f", padding: "2px" }}
+                          key={index}
+                        >{`Abogado: ${lawyer}`}</ListItem>
+                      ))}
+                      {Array.from(errorClients).map((client, index) => (
+                        <ListItem
+                          sx={{ color: "#d32f2f", padding: "2px" }}
+                          key={index}
+                        >{`Cliente: ${client}`}</ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                ) : (
+                  <Typography color="error" variant={"body1"}>
+                    {state.msg}
+                  </Typography>
+                )
+              ) : null}
+              {state.msg && !state.error && (
+                <Typography color="success" variant={"body1"} sx={{ color: "green" }}>
+                  {state.msg}
+                </Typography>
+              )}
+              {duplicatedData.length > 0 ? (
                 <Box>
                   <Typography color="error" variant="body1">
-                    No se encontraron los siguientes datos:
+                    {`Los siguientes ${
+                      title === "Clientes" ? "nombres" : "id's"
+                    } ya se encuentran en la plataforma, se ignoraran ${duplicatedData.length} datos: `}
                   </Typography>
                   <List>
-                    {Array.from(errorLawyers).map((lawyer, index) => (
-                      <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>{`Abogado: ${lawyer}`}</ListItem>
-                    ))}
-                    {Array.from(errorClients).map((client, index) => (
-                      <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>{`Cliente: ${client}`}</ListItem>
+                    {Array.from(duplicatedData).map((data, index) => (
+                      <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>
+                        {title === "Clientes" ? `Nombre: ${data}` : `ID: ${data}`}
+                      </ListItem>
                     ))}
                   </List>
                 </Box>
-              ) : (
-                <Typography color="error" variant={"body1"}>
-                  {state.msg}
-                </Typography>
-              )
-            ) : null}
-            {state.msg && !state.error && (
-              <Typography color="success" variant={"body1"} sx={{ color: "green" }}>
-                {state.msg}
-              </Typography>
-            )}
-            {duplicatedData.length > 0 ? (
-              <Box>
-                <Typography color="error" variant="body1">
-                  {`Los siguientes ${
-                    title === "Clientes" ? "nombres" : "id's"
-                  } ya se encuentran en la plataforma, se ignoraran ${duplicatedData.length} datos: `}
-                </Typography>
-                <List>
-                  {Array.from(duplicatedData).map((data, index) => (
-                    <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>
-                      {title === "Clientes" ? `Nombre: ${data}` : `ID: ${data}`}
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            ) : null}
-          </ColumnAlignFlex>
+              ) : null}
+            </ColumnAlignFlex>
+          )}
         </ModalBody>
 
         {/* M0DAL FOOTER */}
         <ModalFooter>
-          <PrimaryButton onClick={handleUpload} disabled={!state.loaded || state.error || data.length === 0}>
+          <PrimaryButton onClick={handleUpload} disabled={!state.loaded || state.error || data.length === 0 || loading}>
             Subir
           </PrimaryButton>
         </ModalFooter>

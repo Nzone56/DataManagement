@@ -41,7 +41,6 @@ export const LandingPage = () => {
         })
       );
     } catch (error) {
-      console.log(error);
       setError("Correo o contraseña incorrectos.");
     }
   };

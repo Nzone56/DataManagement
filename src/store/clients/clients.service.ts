@@ -1,5 +1,5 @@
 import { Client } from "../../models/interfaces/Client/IClient";
-import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc, addDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_CLIENTS } from "../../server/collections";
 
@@ -17,7 +17,6 @@ const addClient = async (client: Client) => {
 const updateClient = async (client: Client): Promise<Client> => {
   const { id, ...clientData } = client;
   const clientRef = doc(db, COLLECTION_CLIENTS, id);
-  console.log(clientRef);
   await updateDoc(clientRef, clientData as Partial<Client>);
 
   return client;
@@ -28,11 +27,13 @@ const removeClient = async (id: string): Promise<void> => {
   await deleteDoc(clientRef);
 };
 
-const setClients = async (clients: Omit<Client, "id">[]) => {
+const setClients = async (clients: Client[]) => {
   const requests = clients.map(async (client) => {
-    const docRef = await addDoc(collection(db, COLLECTION_CLIENTS), client);
-    return { id: docRef.id, ...client };
+    const docRef = doc(collection(db, COLLECTION_CLIENTS), client.id);
+    await setDoc(docRef, client);
+    return client;
   });
+
   return Promise.all(requests);
 };
 
