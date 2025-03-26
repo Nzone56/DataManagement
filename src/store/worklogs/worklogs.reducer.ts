@@ -99,9 +99,4 @@ export const worklogsReducer = createReducer(initialStateWorklogs, (builder) => 
       state.error = action.error.message || "Error al subir los worklogs";
       toast.error(state.error);
     });
-
-  // .addCase(setWorklogs, (state, action) => {
-  //   toast.success("Worklogs añadidos con éxito");
-  //   state.worklogs = [...state.worklogs, ...action.payload];
-  // });
 });

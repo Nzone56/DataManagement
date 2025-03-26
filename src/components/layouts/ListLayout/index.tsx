@@ -59,8 +59,13 @@ export const ListLayout = <T extends { id: string }>({
     setModalState({ open: true, mode, data });
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModalItem = () => {
     setModalState({ open: false, mode: "create", data: undefined });
+  };
+
+  const handleCloseModalUpload = () => {
+    setShowUploadModal(false);
+    setAnchorEl(null);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -78,7 +83,7 @@ export const ListLayout = <T extends { id: string }>({
           title={title.replace(/s$/, "")}
           show={modalState.open}
           modalType={modalState.mode}
-          onHide={handleCloseModal}
+          onHide={handleCloseModalItem}
           list={header}
           initialValue={modalState.data ? modalState.data : initialDataItem}
           addItem={addItem}
@@ -86,7 +91,7 @@ export const ListLayout = <T extends { id: string }>({
         />
       ) : null}
       {showUploadModal ? (
-        <ListModalUpload show={showUploadModal} onHide={() => setShowUploadModal(false)} title={title} />
+        <ListModalUpload show={showUploadModal} onHide={handleCloseModalUpload} title={title} />
       ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>
@@ -128,7 +133,10 @@ export const ListLayout = <T extends { id: string }>({
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={() => setShowUploadModal(true)} disabled={title !== "TimeManager"}>
+            <MenuItem
+              onClick={() => setShowUploadModal(true)}
+              disabled={title === "Gastos" || title === "Conceptos" || title === "Honorarios" || title === "Abogados"}
+            >
               <UploadIcon />
               <Typography ml={1}>Subir </Typography>
             </MenuItem>

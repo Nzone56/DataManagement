@@ -1,3 +1,6 @@
+import { Client } from "../models/interfaces/Client/IClient";
+import { Worklog } from "../models/interfaces/TimeManager/IWorklog";
+
 export const deepEqual = <T>(obj1: T, obj2: T): boolean => {
   if (obj1 === obj2) {
     return true;
@@ -28,4 +31,12 @@ export const deepEqual = <T>(obj1: T, obj2: T): boolean => {
   }
 
   return true;
+};
+
+export const isWorklogArray = (data: any): data is Worklog[] => {
+  return Array.isArray(data) && data.every((item) => "lawyerId" in item && "clientId" in item);
+};
+
+export const isClientArray = (data: any): data is Client[] => {
+  return Array.isArray(data) && data.every((item) => "name" in item && "email" in item);
 };

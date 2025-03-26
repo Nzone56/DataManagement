@@ -17,3 +17,8 @@ export const updateClient = createAsyncThunk<Client, Client, ThunkApiConfig>("cl
   ClientService.updateClient(client)
 );
 export const fetchClients = createAsyncThunk<Client[]>("clients/fetchClients", () => ClientService.fetchClients());
+
+export const setClients = createAsyncThunk<Client[], Client[], ThunkApiConfig>(
+  "clients/setClients",
+  (clients: Client[]) => ClientService.setClients(clients)
+);

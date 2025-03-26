@@ -1,9 +1,8 @@
 import { Client } from "../../models/interfaces/Client/IClient";
-import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc, addDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_CLIENTS } from "../../server/collections";
 
-// Obtener todos los clientes
 const fetchClients = async (): Promise<Client[]> => {
   const querySnapshot = await getDocs(collection(db, COLLECTION_CLIENTS));
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Client));
@@ -24,10 +23,17 @@ const updateClient = async (client: Client): Promise<Client> => {
   return client;
 };
 
-// Eliminar un cliente
 const removeClient = async (id: string): Promise<void> => {
   const clientRef = doc(db, COLLECTION_CLIENTS, id);
   await deleteDoc(clientRef);
+};
+
+const setClients = async (clients: Omit<Client, "id">[]) => {
+  const requests = clients.map(async (client) => {
+    const docRef = await addDoc(collection(db, COLLECTION_CLIENTS), client);
+    return { id: docRef.id, ...client };
+  });
+  return Promise.all(requests);
 };
 
 export const ClientService = {
@@ -35,4 +41,5 @@ export const ClientService = {
   addClient,
   updateClient,
   removeClient,
+  setClients,
 };

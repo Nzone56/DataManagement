@@ -6,6 +6,7 @@ import { useState } from "react";
 import { getWorklogs } from "../store/worklogs/worklogs.selector";
 import { parseISO } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import { Client, RawClient } from "../models/interfaces/Client/IClient";
 
 export const useTransformData = () => {
   const { lawyers } = useSelector(getLawyers);
@@ -16,7 +17,7 @@ export const useTransformData = () => {
   const [errorClients, setErrorClients] = useState<string[]>([]);
   const [duplicatedData, setDuplicated] = useState<string[]>([]);
   const removeSpaces = (str: string) => String(str).replace(/\s+/g, "");
-  //TODO: FIX DATES
+
   const mapHeadersToWorklog = (data: RawWorklog[]): Worklog[] => {
     const mappedData = data.map((row) => ({
       id: String(row.ID || "").trim(),
@@ -82,5 +83,30 @@ export const useTransformData = () => {
     return uniqueData;
   };
 
-  return { mapHeadersToWorklog, errorLawyers, errorClients, duplicatedData };
+  const mapHeadersToClient = (data: RawClient[]): Client[] => {
+    const mappedData = data.map((row) => ({
+      id: String(crypto.randomUUID),
+      name: String(row["Razón Social"] || "").trim(),
+      repLegal: String(row.Representante || "").trim(),
+      phone: String(row.Teléfono || "").trim(),
+      nitcc: String(row.NIT || "").trim(),
+      address: String(row["Dirección"] || "").trim(),
+      city: String(row.Ciudad || "").trim(),
+      email: String(row["e-mail"] || "").trim(),
+      joinedDate: toZonedTime(new Date(), "America/Bogota").getTime(),
+    }));
+
+    mappedData.map((data) => {
+      const duplicated = clients.find((client) => client.name === data.name);
+      if (duplicated) setDuplicated((prev) => [...prev, duplicated.name]);
+    });
+
+    const uniqueData = mappedData.filter(
+      (data) => !clients.find((client) => client.name.trim().toLowerCase() === data.name.trim().toLowerCase())
+    );
+
+    return uniqueData;
+  };
+
+  return { mapHeadersToWorklog, mapHeadersToClient, errorLawyers, errorClients, duplicatedData };
 };

@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { addClient, fetchClients, removeClient, updateClient } from "./clients.actions";
+import { addClient, fetchClients, removeClient, updateClient, setClients } from "./clients.actions";
 import { Client } from "../../models/interfaces/Client/IClient";
 import { toast } from "react-toastify";
 
@@ -67,7 +67,7 @@ export const clientsReducer = createReducer(initialState, (builder) => {
       toast.error(state.error);
     })
 
-    // Update Cliente
+    // Update client
     .addCase(updateClient.pending, (state) => {
       state.loading = true;
     })
@@ -82,6 +82,21 @@ export const clientsReducer = createReducer(initialState, (builder) => {
     .addCase(updateClient.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Error al actualizar cliente";
+      toast.error(state.error);
+    })
+
+    // Set Worklog
+    .addCase(setClients.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(setClients.fulfilled, (state, action: PayloadAction<Client[]>) => {
+      state.loading = false;
+      state.clients = [...state.clients, ...Object.values(action.payload)];
+      toast.success("Clientes añadidos con éxito");
+    })
+    .addCase(setClients.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al subir los clientes";
       toast.error(state.error);
     });
 });

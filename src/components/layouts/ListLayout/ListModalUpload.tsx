@@ -10,6 +10,9 @@ import { useDispatch } from "react-redux";
 import { setWorklogs } from "../../../store/worklogs/worklogs.actions";
 import { AppDispatch } from "../../../store/store";
 import { toast } from "react-toastify";
+import { Client, RawClient } from "../../../models/interfaces/Client/IClient";
+import { setClients } from "../../../store/clients/clients.actions";
+import { isClientArray, isWorklogArray } from "../../../utils/compare";
 
 type CustomModalProps = {
   show: boolean;
@@ -23,8 +26,8 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
     error: false,
     msg: "",
   });
-  const [data, setData] = useState<Worklog[]>([]);
-  const { mapHeadersToWorklog, errorClients, errorLawyers, duplicatedData } = useTransformData();
+  const [data, setData] = useState<Worklog[] | Client[]>([]);
+  const { mapHeadersToWorklog, mapHeadersToClient, errorClients, errorLawyers, duplicatedData } = useTransformData();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,9 +53,20 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
         const workbook = XLSX.read(sheetdata, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const jsonData: RawWorklog[] = XLSX.utils.sheet_to_json(sheet);
 
-        const transformedData = mapHeadersToWorklog(jsonData);
+        let jsonData: RawClient[] | RawWorklog[] = [];
+        let transformedData: Client[] | Worklog[] = [];
+
+        if (title === "Clientes") {
+          jsonData = XLSX.utils.sheet_to_json<RawClient>(sheet);
+          transformedData = mapHeadersToClient(jsonData);
+        }
+
+        if (title === "TimeManager") {
+          jsonData = XLSX.utils.sheet_to_json<RawWorklog>(sheet);
+          transformedData = mapHeadersToWorklog(jsonData);
+        }
+        console.log(title === "Clientes", jsonData, transformedData);
         setData(transformedData);
         setState((prev) => ({
           ...prev,
@@ -65,7 +79,7 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
           setState((prev) => ({
             ...prev,
             error: true,
-            msg: `Error al procesar el archivo: No tiene la estructura del TimeManager`,
+            msg: `Error al procesar el archivo: No tiene la estructura deseada`,
           }));
         }
       }
@@ -76,13 +90,20 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
 
   const handleUpload = async () => {
     try {
-      await dispatch(setWorklogs(data));
+      if (title === "Clientes") {
+        if (isClientArray(data)) {
+          await dispatch(setClients(data));
+        }
+      } else if (title === "TimeManager") {
+        if (isWorklogArray(data)) {
+          await dispatch(setWorklogs(data));
+        }
+      }
       onHide();
     } catch (error) {
-      toast.error(`Error al subir worklogs: ${error}`);
+      toast.error(`Error al subir ${title}: ${error}`);
     }
   };
-
   useEffect(() => {
     if (errorClients.length > 0 || errorLawyers.length > 0) {
       setState((prev) => ({
@@ -107,8 +128,9 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
         <ModalBody alignItems={"center"}>
           <ColumnAlignFlex mt={5}>
             <Typography variant="body1">
-              NOTA: ASEGURARSE QUE LOS CLIENTES Y ABOGADOS ESTEN AÑÁDIDOS Y SU NOMBRE SEA EXACTAMENTE IGUAL TANTO EN EL
-              EXCEL COMO EN LA PLATAFORMA
+              {title === "TimeManager"
+                ? "⚠️ Nota Importante: Asegúrese de que los nombres de clientes y abogados estén correctamente añadidos y sean idénticos tanto en el archivo Excel como en la plataforma, sin variaciones ni errores de escritura."
+                : "⚠️ Nota Importante: Asegúrese de elegir el archivo xlsx de clientes correcto"}
             </Typography>
             <input type="file" accept=".xlsx" onChange={handleFileUpload} style={{ display: "none" }} id="file-input" />
             <label htmlFor="file-input">
@@ -145,11 +167,15 @@ export const ListModalUpload = ({ show, onHide, title }: CustomModalProps) => {
             {duplicatedData.length > 0 ? (
               <Box>
                 <Typography color="error" variant="body1">
-                  {`Los siguientes id's ya se encuentran en la plataforma, se ignoraran ${duplicatedData.length} datos: `}
+                  {`Los siguientes ${
+                    title === "Clientes" ? "nombres" : "id's"
+                  } ya se encuentran en la plataforma, se ignoraran ${duplicatedData.length} datos: `}
                 </Typography>
                 <List>
                   {Array.from(duplicatedData).map((data, index) => (
-                    <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>{`ID: ${data}`}</ListItem>
+                    <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>
+                      {title === "Clientes" ? `Nombre: ${data}` : `ID: ${data}`}
+                    </ListItem>
                   ))}
                 </List>
               </Box>
