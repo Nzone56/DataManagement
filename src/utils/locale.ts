@@ -49,6 +49,11 @@ export const localeDictionary = {
   expirationDate: "Fecha vencimiento",
   totalValue: "Valor Total",
   subject: "Asunto",
+  receiptNumber: "N° Recibo",
+  registered: "Registrado por:",
+  paymentMethod: "Método de pago",
+  bills: "Facturas",
+  observations: "Observaciones",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

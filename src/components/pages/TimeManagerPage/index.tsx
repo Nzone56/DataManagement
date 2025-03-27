@@ -4,10 +4,17 @@ import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { Worklog } from "../../../models/interfaces/TimeManager/IWorklog";
 import { getWorklogs } from "../../../store/worklogs/worklogs.selector";
-import { addWorklog, fetchWorklogs, removeWorklog, updateWorklog } from "../../../store/worklogs/worklogs.actions";
+import {
+  addWorklog,
+  fetchWorklogs,
+  removeWorklog,
+  setWorklogs,
+  updateWorklog,
+} from "../../../store/worklogs/worklogs.actions";
 import { ListLayout } from "../../layouts/ListLayout";
 import { fetchClients } from "../../../store/clients/clients.actions";
 import { fetchLawyers } from "../../../store/lawyers/lawyers.actions";
+import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialWorklog: Worklog = {
   id: "",
@@ -37,6 +44,8 @@ export const TimeManagerPage = () => {
   const { worklogs, loading } = useSelector(getWorklogs);
   const dispatch = useDispatch<AppDispatch>();
 
+  const { mapHeadersToWorklog } = useTransformData();
+
   useEffect(() => {
     dispatch(fetchWorklogs());
     dispatch(fetchClients());
@@ -55,6 +64,8 @@ export const TimeManagerPage = () => {
         updateItem={updateWorklog}
         removeItem={removeWorklog}
         loading={loading}
+        mapUpload={mapHeadersToWorklog}
+        setData={setWorklogs}
       />
     </MainLayout>
   );

@@ -2,11 +2,18 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { ListLayout } from "../../layouts/ListLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getClients } from "../../../store/clients/clients.selector";
-import { addClient, fetchClients, removeClient, updateClient } from "../../../store/clients/clients.actions";
+import {
+  addClient,
+  fetchClients,
+  removeClient,
+  setClients,
+  updateClient,
+} from "../../../store/clients/clients.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { Client } from "../../../models/interfaces/Client/IClient";
 import { toZonedTime } from "date-fns-tz";
+import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialClient: Client = {
   id: "",
@@ -28,6 +35,8 @@ export const ClientsPage = () => {
     //eslint-disable-next-line
   }, []);
 
+  const { mapHeadersToClient } = useTransformData();
+
   return (
     <MainLayout>
       <ListLayout
@@ -39,6 +48,8 @@ export const ClientsPage = () => {
         updateItem={updateClient}
         removeItem={removeClient}
         loading={loading}
+        mapUpload={mapHeadersToClient}
+        setData={setClients}
       />
     </MainLayout>
   );

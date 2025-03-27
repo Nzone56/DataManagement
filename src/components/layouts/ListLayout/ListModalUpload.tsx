@@ -1,36 +1,50 @@
 import { Box, IconButton, List, ListItem, Modal, Typography } from "@mui/material";
 import * as XLSX from "xlsx";
 import { ModalBody, ModalFooter, ModalHeader, ModalInnerContainer, ModalTitle } from "./ListModal.styled";
-import { RawWorklog, Worklog } from "../../../models/interfaces/TimeManager/IWorklog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CenteredBox, ColumnAlignFlex, PrimaryButton } from "../../Components.styled";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useTransformData } from "../../../hooks/useTransformData";
 import { useDispatch } from "react-redux";
-import { setWorklogs } from "../../../store/worklogs/worklogs.actions";
-import { AppDispatch } from "../../../store/store";
+import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 import { toast } from "react-toastify";
-import { Client, RawClient } from "../../../models/interfaces/Client/IClient";
-import { setClients } from "../../../store/clients/clients.actions";
-import { isClientArray, isWorklogArray } from "../../../utils/compare";
 import { Spinner } from "../../ui/Spinner";
+import { AsyncThunk } from "@reduxjs/toolkit";
 
-type CustomModalProps = {
+type CustomModalProps<T, T2> = {
   show: boolean;
   onHide: () => void;
   title: string;
   loading: boolean;
+  setData: AsyncThunk<T[], T[], ThunkApiConfig>;
+  mapUpload: (data: T2[]) => {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    duplicatedData: string[];
+    uniqueData: T[];
+  };
 };
 
-export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalProps) => {
+export const ListModalUpload = <T, T2>({
+  show,
+  onHide,
+  title,
+  loading,
+  mapUpload,
+  setData,
+}: CustomModalProps<T, T2>) => {
   const [state, setState] = useState({
     loaded: false,
     error: false,
     msg: "",
   });
-  const [data, setData] = useState<Worklog[] | Client[]>([]);
-  const { mapHeadersToWorklog, mapHeadersToClient, errorClients, errorLawyers, duplicatedData } = useTransformData();
+  const [XLSXData, setXLSXData] = useState<T[]>([]);
+  const [jsonData, setJsonData] = useState<T2[]>([]);
   const dispatch = useDispatch<AppDispatch>();
+  const [errorLawyers, setErrorLawyers] = useState<string[]>([]);
+  const [errorClients, setErrorClients] = useState<string[]>([]);
+  const [errorBills, setErrorBills] = useState<string[]>([]);
+  const [duplicatedData, setDuplicated] = useState<string[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -56,25 +70,54 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
 
-        let jsonData: RawClient[] | RawWorklog[] = [];
-        let transformedData: Client[] | Worklog[] = [];
+        let jsonData: T2[] = [];
+        let transformedData: T[] = [];
 
-        if (title === "Clientes") {
-          jsonData = XLSX.utils.sheet_to_json<RawClient>(sheet);
-          transformedData = mapHeadersToClient(jsonData);
-        }
+        jsonData = XLSX.utils.sheet_to_json<T2>(sheet);
+        const { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData } = mapUpload(jsonData);
+        setErrorBills(errorBills);
+        setDuplicated(duplicatedData);
+        setErrorClients(errorClients);
+        setErrorLawyers(errorLawyers);
+        transformedData = uniqueData;
 
-        if (title === "TimeManager") {
-          jsonData = XLSX.utils.sheet_to_json<RawWorklog>(sheet);
-          transformedData = mapHeadersToWorklog(jsonData);
+        setXLSXData(transformedData);
+
+        if (
+          (title === "TimeManager" && (errorClients.length > 0 || errorLawyers.length > 0)) ||
+          ((title === "Facturación" || title === "Ingresos") && errorClients.length > 0)
+        ) {
+          setState((prev) => ({
+            ...prev,
+            error: true,
+            msg: "missing",
+          }));
+        } else {
+          if (title === "Clientes" && errorClients.length > 0) {
+            setState((prev) => ({
+              ...prev,
+              error: true,
+              msg: "duplicated",
+            }));
+          } else {
+            if (title === "Facturación" && errorClients.length > 0) {
+              setState((prev) => ({
+                ...prev,
+                error: true,
+                msg: "duplicated",
+              }));
+            } else {
+              setState((prev) => ({
+                ...prev,
+                error: false,
+                loaded: true,
+                msg: `Se han cargado satisfactoriamente ${jsonData.length} datos`,
+              }));
+
+              setJsonData(jsonData);
+            }
+          }
         }
-        setData(transformedData);
-        setState((prev) => ({
-          ...prev,
-          error: false,
-          loaded: true,
-          msg: `Se han cargado satisfactoriamente ${jsonData.length} datos`,
-        }));
       } catch (error) {
         if (String(error).startsWith("TypeError:")) {
           setState((prev) => ({
@@ -91,29 +134,12 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
 
   const handleUpload = async () => {
     try {
-      if (title === "Clientes") {
-        if (isClientArray(data)) {
-          await dispatch(setClients(data));
-        }
-      } else if (title === "TimeManager") {
-        if (isWorklogArray(data)) {
-          await dispatch(setWorklogs(data));
-        }
-      }
+      await dispatch(setData(XLSXData));
       onHide();
     } catch (error) {
       toast.error(`Error al subir ${title}: ${error}`);
     }
   };
-  useEffect(() => {
-    if (errorClients.length > 0 || errorLawyers.length > 0) {
-      setState((prev) => ({
-        ...prev,
-        error: true,
-        msg: "missing",
-      }));
-    }
-  }, [data, errorClients, errorLawyers]);
 
   return (
     <Modal open={show} onClose={onHide} aria-labelledby="modal-title">
@@ -151,10 +177,12 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
                 </IconButton>
               </label>
               {state.error ? (
-                state.msg === "missing" ? (
+                state.msg === "missing" || state.msg === "duplicated" ? (
                   <Box>
                     <Typography color="error" variant="body1">
-                      No se encontraron los siguientes datos:
+                      {state.msg === "missing"
+                        ? "No se encontraron los siguientes datos:"
+                        : "Los siguentes datos se repiten en el archivo subido:"}
                     </Typography>
                     <List>
                       {Array.from(errorLawyers).map((lawyer, index) => (
@@ -168,6 +196,9 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
                           sx={{ color: "#d32f2f", padding: "2px" }}
                           key={index}
                         >{`Cliente: ${client}`}</ListItem>
+                      ))}
+                      {Array.from(errorBills).map((bill, index) => (
+                        <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>{`Factura: ${bill}`}</ListItem>
                       ))}
                     </List>
                   </Box>
@@ -184,6 +215,14 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
               )}
               {duplicatedData.length > 0 ? (
                 <Box>
+                  <Typography color="error" variant="body1">
+                    {XLSXData.length < jsonData.length - duplicatedData.length &&
+                    jsonData.length > duplicatedData.length
+                      ? `⚠️ ADVERTENCIA: Hay ${
+                          jsonData.length - duplicatedData.length - XLSXData.length
+                        } ${title} repetidos en la tabla se recomienda revisar los datos`
+                      : null}
+                  </Typography>
                   <Typography color="error" variant="body1">
                     {`Los siguientes ${
                       title === "Clientes" ? "nombres" : "id's"
@@ -204,7 +243,10 @@ export const ListModalUpload = ({ show, onHide, title, loading }: CustomModalPro
 
         {/* M0DAL FOOTER */}
         <ModalFooter>
-          <PrimaryButton onClick={handleUpload} disabled={!state.loaded || state.error || data.length === 0 || loading}>
+          <PrimaryButton
+            onClick={handleUpload}
+            disabled={!state.loaded || state.error || XLSXData.length === 0 || loading}
+          >
             Subir
           </PrimaryButton>
         </ModalFooter>

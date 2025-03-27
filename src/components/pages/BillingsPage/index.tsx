@@ -4,9 +4,10 @@ import { Bill } from "../../../models/interfaces/Bill/IBill";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { useEffect } from "react";
-import { addBill, fetchBills, removeBill, updateBill } from "../../../store/bills/bills.actions";
+import { addBill, fetchBills, removeBill, setBills, updateBill } from "../../../store/bills/bills.actions";
 import { fetchClients } from "../../../store/clients/clients.actions";
 import { getBills } from "../../../store/bills/bills.selector";
+import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialBill: Bill = {
   id: "",
@@ -15,6 +16,7 @@ const InitialBill: Bill = {
   expirationDate: 0,
   clientId: "",
   nitcc: "",
+  value: 0,
   totalValue: 0,
   concept: "",
   subject: "",
@@ -25,6 +27,8 @@ const InitialBill: Bill = {
 export const BillingsPage = () => {
   const { bills, loading } = useSelector(getBills);
   const dispatch = useDispatch<AppDispatch>();
+
+  const { mapHeadersToBill } = useTransformData();
 
   useEffect(() => {
     dispatch(fetchBills());
@@ -43,6 +47,8 @@ export const BillingsPage = () => {
         updateItem={updateBill}
         removeItem={removeBill}
         loading={loading}
+        mapUpload={mapHeadersToBill}
+        setData={setBills}
       />
     </MainLayout>
   );

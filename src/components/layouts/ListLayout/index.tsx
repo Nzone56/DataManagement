@@ -21,7 +21,7 @@ import { AsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../../../store/store";
 import { ListModalUpload } from "./ListModalUpload";
 
-interface ListLayoutProps<T extends { id: string }> {
+interface ListLayoutProps<T extends { id: string }, T2> {
   title: string;
   list: T[];
   header: string[];
@@ -30,9 +30,17 @@ interface ListLayoutProps<T extends { id: string }> {
   addItem: AsyncThunk<T, T, ThunkApiConfig>;
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
   updateItem: AsyncThunk<T, T, ThunkApiConfig>;
+  mapUpload?: (data: T2[]) => {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    duplicatedData: string[];
+    uniqueData: T[];
+  };
+  setData?: AsyncThunk<T[], T[], ThunkApiConfig>;
 }
 
-export const ListLayout = <T extends { id: string }>({
+export const ListLayout = <T extends { id: string }, T2>({
   title,
   list,
   header,
@@ -41,7 +49,9 @@ export const ListLayout = <T extends { id: string }>({
   addItem,
   removeItem,
   updateItem,
-}: ListLayoutProps<T>) => {
+  mapUpload,
+  setData,
+}: ListLayoutProps<T, T2>) => {
   const [searchState, setSearchState] = useState<string>("");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [modalState, setModalState] = useState<{
@@ -91,8 +101,15 @@ export const ListLayout = <T extends { id: string }>({
           loading={loading}
         />
       ) : null}
-      {showUploadModal ? (
-        <ListModalUpload show={showUploadModal} onHide={handleCloseModalUpload} title={title} loading={loading} />
+      {showUploadModal && mapUpload && setData ? (
+        <ListModalUpload<T, T2>
+          show={showUploadModal}
+          onHide={handleCloseModalUpload}
+          title={title}
+          loading={loading}
+          mapUpload={mapUpload}
+          setData={setData}
+        />
       ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>

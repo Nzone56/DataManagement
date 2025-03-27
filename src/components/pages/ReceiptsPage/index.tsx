@@ -3,10 +3,17 @@ import { ListLayout } from "../../layouts/ListLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { useEffect } from "react";
-import { addReceipt, fetchReceipts, removeReceipt, updateReceipt } from "../../../store/receipts/receipts.actions";
+import {
+  addReceipt,
+  fetchReceipts,
+  removeReceipt,
+  setReceipts,
+  updateReceipt,
+} from "../../../store/receipts/receipts.actions";
 import { fetchClients } from "../../../store/clients/clients.actions";
 import { getReceipts } from "../../../store/receipts/receipts.selector";
 import { Receipt } from "../../../models/interfaces/Receipt/IReceipts";
+import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialReceipt: Receipt = {
   id: "",
@@ -23,6 +30,8 @@ const InitialReceipt: Receipt = {
 export const ReceiptsPage = () => {
   const { receipts, loading } = useSelector(getReceipts);
   const dispatch = useDispatch<AppDispatch>();
+
+  const { mapHeadersToReceipt } = useTransformData();
 
   useEffect(() => {
     dispatch(fetchReceipts());
@@ -41,6 +50,8 @@ export const ReceiptsPage = () => {
         updateItem={updateReceipt}
         removeItem={removeReceipt}
         loading={loading}
+        mapUpload={mapHeadersToReceipt}
+        setData={setReceipts}
       />
     </MainLayout>
   );

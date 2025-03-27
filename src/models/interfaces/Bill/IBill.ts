@@ -5,6 +5,7 @@ export interface Bill {
   expirationDate: number;
   clientId: string;
   nitcc: string;
+  value: number;
   totalValue: number;
   concept: string;
   subject: string;
@@ -18,6 +19,7 @@ export interface RawBill {
   "Fecha vencimiento": string;
   "Razón Social": string;
   Nit: string;
+  Valor: number;
   "Valor Total": string;
   Concepto: string;
   Asunto: string;
