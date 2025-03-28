@@ -8,7 +8,6 @@ export const fetchSettings = createAsyncThunk<ISettings>("settings/fetchSettings
 );
 
 //TODO: better micromanagement settings
-//TODO: fix wrnings
 export const addSettings = createAsyncThunk<ISettings, ISettings, ThunkApiConfig>(
   "settings/addSettings",
   (settings: ISettings) => SettingsService.addSettings(settings)

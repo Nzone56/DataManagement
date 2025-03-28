@@ -7,6 +7,8 @@ import { getLawyers } from "../store/lawyers/lawyers.selector";
 import { getClients } from "../store/clients/clients.selector";
 import { getArrayPropById } from "../utils/getters";
 import { Filters } from "./useDateFilters";
+import { getReceipts } from "../store/receipts/receipts.selector";
+import { getBills } from "../store/bills/bills.selector";
 
 interface StatChart {
   id: string;
@@ -47,6 +49,9 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
   const { lawyers } = useSelector(getLawyers);
   const { clients } = useSelector(getClients);
   const { fees } = useSelector(getFees);
+  const { receipts } = useSelector(getReceipts);
+  const { bills } = useSelector(getBills);
+
   const colorsConcepts = useMemo(() => expensesConcepts.map((concept) => concept.color), [expensesConcepts]);
 
   // ----- SERIES ----- //
@@ -59,7 +64,6 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
   );
   const feesCategories = ["Germán Ulloa", "Carlos Bermúdez"];
   const lawyerNames = useMemo(() => lawyers.map((lawyer) => lawyer.name), [lawyers]);
-
   const clientNames = useMemo(() => clients.map((client) => client.name), [clients]);
 
   // ----- CATEGORIES ----- /
@@ -298,6 +302,55 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     [worklogs, clients, filters]
   );
 
+  const clientReceipted = useMemo(
+    () =>
+      clients.map((client) =>
+        receipts
+          .filter((receipt) => receipt.clientId === client.id && isDateInFilter(receipt.date, filters))
+          .reduce((sum, receipt) => sum + receipt.totalValue, 0)
+      ),
+    //eslint-disable-next-line
+    [receipts, clients, filters]
+  );
+
+  const clientBilled = useMemo(
+    () =>
+      clients.map((client) =>
+        bills
+          .filter((bill) => bill.clientId === client.id && isDateInFilter(bill.issueDate, filters))
+          .reduce((sum, bill) => sum + bill.totalValue, 0)
+      ),
+    //eslint-disable-next-line
+    [bills, clients, filters]
+  );
+
+  const clientBilledvsReceipted = useMemo(
+    () => [
+      {
+        name: "Pagado",
+        type: "column",
+        data:
+          clients.map((client) =>
+            receipts
+              .filter((receipt) => receipt.clientId === client.id && isDateInFilter(receipt.date, filters))
+              .reduce((sum, receipt) => sum + receipt.totalValue, 0)
+          ) || 0,
+      },
+      {
+        name: "Facturado",
+        type: "line",
+        data:
+          clients.map((client) =>
+            bills
+              .filter((bill) => bill.clientId === client.id && isDateInFilter(bill.issueDate, filters))
+              .reduce((sum, bill) => sum + bill.totalValue, 0)
+          ) || 0,
+      },
+    ],
+    //eslint-disable-next-line
+    [receipts, bills, clients, filters]
+  );
+
   // const worklogEarnings = useMemo(() => worklogs.map((w) => w.total), [worklogs]);
 
   const statCategories: Record<string, StatcategoryId> = {
@@ -448,19 +501,36 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
         },
       ],
     },
-    // worklog: {
-    //   title: "Worklog",
-    //   charts: [
-    //     {
-    //       id: "worklogEarnings",
-    //       title: "Ingresos por Worklog",
-    //       type: "bar",
-    //       categories: worklogs.map((w) => `Worklog ${w.id}`),
-    //       series: worklogEarnings,
-    //       formatter: "money",
-    //     },
-    //   ],
-    // },
+    bills: {
+      title: "Facturación / Ingresos",
+      filterCategories: true,
+      charts: [
+        {
+          id: "clientBilled",
+          title: "Total facturado por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientBilled,
+          formatter: "money",
+        },
+        {
+          id: "clientReceipted",
+          title: "Total pagado por Cliente",
+          type: "bar",
+          categories: clientNames,
+          series: clientReceipted,
+          formatter: "money",
+        },
+        {
+          id: "clientBilledvsReceipted",
+          title: "Total Facturado vs Pagado por Cliente",
+          type: "bar-line",
+          categories: clientNames,
+          series: clientBilledvsReceipted,
+          formatter: "money",
+        },
+      ],
+    },
   };
 
   const filterChartData = ({ categories, series, filterCategories, localCategories, hideZeros }: FilterParams) => {

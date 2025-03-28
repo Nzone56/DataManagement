@@ -6,5 +6,6 @@ export interface Lawyer {
   email: string;
   position: string;
   address: string;
+  professionalCard: string;
   entryDate: number;
 }

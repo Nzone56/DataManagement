@@ -21,7 +21,7 @@ type FilterCategory = {
 export const StatsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [chartSelect, setChartSelect] = useState<string>("all");
-  const [hideZeros, setHideZeros] = useState(false);
+  const [hideZeros, setHideZeros] = useState(true);
   const { filters, handleDateFilterChange, handleChangeFilterProp, handleChangeDate, isDateInFilter } =
     useDateFilters();
   const { statCategories, filterChartData } = useCharts({

@@ -23,6 +23,24 @@ export const SideMenuContainer = styled(Box, {
   width: expanded ? "200px" : "50px",
   transition: "width 0.25s ease-in",
   zIndex: "1000",
+  overflowY: expanded ? "auto" : "hidden",
+  overflowX: "hidden",
+
+  /* Custom Scrollbar */
+  "&::-webkit-scrollbar": {
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "rgba(255, 255, 255, 0.1)",
+    borderRadius: "15px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "rgba(255, 255, 255, 0.3)",
+    borderRadius: "15px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    background: "rgba(255, 255, 255, 0.5)",
+  },
 }));
 
 export const SideMenuTitle = styled(Typography, {

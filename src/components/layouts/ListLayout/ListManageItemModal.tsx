@@ -31,6 +31,7 @@ type CustomModalProps<T> = {
   initialValue: T;
   addItem: AsyncThunk<T, T, ThunkApiConfig>;
   updateItem: AsyncThunk<T, T, ThunkApiConfig>;
+  loading: boolean;
 };
 
 type Errors = {
@@ -49,6 +50,7 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
   initialValue,
   addItem,
   updateItem,
+  loading,
 }: CustomModalProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
   const [managedItem, setManagedItem] = useState<T>(initialValue);
@@ -176,7 +178,10 @@ export const ListManageItemModal = <T extends Record<string, unknown>>({
           <PrimaryButton
             onClick={modalType === "create" ? handleAddItem : handleUpdateItem}
             disabled={
-              !Object.values(managedItem).every((prop, index) => prop || index === 0) || errors.name || errors.id
+              !Object.values(managedItem).every((prop, index) => prop || index === 0) ||
+              errors.name ||
+              errors.id ||
+              loading
             }
           >
             {modalType === "create" ? `Crear ` : `Editar`}

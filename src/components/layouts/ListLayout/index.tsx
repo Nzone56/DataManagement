@@ -21,7 +21,7 @@ import { AsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../../../store/store";
 import { ListModalUpload } from "./ListModalUpload";
 
-interface ListLayoutProps<T extends { id: string }> {
+interface ListLayoutProps<T extends { id: string }, T2> {
   title: string;
   list: T[];
   header: string[];
@@ -30,9 +30,17 @@ interface ListLayoutProps<T extends { id: string }> {
   addItem: AsyncThunk<T, T, ThunkApiConfig>;
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
   updateItem: AsyncThunk<T, T, ThunkApiConfig>;
+  mapUpload?: (data: T2[]) => {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    duplicatedData: string[];
+    uniqueData: T[];
+  };
+  setData?: AsyncThunk<T[], T[], ThunkApiConfig>;
 }
 
-export const ListLayout = <T extends { id: string }>({
+export const ListLayout = <T extends { id: string }, T2>({
   title,
   list,
   header,
@@ -41,7 +49,9 @@ export const ListLayout = <T extends { id: string }>({
   addItem,
   removeItem,
   updateItem,
-}: ListLayoutProps<T>) => {
+  mapUpload,
+  setData,
+}: ListLayoutProps<T, T2>) => {
   const [searchState, setSearchState] = useState<string>("");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [modalState, setModalState] = useState<{
@@ -59,8 +69,13 @@ export const ListLayout = <T extends { id: string }>({
     setModalState({ open: true, mode, data });
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModalItem = () => {
     setModalState({ open: false, mode: "create", data: undefined });
+  };
+
+  const handleCloseModalUpload = () => {
+    setShowUploadModal(false);
+    setAnchorEl(null);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -78,15 +93,23 @@ export const ListLayout = <T extends { id: string }>({
           title={title.replace(/s$/, "")}
           show={modalState.open}
           modalType={modalState.mode}
-          onHide={handleCloseModal}
+          onHide={handleCloseModalItem}
           list={header}
           initialValue={modalState.data ? modalState.data : initialDataItem}
           addItem={addItem}
           updateItem={updateItem}
+          loading={loading}
         />
       ) : null}
-      {showUploadModal ? (
-        <ListModalUpload show={showUploadModal} onHide={() => setShowUploadModal(false)} title={title} />
+      {showUploadModal && mapUpload && setData ? (
+        <ListModalUpload<T, T2>
+          show={showUploadModal}
+          onHide={handleCloseModalUpload}
+          title={title}
+          loading={loading}
+          mapUpload={mapUpload}
+          setData={setData}
+        />
       ) : null}
       <ListTitleContainer>
         <ListTitle variant="h1">{title}</ListTitle>
@@ -128,7 +151,10 @@ export const ListLayout = <T extends { id: string }>({
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={() => setShowUploadModal(true)} disabled={title !== "TimeManager"}>
+            <MenuItem
+              onClick={() => setShowUploadModal(true)}
+              disabled={title === "Gastos" || title === "Conceptos" || title === "Honorarios" || title === "Abogados"}
+            >
               <UploadIcon />
               <Typography ml={1}>Subir </Typography>
             </MenuItem>

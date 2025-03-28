@@ -23,7 +23,6 @@ export const updateWorklog = createAsyncThunk<Worklog, Worklog, ThunkApiConfig>(
   (worklog: Worklog) => WorklogService.updateWorklog(worklog)
 );
 
-// export const setWorklogs = createAction<Worklog[]>("worklogs/setWorklogs");
 export const setWorklogs = createAsyncThunk<Worklog[], Worklog[], ThunkApiConfig>(
   "worklogs/setWorklogs",
   (worklogs: Worklog[]) => WorklogService.setWorklogs(worklogs)

@@ -21,6 +21,10 @@ export const ModalDatePicker = <T extends Record<string, unknown>>({
       <ModalFormTitle mr={1}>{codeToText(item as keyof typeof localeDictionary)}:</ModalFormTitle>
       <Box>
         <DatePicker
+          peekNextMonth
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
           id="exampleDate"
           name="date"
           onChange={(date) => onChangeItemValue(item as keyof T, convertToTimestamp(String(date)))}

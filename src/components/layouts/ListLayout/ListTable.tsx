@@ -141,7 +141,9 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                   return (
                     <TableCellStyled
                       cellwidth={((100 - 5) / header.length).toString()}
-                      cellminwidth={title === "TimeManager" ? String(columnWidths[rowHeader]) : ""}
+                      cellminwidth={
+                        title === "TimeManager" || title === "Facturación" ? String(columnWidths[rowHeader]) : ""
+                      }
                       header={true}
                       key={rowHeader}
                       onClick={() => handleSortHeader(rowHeader)}
@@ -163,7 +165,9 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                 }
                 return (
                   <TableCellStyled
-                    cellminwidth={title === "TimeManager" ? String(columnWidths[rowHeader]) : ""}
+                    cellminwidth={
+                      title === "TimeManager" || title === "Facturación" ? String(columnWidths[rowHeader]) : ""
+                    }
                     size="small"
                     key={rowHeader}
                     cellwidth={((100 - 5) / header.length).toString()}
@@ -245,7 +249,8 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
                               {clients.find((client) => client.id === filteredItem[headerItem])?.name ||
                                 "No encontrado"}
                             </TableText>
-                          ) : headerItem.toLocaleLowerCase().includes("sub") ? (
+                          ) : headerItem.toLocaleLowerCase().includes("sub") &&
+                            headerItem.toLocaleLowerCase() !== "subject" ? (
                             Array.isArray(filteredItem[headerItem]) &&
                             filteredItem[headerItem].map((item) => (
                               <StyledChip
@@ -311,7 +316,7 @@ export const ListTable = <T extends Record<string, string | number | string[] | 
             <TableRow>
               <StyledTablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
-                colSpan={title === "TimeManager" ? 5 : header.length}
+                colSpan={title === "TimeManager" || title === "Facturación" ? 5 : header.length}
                 count={filteredValues.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

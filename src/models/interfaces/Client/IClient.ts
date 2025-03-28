@@ -7,5 +7,15 @@ export interface Client {
   address: string;
   city: string;
   email: string;
-  joinedDate: number;
+  joinedDate?: number;
+}
+
+export interface RawClient {
+  "Razón Social": string;
+  Representante: string;
+  Dirección: string;
+  Ciudad: string;
+  NIT: string;
+  Teléfono: string;
+  "e-mail": string;
 }

@@ -5,6 +5,8 @@ import { lawyersReducer } from "./lawyers/lawyers.reducer";
 import { expensesReducer } from "./expenses/expenses.reducer";
 import { settingsReducer } from "./settings/settings.reducer";
 import { worklogsReducer } from "./worklogs/worklogs.reducer";
+import { billsReducer } from "./bills/bills.reducer";
+import { receiptsReducer } from "./receipts/receipts.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     expenses: expensesReducer,
     settings: settingsReducer,
     worklogs: worklogsReducer,
+    bills: billsReducer,
+    receipts: receiptsReducer,
   },
 });
 
