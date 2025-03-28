@@ -45,7 +45,7 @@ export const ReceiptsPage = () => {
         title="Ingresos"
         list={receipts}
         initialDataItem={InitialReceipt}
-        header={Object.keys(InitialReceipt)}
+        header={Object.keys(InitialReceipt)?.filter((headItem) => headItem !== "id")}
         addItem={addReceipt}
         updateItem={updateReceipt}
         removeItem={removeReceipt}

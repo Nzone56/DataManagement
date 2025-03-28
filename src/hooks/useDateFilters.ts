@@ -3,7 +3,6 @@ import { useState } from "react";
 import { subDays, isSameDay, isWithinInterval, getYear, getMonth } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 
-// TODO: VOLVERLO UN REDUCER DE REDUX
 export interface Filters {
   dateFilter: string;
   startDate?: Date | null;

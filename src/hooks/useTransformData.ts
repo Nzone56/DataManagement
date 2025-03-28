@@ -191,7 +191,7 @@ export const useTransformData = () => {
 
     uniqueData.forEach((mapped) => {
       if (mapped.clientId === "Error Cliente") {
-        const clientName = data.find((raw) => String(raw.Cliente) === mapped.id)?.Cliente.trim();
+        const clientName = data.find((raw) => String(raw["N° Recibo"]) === mapped.receiptNumber)?.Cliente.trim();
         if (clientName) uniqueErrorClients.add(clientName);
       }
     });
@@ -239,6 +239,7 @@ export const useTransformData = () => {
       if (duplicated) errorData.add(duplicated.billNumber);
     });
 
+    // Filter the duplicated with value of 0
     const uniqueData = mappedData.filter(
       (data) => data.value !== 0 && !bills.find((bill) => bill.billNumber === data.billNumber)
     );
@@ -247,7 +248,7 @@ export const useTransformData = () => {
 
     uniqueData.forEach((mapped, index) => {
       if (mapped.clientId === "Error Cliente") {
-        const clientName = data.find((raw) => String(raw["Razón Social"]) === mapped.id)?.["Razón Social"].trim();
+        const clientName = data.find((raw) => String(raw["Factura N°"]) === mapped.billNumber)?.["Razón Social"].trim();
         if (clientName) uniqueErrorClients.add(clientName);
       }
 
@@ -256,16 +257,16 @@ export const useTransformData = () => {
       }
     });
 
-    console.log(
-      "DATA",
-      mappedData.map((map) => map.value)
-    );
-    console.log(
-      "FILTERED",
-      uniqueData.map((map) => map.billNumber)
-    );
+    // console.log(
+    //   "DATA",
+    //   mappedData.map((map) => map.concept)
+    // );
+    // console.log(
+    //   "FILTERED",
+    //   uniqueData.map((map) => map.billNumber)
+    // );
 
-    console.log("ERROR", Array.from(uniqueErrorBills));
+    // console.log("ERROR", Array.from(uniqueErrorBills));
     const errorClients = Array.from(uniqueErrorClients);
     const errorLawyers: string[] = [];
     const errorBills = Array.from(uniqueErrorBills);

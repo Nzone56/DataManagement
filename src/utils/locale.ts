@@ -54,6 +54,7 @@ export const localeDictionary = {
   paymentMethod: "Método de pago",
   bills: "Facturas",
   observations: "Observaciones",
+  value: "Valor",
 } as const;
 
 export const codeToText = (code: keyof typeof localeDictionary): string => {

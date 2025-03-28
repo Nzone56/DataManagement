@@ -42,7 +42,7 @@ export const BillingsPage = () => {
         title="Facturación"
         list={bills}
         initialDataItem={InitialBill}
-        header={Object.keys(InitialBill)}
+        header={Object.keys(InitialBill)?.filter((headItem) => headItem !== "id")}
         addItem={addBill}
         updateItem={updateBill}
         removeItem={removeBill}

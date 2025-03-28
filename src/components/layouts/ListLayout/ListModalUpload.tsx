@@ -100,7 +100,7 @@ export const ListModalUpload = <T, T2>({
               msg: "duplicated",
             }));
           } else {
-            if (title === "Facturación" && errorClients.length > 0) {
+            if (title === "Facturación" && errorBills.length > 0) {
               setState((prev) => ({
                 ...prev,
                 error: true,
