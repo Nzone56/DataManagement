@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chart from "react-apexcharts";
 import { Spinner } from "../../ui/Spinner";
 import { Expand as ExpandIcon } from "@mui/icons-material";
@@ -29,6 +29,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const options = getTableOptions(categories, type, formatter, colors, series);
 
@@ -74,13 +75,14 @@ export const StatCard: React.FC<StatCardProps> = ({
           {title}
         </Typography>
       </SecondaryAccordionSummary>
-      <AccordionDetails sx={{ overflowX: "auto" }}>
+      <AccordionDetails sx={{ overflowX: "auto" }} ref={containerRef}>
         {isChartVisible && (
           <ColumnJustifyFlex
             sx={{
               transition: "opacity 0.3s",
               opacity: isExpanded ? 1 : 0,
-              minWidth: categories.length > 15 ? "200%" : "",
+              minWidth: categories.length > 15 && type !== "pie" ? "200%" : undefined,
+              maxWidth: type === "pie" && containerRef.current ? containerRef.current?.offsetWidth : undefined,
             }}
           >
             {isLoading ? (
@@ -91,7 +93,7 @@ export const StatCard: React.FC<StatCardProps> = ({
                 series={formattedSeries}
                 type={type === "bar-line" ? "line" : type}
                 height={type !== "pie" ? 400 : 300}
-                width={categories.length > 15 ? "200%" : "100%"}
+                width={categories.length > 15 && type !== "pie" ? "200%" : "100%"}
               />
             ) : (
               <FullCenterBox>

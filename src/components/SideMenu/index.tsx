@@ -42,6 +42,7 @@ export const SideMenu = () => {
 
   useEffect(() => {
     const isReload = sessionStorage.getItem("isReload");
+    //TODO: Fix Expanded Menu
     if (!isReload) {
       setExpandedMenu(true);
     }

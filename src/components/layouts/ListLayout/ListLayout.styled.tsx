@@ -8,6 +8,8 @@ import {
   TableFooter,
   TableHead,
   TablePagination,
+  Tooltip,
+  tooltipClasses,
   Typography,
 } from "@mui/material";
 import { Theme } from "@mui/material/styles";
@@ -168,3 +170,19 @@ export const StyledChip = styled(Chip)<{ chipcolor: string; chiptextcolor: strin
     ...getResponsiveFontSize(theme),
   })
 );
+
+// TODO: ESTILOS TOOLTIP
+export const StyledTooltip = styled(Tooltip)(() => ({
+  [`& .${tooltipClasses.popper}`]: {
+    fontSize: "1.4rem",
+    padding: "10px 16px",
+    maxWidth: "300px",
+    backgroundColor: "#333",
+    color: "#fff",
+    borderRadius: "8px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#333",
+  },
+}));

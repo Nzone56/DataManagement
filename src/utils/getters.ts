@@ -47,3 +47,8 @@ export const getArrayPropById = <T extends { id: string }>(id: string, array: T[
   const stringProps = getPropById(id, array, prop);
   return stringProps.split(",");
 };
+
+export const getRandomColor = () => {
+  const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  return randomColor.padEnd(7, "0");
+};

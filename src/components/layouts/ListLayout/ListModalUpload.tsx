@@ -1,14 +1,15 @@
-import { Box, IconButton, List, ListItem, Modal, Typography } from "@mui/material";
 import * as XLSX from "xlsx";
-import { ModalBody, ModalFooter, ModalHeader, ModalInnerContainer, ModalTitle } from "./ListModal.styled";
 import { useState } from "react";
-import { CenteredBox, ColumnAlignFlex, PrimaryButton } from "../../Components.styled";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useDispatch } from "react-redux";
-import { AppDispatch, ThunkApiConfig } from "../../../store/store";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 import { Spinner } from "../../ui/Spinner";
 import { AsyncThunk } from "@reduxjs/toolkit";
+import { getSimpleOptions } from "../../../utils/getters";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { AppDispatch, ThunkApiConfig } from "../../../store/store";
+import { CenteredBox, ColumnAlignFlex, PrimaryButton } from "../../Components.styled";
+import { Box, IconButton, List, ListItem, MenuItem, Modal, Select, Typography } from "@mui/material";
+import { ModalBody, ModalFooter, ModalHeader, ModalInnerContainer, ModalTitle } from "./ListModal.styled";
 
 type CustomModalProps<T, T2> = {
   show: boolean;
@@ -16,10 +17,14 @@ type CustomModalProps<T, T2> = {
   title: string;
   loading: boolean;
   setData: AsyncThunk<T[], T[], ThunkApiConfig>;
-  mapUpload: (data: T2[]) => {
+  mapUpload: (
+    data: T2[],
+    concept?: "Germán Ulloa" | "Carlos Bermúdez"
+  ) => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
     duplicatedData: string[];
     uniqueData: T[];
   };
@@ -44,7 +49,10 @@ export const ListModalUpload = <T, T2>({
   const [errorLawyers, setErrorLawyers] = useState<string[]>([]);
   const [errorClients, setErrorClients] = useState<string[]>([]);
   const [errorBills, setErrorBills] = useState<string[]>([]);
+  const [errorConcepts, setErrorConcepts] = useState<string[]>([]);
   const [duplicatedData, setDuplicated] = useState<string[]>([]);
+
+  const [selectFeeConcept, setSelectFeeConcept] = useState<"Germán Ulloa" | "Carlos Bermúdez">("Carlos Bermúdez");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -71,21 +79,31 @@ export const ListModalUpload = <T, T2>({
         const sheet = workbook.Sheets[sheetName];
 
         let jsonData: T2[] = [];
-        let transformedData: T[] = [];
-
         jsonData = XLSX.utils.sheet_to_json<T2>(sheet);
-        const { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData } = mapUpload(jsonData);
+
+        let errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData;
+
+        if (title === "Honorarios") {
+          ({ errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData } = mapUpload(
+            jsonData,
+            selectFeeConcept
+          ));
+        } else {
+          ({ errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData } = mapUpload(jsonData));
+        }
+
         setErrorBills(errorBills);
         setDuplicated(duplicatedData);
         setErrorClients(errorClients);
+        setErrorConcepts(errorConcepts);
         setErrorLawyers(errorLawyers);
-        transformedData = uniqueData;
+        setXLSXData(uniqueData);
 
-        setXLSXData(transformedData);
-
+        console.log(uniqueData);
         if (
           (title === "TimeManager" && (errorClients.length > 0 || errorLawyers.length > 0)) ||
-          ((title === "Facturación" || title === "Ingresos") && errorClients.length > 0)
+          ((title === "Facturación" || title === "Ingresos") && errorClients.length > 0) ||
+          ((title === "Gastos" || title === "Honorarios") && errorConcepts.length > 0)
         ) {
           setState((prev) => ({
             ...prev,
@@ -107,14 +125,40 @@ export const ListModalUpload = <T, T2>({
                 msg: "duplicated",
               }));
             } else {
-              setState((prev) => ({
-                ...prev,
-                error: false,
-                loaded: true,
-                msg: `Se han cargado satisfactoriamente ${jsonData.length} datos`,
-              }));
+              if (title === "Conceptos" && errorConcepts.length > 0) {
+                setState((prev) => ({
+                  ...prev,
+                  error: true,
+                  msg: "duplicated",
+                }));
+              } else {
+                if (title === "Gastos" && errorConcepts.length > 0) {
+                  setState((prev) => ({
+                    ...prev,
+                    error: true,
+                    msg: "duplicated",
+                  }));
+                } else {
+                  if (title === "Honorarios" && errorConcepts.length > 0) {
+                    setState((prev) => ({
+                      ...prev,
+                      error: true,
+                      msg: "duplicated",
+                    }));
+                  } else {
+                    setState((prev) => ({
+                      ...prev,
+                      error: false,
+                      loaded: true,
+                      msg: `Se han cargado satisfactoriamente ${
+                        title === "Gastos" || title === "Honorarios" ? uniqueData.length : jsonData.length
+                      } datos`,
+                    }));
 
-              setJsonData(jsonData);
+                    setJsonData(jsonData);
+                  }
+                }
+              }
             }
           }
         }
@@ -162,8 +206,23 @@ export const ListModalUpload = <T, T2>({
               <Typography variant="body1">
                 {title === "TimeManager"
                   ? "⚠️ Nota Importante: Asegúrese de que los nombres de clientes y abogados estén correctamente añadidos y sean idénticos tanto en el archivo Excel como en la plataforma, sin variaciones ni errores de escritura."
-                  : "⚠️ Nota Importante: Asegúrese de elegir el archivo xlsx de clientes correcto"}
+                  : `⚠️ Nota Importante: Asegúrese de elegir el archivo xlsx de  ${title} correcto`}
               </Typography>
+              {title === "Honorarios" && (
+                <Select
+                  value={selectFeeConcept}
+                  onChange={(e) => setSelectFeeConcept(e.target.value as "Germán Ulloa" | "Carlos Bermúdez")}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                >
+                  {getSimpleOptions("feeConcept")?.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+
               <input
                 type="file"
                 accept=".xlsx"
@@ -196,6 +255,12 @@ export const ListModalUpload = <T, T2>({
                           sx={{ color: "#d32f2f", padding: "2px" }}
                           key={index}
                         >{`Cliente: ${client}`}</ListItem>
+                      ))}
+                      {Array.from(errorConcepts).map((client, index) => (
+                        <ListItem
+                          sx={{ color: "#d32f2f", padding: "2px" }}
+                          key={index}
+                        >{`Concepto: ${client}`}</ListItem>
                       ))}
                       {Array.from(errorBills).map((bill, index) => (
                         <ListItem sx={{ color: "#d32f2f", padding: "2px" }} key={index}>{`Factura: ${bill}`}</ListItem>
