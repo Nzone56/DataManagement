@@ -85,7 +85,7 @@ export const clientsReducer = createReducer(initialState, (builder) => {
       toast.error(state.error);
     })
 
-    // Set Worklog
+    // Set clients
     .addCase(setClients.pending, (state) => {
       state.loading = true;
     })

@@ -9,6 +9,9 @@ import {
   removeExpense,
   removeExpenseConcept,
   removeFee,
+  setExpenses,
+  setExpensesConcepts,
+  setFees,
   updateExpense,
   updateExpenseConcept,
   updateFee,
@@ -54,7 +57,7 @@ const initialStateFees: FeesReducer = {
 
 const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) => {
   builder
-    // Fetch ExpenseConcepts
+    // Fetch Concept
     .addCase(fetchExpenseConcepts.pending, (state) => ({
       ...state,
       loading: true,
@@ -74,7 +77,7 @@ const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) =>
       };
     })
 
-    // Add expensesConcept
+    // Add Concept
     .addCase(addExpenseConcept.pending, (state) => {
       state.loading = true;
     })
@@ -89,7 +92,7 @@ const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) =>
       toast.error(state.error);
     })
 
-    // Delete expensesConcept
+    // Delete Concept
     .addCase(removeExpenseConcept.pending, (state) => {
       state.loading = true;
     })
@@ -104,7 +107,7 @@ const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) =>
       toast.error(state.error);
     })
 
-    // Update ExpenseConcepte
+    // Update Concept
     .addCase(updateExpenseConcept.pending, (state) => {
       state.loading = true;
     })
@@ -120,12 +123,27 @@ const expensesConceptsReducer = createReducer(initialStateConcepts, (builder) =>
       state.loading = false;
       state.error = action.error.message || "Error al actualizar el concepto de gasto";
       toast.error(state.error);
+    })
+
+    // Set Concepts
+    .addCase(setExpensesConcepts.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(setExpensesConcepts.fulfilled, (state, action: PayloadAction<ExpenseConcept[]>) => {
+      state.loading = false;
+      state.expensesConcepts = [...state.expensesConcepts, ...Object.values(action.payload)];
+      toast.success("Conceptos añadidos con éxito");
+    })
+    .addCase(setExpensesConcepts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al subir los conceptos";
+      toast.error(state.error);
     });
 });
 
 const expensesManageReducer = createReducer(initialStateExpenses, (builder) => {
   builder
-    // Fetch ExpenseConcepts
+    // Fetch Expenses
     .addCase(fetchExpenses.pending, (state) => ({
       ...state,
       loading: true,
@@ -190,6 +208,21 @@ const expensesManageReducer = createReducer(initialStateExpenses, (builder) => {
     .addCase(updateExpense.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Error al actualizar el concepto de gasto";
+      toast.error(state.error);
+    })
+
+    // Set Concepts
+    .addCase(setExpenses.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(setExpenses.fulfilled, (state, action: PayloadAction<Expense[]>) => {
+      state.loading = false;
+      state.expenses = [...state.expenses, ...Object.values(action.payload)];
+      toast.success(" Gastos añadidos con éxito");
+    })
+    .addCase(setExpenses.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al subir los gastos";
       toast.error(state.error);
     });
 });
@@ -261,6 +294,20 @@ const feesReducer = createReducer(initialStateFees, (builder) => {
     .addCase(updateFee.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Error al actualizar el concepto de Honorario";
+      toast.error(state.error);
+    })
+    // Set Fees
+    .addCase(setFees.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(setFees.fulfilled, (state, action: PayloadAction<Fee[]>) => {
+      state.loading = false;
+      state.fees = [...state.fees, ...Object.values(action.payload)];
+      toast.success(" Honorarios añadidos con éxito");
+    })
+    .addCase(setFees.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Error al subir los honorarios";
       toast.error(state.error);
     });
 });

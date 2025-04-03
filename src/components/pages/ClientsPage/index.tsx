@@ -30,12 +30,13 @@ const InitialClient: Client = {
 export const ClientsPage = () => {
   const { clients, loading } = useSelector(getClients);
   const dispatch = useDispatch<AppDispatch>();
+
+  const { mapHeadersToClient } = useTransformData();
+
   useEffect(() => {
     dispatch(fetchClients());
     //eslint-disable-next-line
   }, []);
-
-  const { mapHeadersToClient } = useTransformData();
 
   return (
     <MainLayout>

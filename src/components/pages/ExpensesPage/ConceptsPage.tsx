@@ -5,12 +5,14 @@ import {
   addExpenseConcept,
   fetchExpenseConcepts,
   removeExpenseConcept,
+  setExpensesConcepts,
   updateExpenseConcept,
 } from "../../../store/expenses/expenses.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
 import { ExpenseConcept } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenseConcepts } from "../../../store/expenses/expenses.selector";
+import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialExpenseConcept: ExpenseConcept = {
   id: "",
@@ -23,6 +25,8 @@ const InitialExpenseConcept: ExpenseConcept = {
 export const ConceptsPage = () => {
   const { expensesConcepts, loading } = useSelector(getExpenseConcepts);
   const dispatch = useDispatch<AppDispatch>();
+
+  const { mapHeaderToConcept } = useTransformData();
 
   useEffect(() => {
     dispatch(fetchExpenseConcepts());
@@ -40,6 +44,8 @@ export const ConceptsPage = () => {
         updateItem={updateExpenseConcept}
         removeItem={removeExpenseConcept}
         loading={loading}
+        mapUpload={mapHeaderToConcept}
+        setData={setExpensesConcepts}
       />
     </MainLayout>
   );

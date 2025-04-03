@@ -31,6 +31,20 @@ export const getTableOptions = (
     markers: {
       size: type === "bar-line" ? [0, 5] : [5], // 0 para barras, 5 para línea
     },
+    legend: {
+      show: true,
+      formatter: (seriesName: string) => {
+        if (type === "pie") {
+          return seriesName.length > 18
+            ? `<span title="${seriesName}">${seriesName.slice(0, 18)}...</span>`
+            : seriesName;
+        }
+        return seriesName; // No modifica la leyenda en otros tipos de gráfico
+      },
+      labels: {
+        useSeriesColors: true,
+      },
+    },
     noData: {
       text: "No hay datos disponibles",
       align: "center" as const,

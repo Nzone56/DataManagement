@@ -24,6 +24,11 @@ export const updateExpenseConcept = createAsyncThunk<ExpenseConcept, ExpenseConc
   (expenseConcept: ExpenseConcept) => ExpenseConceptService.updateExpenseConcept(expenseConcept)
 );
 
+export const setExpensesConcepts = createAsyncThunk<ExpenseConcept[], ExpenseConcept[], ThunkApiConfig>(
+  "expenses/setConcepts",
+  (expenses: ExpenseConcept[]) => ExpenseConceptService.setConcepts(expenses)
+);
+
 // -- EXPENSES -- //
 
 export const fetchExpenses = createAsyncThunk<Expense[]>("expenses/fetchExpenses", () =>
@@ -46,6 +51,11 @@ export const updateExpense = createAsyncThunk<Expense, Expense, ThunkApiConfig>(
   (expense: Expense) => ExpenseService.updateExpense(expense)
 );
 
+export const setExpenses = createAsyncThunk<Expense[], Expense[], ThunkApiConfig>(
+  "expenses/setExpenses",
+  (expenses: Expense[]) => ExpenseService.setExpenses(expenses)
+);
+
 // -- FEES -- //
 
 export const fetchFees = createAsyncThunk<Fee[]>("expenses/fetchFees", () => FeeService.fetchFees());
@@ -59,4 +69,8 @@ export const removeFee = createAsyncThunk<string, string, ThunkApiConfig>("expen
 });
 export const updateFee = createAsyncThunk<Fee, Fee, ThunkApiConfig>("expenses/updateFee", (fee: Fee) =>
   FeeService.updateFee(fee)
+);
+
+export const setFees = createAsyncThunk<Fee[], Fee[], ThunkApiConfig>("expenses/setFees", (fees: Fee[]) =>
+  FeeService.setFees(fees)
 );

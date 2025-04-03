@@ -30,10 +30,14 @@ interface ListLayoutProps<T extends { id: string }, T2> {
   addItem: AsyncThunk<T, T, ThunkApiConfig>;
   removeItem: AsyncThunk<string, string, ThunkApiConfig>;
   updateItem: AsyncThunk<T, T, ThunkApiConfig>;
-  mapUpload?: (data: T2[]) => {
+  mapUpload?: (
+    data: T2[],
+    concept?: "Germán Ulloa" | "Carlos Bermúdez"
+  ) => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
     duplicatedData: string[];
     uniqueData: T[];
   };
@@ -151,10 +155,7 @@ export const ListLayout = <T extends { id: string }, T2>({
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem
-              onClick={() => setShowUploadModal(true)}
-              disabled={title === "Gastos" || title === "Conceptos" || title === "Honorarios" || title === "Abogados"}
-            >
+            <MenuItem onClick={() => setShowUploadModal(true)} disabled={title === "Abogados"}>
               <UploadIcon />
               <Typography ml={1}>Subir </Typography>
             </MenuItem>

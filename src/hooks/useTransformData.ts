@@ -10,6 +10,10 @@ import { RawReceipt, Receipt } from "../models/interfaces/Receipt/IReceipts";
 import { getReceipts } from "../store/receipts/receipts.selector";
 import { getBills } from "../store/bills/bills.selector";
 import { Bill, RawBill } from "../models/interfaces/Bill/IBill";
+import { Expense, ExpenseConcept, Fee, rawConcept, RawExpense, RawFee } from "../models/interfaces/Expense/IExpense";
+import { getExpenseConcepts, getExpenses, getFees } from "../store/expenses/expenses.selector";
+import { getPropById, getRandomColor } from "../utils/getters";
+import { formatDateText } from "../utils/dates";
 
 export const useTransformData = () => {
   const { lawyers } = useSelector(getLawyers);
@@ -17,6 +21,9 @@ export const useTransformData = () => {
   const { worklogs } = useSelector(getWorklogs);
   const { receipts } = useSelector(getReceipts);
   const { bills } = useSelector(getBills);
+  const { expensesConcepts } = useSelector(getExpenseConcepts);
+  const { expenses } = useSelector(getExpenses);
+  const { fees } = useSelector(getFees);
 
   const removeSpaces = (str: string) => String(str).replace(/\s+/g, "");
 
@@ -26,6 +33,7 @@ export const useTransformData = () => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
     duplicatedData: string[];
     uniqueData: Worklog[];
   } => {
@@ -60,8 +68,10 @@ export const useTransformData = () => {
       status: String(row.Estado || "").trim(),
       billable: String(row.Facturable || "").trim() === "Sí",
       documentNumber: String(row["N° Documento"] || "").trim(),
-      lastModifiedDate: new Date(row["Fecha_Ultima_Modificacion"] || "").getTime() || 0,
-      creationDate: new Date(row["Fecha Creación"] || "").getTime() || 0,
+      lastModifiedDate: row["Fecha_Ultima_Modificacion"]
+        ? toZonedTime(parseISO(row["Fecha_Ultima_Modificacion"]), "UTC").getTime()
+        : 0,
+      creationDate: row["Fecha Creación"] ? toZonedTime(parseISO(row["Fecha Creación"]), "UTC").getTime() : 0,
       source: String(row.Origen || "").trim(),
     }));
 
@@ -91,8 +101,9 @@ export const useTransformData = () => {
     const errorClients = Array.from(uniqueErrorClients);
     const errorLawyers = Array.from(uniqueErrorLawyers);
     const errorBills: string[] = [];
+    const errorConcepts: string[] = [];
     const duplicatedData = Array.from(errorData);
-    return { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData };
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
   };
 
   const mapHeadersToClient = (
@@ -101,6 +112,8 @@ export const useTransformData = () => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
+
     duplicatedData: string[];
     uniqueData: Client[];
   } => {
@@ -140,8 +153,9 @@ export const useTransformData = () => {
     const errorClients = Array.from(uniqueErrorClients);
     const errorLawyers: string[] = [];
     const errorBills: string[] = [];
+    const errorConcepts: string[] = [];
     const duplicatedData = Array.from(errorData);
-    return { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData };
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
   };
 
   const mapHeadersToReceipt = (
@@ -150,13 +164,14 @@ export const useTransformData = () => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
     duplicatedData: string[];
     uniqueData: Receipt[];
   } => {
     const mappedData = data.map((row) => ({
       id: String(crypto.randomUUID()),
       receiptNumber: String(row["N° Recibo"] || "").trim(),
-      date: new Date(row.Fecha || "").getTime() || 0,
+      date: row.Fecha ? toZonedTime(parseISO(row.Fecha), "UTC").getTime() : 0,
       clientId: String(
         clients.find(
           (client) =>
@@ -199,8 +214,9 @@ export const useTransformData = () => {
     const errorClients = Array.from(uniqueErrorClients);
     const errorLawyers: string[] = [];
     const errorBills: string[] = [];
+    const errorConcepts: string[] = [];
     const duplicatedData = Array.from(errorData);
-    return { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData };
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
   };
 
   const mapHeadersToBill = (
@@ -209,14 +225,15 @@ export const useTransformData = () => {
     errorClients: string[];
     errorLawyers: string[];
     errorBills: string[];
+    errorConcepts: string[];
     duplicatedData: string[];
     uniqueData: Bill[];
   } => {
     const mappedData = data.map((row) => ({
       id: String(crypto.randomUUID()),
       billNumber: String(row["Factura N°"] || "").trim(),
-      issueDate: new Date(row["Fecha emisión"] || "").getTime() || 0,
-      expirationDate: new Date(row["Fecha vencimiento"] || "").getTime() || 0,
+      issueDate: row["Fecha emisión"] ? toZonedTime(parseISO(row["Fecha emisión"]), "UTC").getTime() : 0,
+      expirationDate: row["Fecha vencimiento"] ? toZonedTime(parseISO(row["Fecha vencimiento"]), "UTC").getTime() : 0,
       clientId: String(
         clients.find(
           (client) =>
@@ -257,21 +274,251 @@ export const useTransformData = () => {
       }
     });
 
-    // console.log(
-    //   "DATA",
-    //   mappedData.map((map) => map.concept)
-    // );
-    // console.log(
-    //   "FILTERED",
-    //   uniqueData.map((map) => map.billNumber)
-    // );
-
-    // console.log("ERROR", Array.from(uniqueErrorBills));
     const errorClients = Array.from(uniqueErrorClients);
     const errorLawyers: string[] = [];
+    const errorConcepts: string[] = [];
     const errorBills = Array.from(uniqueErrorBills);
     const duplicatedData = Array.from(errorData);
-    return { errorClients, errorLawyers, errorBills, duplicatedData, uniqueData };
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
+  };
+
+  const mapHeaderToConcept = (
+    data: rawConcept[]
+  ): {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    errorConcepts: string[];
+    duplicatedData: string[];
+    uniqueData: ExpenseConcept[];
+  } => {
+    const mappedData = data.map((row) => ({
+      id: crypto.randomUUID(),
+      name: row.Concepto.trim(),
+      type: "",
+      color: getRandomColor(),
+      categories: [],
+    }));
+
+    const errorData = new Set<string>();
+    const uniqueErrorsConcepts = new Set<string>();
+
+    // Find duplicated on table
+    mappedData.map((data) => {
+      const duplicated = expensesConcepts.find(
+        (concept) => concept.name.toLocaleLowerCase().trim() === data.name.toLocaleLowerCase().trim()
+      );
+      if (duplicated) errorData.add(duplicated.name.trim());
+    });
+
+    // Find duplicated on the same file
+    mappedData.forEach((mapped, index) => {
+      if (
+        mappedData.findIndex(
+          (finder) => finder.name.toLocaleLowerCase().trim() === mapped.name.toLocaleLowerCase().trim()
+        ) !== index
+      ) {
+        uniqueErrorsConcepts.add(mapped.name.trim());
+      }
+    });
+
+    const errorConcepts = Array.from(uniqueErrorsConcepts);
+    const errorLawyers: string[] = [];
+    const errorBills: string[] = [];
+    const errorClients: string[] = [];
+    const duplicatedData = Array.from(errorData);
+    const uniqueData = Array.from(new Map(mappedData.map((item) => [item.name, item])).values()).filter(
+      (filtered) => !duplicatedData.find((duplicated) => duplicated === filtered.name)
+    );
+
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
+  };
+
+  const mapHeadersToExpense = (
+    data: RawExpense[]
+  ): {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    errorConcepts: string[];
+    duplicatedData: string[];
+    uniqueData: Expense[];
+  } => {
+    const mappedData: Expense[] = [];
+
+    data.forEach((row) => {
+      const cleanConcept = removeSpaces(String(row.Concepto || "").trim()).toLocaleLowerCase();
+      const findConcept = expensesConcepts.find(
+        (concept) => removeSpaces(String(concept.name || "").trim()).toLocaleLowerCase() === cleanConcept
+      );
+
+      Object.entries(row).forEach(([key, value]) => {
+        if (key === "Concepto") return; // Omit "Concepto"
+
+        const amount = isNaN(Number(value)) ? 0 : Number(value); // If is  " ", add 0
+
+        mappedData.push({
+          id: crypto.randomUUID(),
+          conceptId: findConcept?.id || "Error Concepto",
+          categoryId: "",
+          date: key ? toZonedTime(parseISO(key), "UTC").getTime() : 0,
+          amount: amount,
+          description: "",
+        });
+      });
+    });
+
+    const errorData = new Set<string>();
+    const conceptCount = new Map();
+
+    mappedData.map((data) => {
+      // Duplicated on existing expenses
+      const duplicated = expenses.find((expense) => expense.conceptId === data.conceptId && expense.date === data.date);
+      if (duplicated)
+        errorData.add(
+          "Concepto: " +
+            getPropById(duplicated.conceptId as keyof ExpenseConcept, expensesConcepts, "name") +
+            ", con fecha: " +
+            formatDateText(duplicated.date)
+        );
+    });
+
+    // Duplicated on same file
+    data.forEach((data) => {
+      const count = conceptCount.get(data.Concepto) || 0;
+      conceptCount.set(data.Concepto, count + 1);
+    });
+
+    conceptCount.forEach((count, conceptId) => {
+      if (count > 1) {
+        errorData.add(`El concepto "${conceptId}".`);
+      }
+    });
+
+    // Filter the duplicated with value of 0
+    const uniqueData = mappedData.filter((data) => data.amount !== 0);
+
+    const uniqueErrorsConcepts = new Set<string>();
+
+    uniqueData.forEach((mapped) => {
+      if (mapped.conceptId === "Error Concepto") {
+        // Search for the OG using data and amount
+        const originalConcept = data
+          .find((raw) =>
+            Object.entries(raw).some(
+              ([key, value]) =>
+                toZonedTime(parseISO(key), "UTC").getTime() === mapped.date && Number(value) === mapped.amount
+            )
+          )
+          ?.Concepto?.trim();
+        if (originalConcept) uniqueErrorsConcepts.add(originalConcept);
+      }
+    });
+
+    const errorConcepts = Array.from(uniqueErrorsConcepts);
+    const errorLawyers: string[] = [];
+    const errorBills: string[] = [];
+    const errorClients: string[] = [];
+    const duplicatedData = Array.from(errorData);
+
+    console.log(mappedData, uniqueData);
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
+  };
+
+  const mapHeadersToFee = (
+    data: RawFee[],
+    concept?: "Germán Ulloa" | "Carlos Bermúdez"
+  ): {
+    errorClients: string[];
+    errorLawyers: string[];
+    errorBills: string[];
+    errorConcepts: string[];
+    duplicatedData: string[];
+    uniqueData: Fee[];
+  } => {
+    const mappedData: Fee[] = [];
+
+    data.forEach((row) => {
+      const cleanConcept = removeSpaces(String(row.Concepto || "").trim()).toLocaleLowerCase();
+      const findConcept = expensesConcepts.find(
+        (concept) => removeSpaces(String(concept.name || "").trim()).toLocaleLowerCase() === cleanConcept
+      );
+
+      Object.entries(row).forEach(([key, value]) => {
+        if (key === "Concepto") return; // Omit "Concepto"
+
+        const amount = isNaN(Number(value)) ? 0 : Number(value); // If is  " ", add 0
+
+        mappedData.push({
+          id: crypto.randomUUID(),
+          feeConcept: concept || "Carlos Bermúdez",
+          conceptId: findConcept?.id || "Error Concepto",
+          categoryId: "",
+          date: key ? toZonedTime(parseISO(key), "UTC").getTime() : 0,
+          amount: amount,
+          description: "",
+        });
+      });
+    });
+
+    const errorData = new Set<string>();
+    const conceptCount = new Map();
+
+    mappedData.map((data) => {
+      // Duplicated on existing expenses
+      const duplicated = fees.find(
+        (fee) => fee.conceptId === data.conceptId && fee.date === data.date && fee.feeConcept === data.feeConcept
+      );
+      if (duplicated)
+        errorData.add(
+          "Concepto: " +
+            getPropById(duplicated.conceptId as keyof ExpenseConcept, expensesConcepts, "name") +
+            ", con fecha: " +
+            formatDateText(duplicated.date) +
+            ", de " +
+            duplicated.feeConcept
+        );
+    });
+
+    // Duplicated on same file
+    data.forEach((data) => {
+      const count = conceptCount.get(data.Concepto) || 0;
+      conceptCount.set(data.Concepto, count + 1);
+    });
+
+    conceptCount.forEach((count, conceptId) => {
+      if (count > 1) {
+        errorData.add(`El concepto "${conceptId}".`);
+      }
+    });
+
+    // Filter the duplicated with value of 0
+    const uniqueData = mappedData.filter((data) => data.amount !== 0);
+
+    const uniqueErrorsConcepts = new Set<string>();
+
+    uniqueData.forEach((mapped) => {
+      if (mapped.conceptId === "Error Concepto") {
+        // Search for the OG using data and amount
+        const originalConcept = data
+          .find((raw) =>
+            Object.entries(raw).some(
+              ([key, value]) =>
+                toZonedTime(parseISO(key), "UTC").getTime() === mapped.date && Number(value) === mapped.amount
+            )
+          )
+          ?.Concepto?.trim();
+        if (originalConcept) uniqueErrorsConcepts.add(originalConcept);
+      }
+    });
+
+    const errorConcepts = Array.from(uniqueErrorsConcepts);
+    const errorLawyers: string[] = [];
+    const errorBills: string[] = [];
+    const errorClients: string[] = [];
+    const duplicatedData = Array.from(errorData);
+
+    return { errorClients, errorLawyers, errorBills, errorConcepts, duplicatedData, uniqueData };
   };
 
   return {
@@ -279,5 +526,8 @@ export const useTransformData = () => {
     mapHeadersToClient,
     mapHeadersToReceipt,
     mapHeadersToBill,
+    mapHeadersToExpense,
+    mapHeaderToConcept,
+    mapHeadersToFee,
   };
 };
