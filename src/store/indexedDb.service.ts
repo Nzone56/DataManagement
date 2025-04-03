@@ -18,6 +18,7 @@ export const openDatabase = async (): Promise<IDBDatabase> => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = (event) => {
+      event.stopPropagation();
       const db = request.result;
       const existingStores = new Set(db.objectStoreNames);
 
