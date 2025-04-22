@@ -10,7 +10,7 @@ import {
 } from "../../../store/expenses/expenses.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { ExpenseConcept } from "../../../models/interfaces/Expense/IExpense";
+import type { ExpenseConcept } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenseConcepts } from "../../../store/expenses/expenses.selector";
 import { useTransformData } from "../../../hooks/useTransformData";
 

@@ -1,4 +1,4 @@
-import { ISettings } from "../../models/interfaces/Settings/ISettings";
+import type { ISettings } from "../../models/interfaces/Settings/ISettings";
 import { collection, getDocs, updateDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_SETTINGS } from "../../server/collections";

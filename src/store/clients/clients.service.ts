@@ -1,4 +1,4 @@
-import { Client } from "../../models/interfaces/Client/IClient";
+import type { Client } from "../../models/interfaces/Client/IClient";
 import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_CLIENTS } from "../../server/collections";

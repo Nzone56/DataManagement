@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLawyers } from "../../../store/lawyers/lawyers.selector";
 import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "../../../store/lawyers/lawyers.actions";
 import { useEffect } from "react";
-import { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
+import type { Lawyer } from "../../../models/interfaces/Lawyer/ILawyer";
 import { AppDispatch } from "../../../store/store";
 import { toZonedTime } from "date-fns-tz";
 

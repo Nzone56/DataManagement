@@ -23,7 +23,7 @@ import { CenteredBox, CenteredBoxBetween, ColumnJustifyFlex } from "../Component
 import { useLocation, useNavigate } from "react-router";
 import { menuSections } from "./SideMenuVariables";
 import { getCurrentUser } from "../../store/user/user.selector";
-import { MenuOptionType } from "../../models/interfaces/Other/IMenu";
+import type { MenuOptionType } from "../../models/interfaces/Other/IMenu";
 
 export const SideMenu = () => {
   const [expandedMenu, setExpandedMenu] = useState<boolean>(false);

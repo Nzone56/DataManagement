@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { addClient, fetchClients, removeClient, updateClient, setClients } from "./clients.actions";
-import { Client } from "../../models/interfaces/Client/IClient";
+import type { Client } from "../../models/interfaces/Client/IClient";
 import { toast } from "react-toastify";
 
 interface ClientsReducer {

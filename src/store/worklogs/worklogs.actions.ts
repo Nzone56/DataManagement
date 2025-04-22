@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../store";
-import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
+import type { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
 import { WorklogService } from "./worklogs.service";
 
 export const fetchWorklogs = createAsyncThunk<Worklog[]>("worklogs/fetchWorklogs", () =>

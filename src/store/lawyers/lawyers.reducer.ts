@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { addLawyer, fetchLawyers, removeLawyer, updateLawyer } from "./lawyers.actions";
-import { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
+import type { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
 import { toast } from "react-toastify";
 
 interface LawyersReducer {

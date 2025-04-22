@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
+import type { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
 import { LawyerService } from "./lawyers.service";
 import { ThunkApiConfig } from "../store";
 

@@ -1,6 +1,6 @@
 import { MainLayout } from "../../layouts/MainLayout";
 import { ListLayout } from "../../layouts/ListLayout";
-import { Bill } from "../../../models/interfaces/Bill/IBill";
+import type { Bill } from "../../../models/interfaces/Bill/IBill";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { useEffect } from "react";

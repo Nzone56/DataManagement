@@ -11,7 +11,7 @@ import {
   Receipt as ReceiptIcon,
   AccountBalanceWalletOutlined as AccountBalanceIcon,
 } from "@mui/icons-material";
-import { MenuSectionType } from "../../models/interfaces/Other/IMenu";
+import type { MenuSectionType } from "../../models/interfaces/Other/IMenu";
 
 export const menuSections: MenuSectionType[] = [
   {

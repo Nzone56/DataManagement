@@ -12,7 +12,7 @@ import {
   updateFee,
 } from "../../../store/expenses/expenses.actions";
 import { AppDispatch } from "../../../store/store";
-import { Fee } from "../../../models/interfaces/Expense/IExpense";
+import type { Fee } from "../../../models/interfaces/Expense/IExpense";
 import { toZonedTime } from "date-fns-tz";
 import { useTransformData } from "../../../hooks/useTransformData";
 

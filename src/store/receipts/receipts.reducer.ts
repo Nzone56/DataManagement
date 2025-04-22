@@ -1,7 +1,7 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { addReceipt, fetchReceipts, removeReceipt, setReceipts, updateReceipt } from "./receipts.actions";
 import { toast } from "react-toastify";
-import { Receipt } from "../../models/interfaces/Receipt/IReceipts";
+import type { Receipt } from "../../models/interfaces/Receipt/IReceipts";
 interface ReceiptsReducer {
   receipts: Receipt[];
   loading: boolean;

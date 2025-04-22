@@ -1,16 +1,23 @@
 import { useSelector } from "react-redux";
-import { RawWorklog, Worklog } from "../models/interfaces/TimeManager/IWorklog";
+import type { RawWorklog, Worklog } from "../models/interfaces/TimeManager/IWorklog";
 import { getLawyers } from "../store/lawyers/lawyers.selector";
 import { getClients } from "../store/clients/clients.selector";
 import { getWorklogs } from "../store/worklogs/worklogs.selector";
 import { parseISO } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import { Client, RawClient } from "../models/interfaces/Client/IClient";
-import { RawReceipt, Receipt } from "../models/interfaces/Receipt/IReceipts";
+import type { Client, RawClient } from "../models/interfaces/Client/IClient";
+import type { RawReceipt, Receipt } from "../models/interfaces/Receipt/IReceipts";
 import { getReceipts } from "../store/receipts/receipts.selector";
 import { getBills } from "../store/bills/bills.selector";
-import { Bill, RawBill } from "../models/interfaces/Bill/IBill";
-import { Expense, ExpenseConcept, Fee, rawConcept, RawExpense, RawFee } from "../models/interfaces/Expense/IExpense";
+import type { Bill, RawBill } from "../models/interfaces/Bill/IBill";
+import type {
+  Expense,
+  ExpenseConcept,
+  Fee,
+  rawConcept,
+  RawExpense,
+  RawFee,
+} from "../models/interfaces/Expense/IExpense";
 import { getExpenseConcepts, getExpenses, getFees } from "../store/expenses/expenses.selector";
 import { getPropById, getRandomColor } from "../utils/getters";
 import { formatDateText } from "../utils/dates";

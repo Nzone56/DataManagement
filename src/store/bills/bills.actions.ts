@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../store";
 import { BillService } from "./bills.service";
-import { Bill } from "../../models/interfaces/Bill/IBill";
+import type { Bill } from "../../models/interfaces/Bill/IBill";
 
 export const fetchBills = createAsyncThunk<Bill[]>("bills/fetchBills", () => BillService.fetchBills());
 

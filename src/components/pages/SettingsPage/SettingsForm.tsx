@@ -5,7 +5,7 @@ import { getSettings } from "../../../store/settings/settings.selector";
 import { useEffect, useState } from "react";
 import { CenteredBox, ColumnJustifyFlex, PrimaryButton } from "../../Components.styled";
 import { formatDateInternational, formatDateText } from "../../../utils/dates";
-import { ISettings } from "../../../models/interfaces/Settings/ISettings";
+import type { ISettings } from "../../../models/interfaces/Settings/ISettings";
 import { updateSettings } from "../../../store/settings/settings.actions";
 import { deepEqual } from "../../../utils/compare";
 import { AppDispatch } from "../../../store/store";

@@ -1,7 +1,7 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { addWorklog, fetchWorklogs, removeWorklog, setWorklogs, updateWorklog } from "./worklogs.actions";
 import { toast } from "react-toastify";
-import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
+import type { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
 
 interface WorklogsReducer {
   worklogs: Worklog[];

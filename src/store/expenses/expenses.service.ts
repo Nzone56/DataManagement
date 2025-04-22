@@ -1,4 +1,4 @@
-import { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
+import type { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
 import { collection, getDocs, updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_CONCEPTS, COLLECTION_EXPENSES, COLLECTION_FEES } from "../../server/collections";
