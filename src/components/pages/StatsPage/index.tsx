@@ -35,15 +35,14 @@ export const StatsPage = () => {
 
   useEffect(() => {
     if (!statCategories || Object.keys(statCategories).length === 0) {
-      return; // Evitar ejecutar si statCategories aún no está disponible
+      return; // Dont run if statCategories its not available
     }
 
-    // Comparar correctamente evitando la primera ejecución errónea
     if (prevStatCategories.current && JSON.stringify(prevStatCategories.current) === JSON.stringify(statCategories)) {
-      return; // No hacer nada si no cambió
+      return;
     }
 
-    prevStatCategories.current = statCategories; // Guardar nueva referencia
+    prevStatCategories.current = statCategories; // Save new reference
 
     const allCategories: FilterCategory[] = [];
 

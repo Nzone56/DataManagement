@@ -19,6 +19,10 @@ export const store = configureStore({
     bills: billsReducer,
     receipts: receiptsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable Middleware for development
+    }),
 });
 
 export interface ThunkApiConfig {
