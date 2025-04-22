@@ -12,7 +12,7 @@ import {
 } from "../../../store/receipts/receipts.actions";
 import { fetchClients } from "../../../store/clients/clients.actions";
 import { getReceipts } from "../../../store/receipts/receipts.selector";
-import { Receipt } from "../../../models/interfaces/Receipt/IReceipts";
+import type { Receipt } from "../../../models/interfaces/Receipt/IReceipts";
 import { useTransformData } from "../../../hooks/useTransformData";
 
 const InitialReceipt: Receipt = {

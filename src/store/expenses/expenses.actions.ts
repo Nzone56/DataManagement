@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
+import type { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
 import { ExpenseConceptService, ExpenseService, FeeService } from "./expenses.service";
 import { ThunkApiConfig } from "../store";
 

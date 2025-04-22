@@ -1,4 +1,4 @@
-import { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
+import type { Worklog } from "../../models/interfaces/TimeManager/IWorklog";
 import { collection, getDocs, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_WORKLOGS } from "../../server/collections";

@@ -2,7 +2,7 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { ListLayout } from "../../layouts/ListLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { Expense } from "../../../models/interfaces/Expense/IExpense";
+import type { Expense } from "../../../models/interfaces/Expense/IExpense";
 import { getExpenses } from "../../../store/expenses/expenses.selector";
 import {
   addExpense,

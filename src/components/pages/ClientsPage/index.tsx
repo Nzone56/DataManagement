@@ -11,7 +11,7 @@ import {
 } from "../../../store/clients/clients.actions";
 import { useEffect } from "react";
 import { AppDispatch } from "../../../store/store";
-import { Client } from "../../../models/interfaces/Client/IClient";
+import type { Client } from "../../../models/interfaces/Client/IClient";
 import { toZonedTime } from "date-fns-tz";
 import { useTransformData } from "../../../hooks/useTransformData";
 

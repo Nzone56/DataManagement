@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { SettingsService } from "./settings.service";
-import { ISettings } from "../../models/interfaces/Settings/ISettings";
+import type { ISettings } from "../../models/interfaces/Settings/ISettings";
 import { ThunkApiConfig } from "../store";
 
 export const fetchSettings = createAsyncThunk<ISettings>("settings/fetchSettings", () =>

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ThunkApiConfig } from "../store";
 import { ReceiptService } from "./receipts.service";
-import { Receipt } from "../../models/interfaces/Receipt/IReceipts";
+import type { Receipt } from "../../models/interfaces/Receipt/IReceipts";
 
 export const fetchReceipts = createAsyncThunk<Receipt[]>("receipts/fetchReceipts", () =>
   ReceiptService.fetchReceipts()

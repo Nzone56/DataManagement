@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MenuOptionType } from "../models/interfaces/Other/IMenu";
+import type { MenuOptionType } from "../models/interfaces/Other/IMenu";
 import { menuSections } from "../components/SideMenu/SideMenuVariables";
 
 export const useSideMenu = () => {

@@ -1,7 +1,7 @@
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_BILLS } from "../../server/collections";
-import { Bill } from "../../models/interfaces/Bill/IBill";
+import type { Bill } from "../../models/interfaces/Bill/IBill";
 import { getFromIndexedDB, openDatabase, saveToIndexedDB } from "../indexedDb.service";
 
 export const fetchBills = async (): Promise<Bill[]> => {

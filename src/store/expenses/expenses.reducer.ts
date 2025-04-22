@@ -16,7 +16,7 @@ import {
   updateExpenseConcept,
   updateFee,
 } from "./expenses.actions";
-import { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
+import type { Expense, ExpenseConcept, Fee } from "../../models/interfaces/Expense/IExpense";
 import { toast } from "react-toastify";
 
 interface ExpenseConceptsReducer {

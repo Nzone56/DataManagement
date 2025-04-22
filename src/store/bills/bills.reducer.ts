@@ -1,7 +1,7 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { addBill, fetchBills, removeBill, setBills, updateBill } from "./bills.actions";
 import { toast } from "react-toastify";
-import { Bill } from "../../models/interfaces/Bill/IBill";
+import type { Bill } from "../../models/interfaces/Bill/IBill";
 
 interface BillsReducer {
   bills: Bill[];

@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { setSettings, fetchSettings, updateSettings, addSettings } from "./settings.actions";
-import { ISettings } from "../../models/interfaces/Settings/ISettings";
+import type { ISettings } from "../../models/interfaces/Settings/ISettings";
 import { toast } from "react-toastify";
 
 interface SettingsReducer {

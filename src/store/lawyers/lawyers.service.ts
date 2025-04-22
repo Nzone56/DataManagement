@@ -1,5 +1,5 @@
 import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
-import { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
+import type { Lawyer } from "../../models/interfaces/Lawyer/ILawyer";
 import { db } from "../../server/firebase";
 import { COLLECTION_LAWYERS } from "../../server/collections";
 import { getFromIndexedDB, openDatabase, saveToIndexedDB } from "../indexedDb.service";

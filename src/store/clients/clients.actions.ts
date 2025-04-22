@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Client } from "../../models/interfaces/Client/IClient";
+import type { Client } from "../../models/interfaces/Client/IClient";
 import { ClientService } from "./clients.service";
 import { ThunkApiConfig } from "../store";
 

@@ -1,7 +1,7 @@
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../../server/firebase";
 import { COLLECTION_RECEIPTS } from "../../server/collections";
-import { Receipt } from "../../models/interfaces/Receipt/IReceipts";
+import type { Receipt } from "../../models/interfaces/Receipt/IReceipts";
 import { getFromIndexedDB, openDatabase, saveToIndexedDB } from "../indexedDb.service";
 
 // Obtener receipts con caché

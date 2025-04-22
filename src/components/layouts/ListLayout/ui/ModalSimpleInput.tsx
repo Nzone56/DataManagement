@@ -8,10 +8,10 @@ import { getClients } from "../../../../store/clients/clients.selector";
 import { getLawyers } from "../../../../store/lawyers/lawyers.selector";
 import { getExpenseConcepts } from "../../../../store/expenses/expenses.selector";
 import { getWorklogs } from "../../../../store/worklogs/worklogs.selector";
-import { Client } from "../../../../models/interfaces/Client/IClient";
-import { Lawyer } from "../../../../models/interfaces/Lawyer/ILawyer";
-import { ExpenseConcept } from "../../../../models/interfaces/Expense/IExpense";
-import { Worklog } from "../../../../models/interfaces/TimeManager/IWorklog";
+import type { Client } from "../../../../models/interfaces/Client/IClient";
+import type { Lawyer } from "../../../../models/interfaces/Lawyer/ILawyer";
+import type { ExpenseConcept } from "../../../../models/interfaces/Expense/IExpense";
+import type { Worklog } from "../../../../models/interfaces/TimeManager/IWorklog";
 type Errors = {
   name: boolean;
   id: boolean;
