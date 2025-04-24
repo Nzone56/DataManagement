@@ -10,6 +10,7 @@ import { Filters } from "./useDateFilters";
 import { getReceipts } from "../store/receipts/receipts.selector";
 import { getBills } from "../store/bills/bills.selector";
 
+//TODO: Fees graphs
 interface StatChart {
   id: string;
   title: string;

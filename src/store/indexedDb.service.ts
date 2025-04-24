@@ -56,7 +56,7 @@ export const getFromIndexedDB = async <T>(storeName: string): Promise<T[]> => {
       const request = store.getAll();
 
       request.onsuccess = () => {
-        console.log(`📤 Datos obtenidos de ${storeName} en INDEXED:`, request.result);
+        console.log(`📤 Datos obtenidos de ${storeName} en INDEXED:`, request.result.length);
         resolve(request.result as T[]);
       };
 

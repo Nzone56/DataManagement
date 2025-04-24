@@ -72,7 +72,8 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
   };
 
   return (
-    <ColumnJustifyFlex>
+    //TODO: FILTERS DESIGN
+    <ColumnJustifyFlex p={2}>
       <Typography mb={1}>{`FILTROS POR FECHA: ${getDateFilterText(filters)}`}</Typography>
       <Select
         value={filters.dateFilter}

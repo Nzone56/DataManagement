@@ -8,7 +8,7 @@ export const fetchLawyers = async (): Promise<Lawyer[]> => {
   console.log("📌 Ejecutando fetchLawyers...");
 
   const cachedLawyers = await getFromIndexedDB("lawyers");
-
+  console.log("Se cargaron ", cachedLawyers.length, "abogados");
   if (cachedLawyers && cachedLawyers.length > 0) {
     console.log("📌 Cargando 'lawyers' desde IndexedDB...");
     return cachedLawyers as Lawyer[];

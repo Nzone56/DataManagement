@@ -10,7 +10,7 @@ export const fetchWorklogs = async (): Promise<Worklog[]> => {
 
   // Intentar obtener de IndexedDB primero
   const cachedWorklogs = await getFromIndexedDB(COLLECTION_WORKLOGS);
-  console.log(cachedWorklogs);
+  console.log("Se cargaron ", cachedWorklogs.length, " worklogs");
   if (cachedWorklogs && cachedWorklogs.length > 0) {
     console.log("📌 Cargando 'worklogs' desde IndexedDB...");
     return cachedWorklogs as Worklog[];

@@ -8,7 +8,8 @@ export const fetchClients = async (): Promise<Client[]> => {
   console.log("📌 Ejecutando fetchClients...");
 
   const cachedClients = await getFromIndexedDB("clients");
-  console.log(cachedClients);
+  console.log("Se cargaron ", cachedClients.length, "clientes");
+
   if (cachedClients && cachedClients.length > 0) {
     console.log("📌 Cargando 'clients' desde IndexedDB...");
     return cachedClients as Client[];

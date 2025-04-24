@@ -9,7 +9,7 @@ export const fetchExpensesConcepts = async (): Promise<ExpenseConcept[]> => {
   console.log("📌 Ejecutando fetchExpensesConcepts...");
 
   const cachedConcepts = await getFromIndexedDB("expensesConcepts");
-  console.log(cachedConcepts);
+  console.log("Se cargaron ", cachedConcepts.length, "conceptos");
   if (cachedConcepts && cachedConcepts.length > 0) {
     console.log("📌 Cargando 'expensesConcepts' desde IndexedDB...");
     return cachedConcepts as ExpenseConcept[];
@@ -88,7 +88,7 @@ export const fetchExpenses = async (): Promise<Expense[]> => {
 
   // Intentar obtener de IndexedDB primero
   const cachedExpenses = await getFromIndexedDB(COLLECTION_EXPENSES);
-  console.log(cachedExpenses);
+  console.log("Se cargaron ", cachedExpenses.length, " gastos");
   if (cachedExpenses && cachedExpenses.length > 0) {
     console.log("📌 Cargando 'expenses' desde IndexedDB...");
     return cachedExpenses as Expense[];
@@ -185,7 +185,7 @@ export const fetchFees = async (): Promise<Fee[]> => {
 
   // Intentar obtener de IndexedDB primero
   const cachedFees = await getFromIndexedDB(COLLECTION_FEES);
-  console.log(cachedFees);
+  console.log("Se cargaron ", cachedFees.length, " honorarios");
   if (cachedFees && cachedFees.length > 0) {
     console.log("📌 Cargando 'fees' desde IndexedDB...");
     return cachedFees as Fee[];

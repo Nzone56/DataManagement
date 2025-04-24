@@ -10,6 +10,7 @@ export const fetchReceipts = async (): Promise<Receipt[]> => {
 
   // Intentar obtener de IndexedDB primero
   const cachedReceipts = await getFromIndexedDB(COLLECTION_RECEIPTS);
+  console.log("Se cargaron ", cachedReceipts.length, " recibos");
   if (cachedReceipts && cachedReceipts.length > 0) {
     console.log("📌 Cargando 'receipts' desde IndexedDB...");
     return cachedReceipts as Receipt[];

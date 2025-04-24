@@ -9,7 +9,7 @@ export const fetchBills = async (): Promise<Bill[]> => {
 
   // Intentar obtener de IndexedDB primero
   const cachedBills = await getFromIndexedDB(COLLECTION_BILLS);
-  console.log(cachedBills);
+  console.log("Se cargaron ", cachedBills.length, " ingresos");
   if (cachedBills && cachedBills.length > 0) {
     console.log("📌 Cargando 'bills' desde IndexedDB...");
     return cachedBills as Bill[];

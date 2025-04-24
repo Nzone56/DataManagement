@@ -1,4 +1,4 @@
-import { AccordionSummary, Box, MenuItem, styled, Typography, Checkbox } from "@mui/material";
+import { AccordionSummary, Box, MenuItem, styled, Typography, Checkbox, Tab } from "@mui/material";
 
 export const StatsContainer = styled(Box)({
   display: "flex",
@@ -42,4 +42,8 @@ export const FilterCheckbox = styled(Checkbox)({
 });
 export const FilterItemText = styled(Typography)({
   fontSize: "1.2rem",
+});
+
+export const StyledTab = styled(Tab)({
+  fontSize: "1.4rem",
 });
