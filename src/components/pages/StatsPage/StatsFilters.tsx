@@ -1,10 +1,9 @@
-import { Box, MenuItem, Select, Typography, SelectChangeEvent } from "@mui/material";
+import { Box, MenuItem, Select, Typography, SelectChangeEvent, FormControlLabel, Switch } from "@mui/material";
 import DatePicker from "react-datepicker";
 import { Filters } from "../../../hooks/useDateFilters";
 import "./styles.scss";
 import { format, subDays } from "date-fns";
 import { es } from "date-fns/locale";
-import { FilterCheckbox } from "./Stats.styled";
 import { CenteredBox, ColumnJustifyFlex } from "../../Components.styled";
 
 interface StatsFiltersProps {
@@ -38,6 +37,16 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
     { id: "10", name: "Octubre" },
     { id: "11", name: "Noviembre" },
     { id: "12", name: "Diciembre" },
+  ];
+
+  const dateFilterOptions = [
+    { value: "all", label: "Todos" },
+    { value: "today", label: "Hoy" },
+    { value: "yesterday", label: "Ayer" },
+    { value: "last7", label: "Últimos 7 días" },
+    { value: "year", label: "Año" },
+    { value: "month", label: "Mes" },
+    { value: "range", label: "Rango" },
   ];
 
   const formatDate = (date: Date | null | undefined): string => {
@@ -74,7 +83,7 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
   return (
     //TODO: FILTERS DESIGN
     <ColumnJustifyFlex p={2}>
-      <Typography mb={1}>{`FILTROS POR FECHA: ${getDateFilterText(filters)}`}</Typography>
+      <Typography mb={1}>{`FILTRO ACTUAL: ${getDateFilterText(filters)}`}</Typography>
       <Select
         value={filters.dateFilter}
         onChange={handleDateFilterChange}
@@ -83,13 +92,11 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
         inputProps={{ "aria-label": "Without label" }}
         sx={{ maxWidth: "150px" }}
       >
-        <MenuItem value="all">Todos</MenuItem>
-        <MenuItem value="today">Hoy</MenuItem>
-        <MenuItem value="yesterday">Ayer</MenuItem>
-        <MenuItem value="last7">Últimos 7 días</MenuItem>
-        <MenuItem value="year">Año</MenuItem>
-        <MenuItem value="month">Mes</MenuItem>
-        <MenuItem value="range">Rango</MenuItem>
+        {dateFilterOptions.map((option) => (
+          <MenuItem value={option.value} key={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
       </Select>
       {(filters.dateFilter === "year" || filters.dateFilter === "month") && (
         <Box display="flex" gap={2} mt={1}>
@@ -140,8 +147,12 @@ export const StatsFilters: React.FC<StatsFiltersProps> = ({
         </Box>
       )}
       <CenteredBox mt={2}>
-        <Typography>Ocultar items sin valores en las gráficas:</Typography>
-        <FilterCheckbox checked={hideZeros} onClick={() => setHideZeros((prev) => !prev)} />
+        <FormControlLabel
+          control={<Switch />}
+          label="Mostrar valores vacios"
+          checked={!hideZeros}
+          onChange={() => setHideZeros((prev) => !prev)}
+        />
       </CenteredBox>
     </ColumnJustifyFlex>
   );

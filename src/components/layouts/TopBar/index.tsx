@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { SearchTopBar, TopBarContainer } from "./TopBar.styled";
-import SearchIcon from "@mui/icons-material/Search";
+import { TopBarContainer } from "./TopBar.styled";
 import { CenteredBox } from "../../Components.styled";
 import { Typography } from "@mui/material";
 import { useSideMenu } from "../../../hooks/useSideMenu";
 
 export const TopBar = () => {
-  const [searchBox, setSearchBox] = useState<boolean>(false);
+  const [searchBox] = useState<boolean>(false);
   const { currentMenuOption } = useSideMenu();
 
   return (
@@ -19,9 +18,6 @@ export const TopBar = () => {
           <Typography>/ {currentMenuOption.label}</Typography>
         </CenteredBox>
       )}
-      <SearchTopBar onClick={() => setSearchBox(true)}>
-        <SearchIcon />
-      </SearchTopBar>
     </TopBarContainer>
   );
 };

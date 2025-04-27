@@ -1,22 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   fetchBillsReceiptsGraphs,
   fetchClientsGraphs,
   fetchExpensesGraphs,
   fetchLawyersGraphs,
 } from "../store/actions";
-import { AppDispatch, RootState } from "../store/store";
+import { AppDispatch } from "../store/store";
 
 const graphDispatchers = [fetchExpensesGraphs, fetchLawyersGraphs, fetchClientsGraphs, fetchBillsReceiptsGraphs];
 
 export const useLoadData = (currentTab: number) => {
   const dispatch = useDispatch<AppDispatch>();
-  const state = useSelector((state: RootState) => state);
   const loadedTabs = useRef<Set<number>>(new Set());
   const [loading, setLoading] = useState(false);
-
-  console.log(state);
 
   useEffect(() => {
     if (loadedTabs.current.has(currentTab)) {

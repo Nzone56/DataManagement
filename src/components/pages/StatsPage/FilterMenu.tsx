@@ -1,7 +1,7 @@
 import { useState, MouseEvent } from "react";
-import { Menu, Typography, Button } from "@mui/material";
+import { Menu, Typography, Button, FormControlLabel, Switch } from "@mui/material";
 import { CenteredBox } from "../../Components.styled";
-import { FilterCheckbox, FilterItemText, SmallMenuItem } from "./Stats.styled";
+import { SmallMenuItem } from "./Stats.styled";
 
 type FilterCategory = {
   name: string;
@@ -41,8 +41,11 @@ const FilterMenu: React.FC<FilterMenuProps> = ({ localCategories, setLocalCatego
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         {localCategories.map((option) => (
           <SmallMenuItem key={option.name} onClick={() => toggleCategory(option.name)} dense>
-            <FilterCheckbox checked={option.enabled} size="small" />
-            <FilterItemText>{option.name}</FilterItemText>
+            <FormControlLabel
+              control={<Switch checked={option.enabled} size="small" disableRipple />}
+              label={option.name}
+              style={{ margin: 0 }}
+            />
           </SmallMenuItem>
         ))}
       </Menu>
