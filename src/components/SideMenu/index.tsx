@@ -87,7 +87,15 @@ export const SideMenu = () => {
           {section.items.map((item) => {
             return (
               <Fragment key={item.id}>
-                <MenuOption animate={expandedMenu} key={item.id} onClick={() => handleNavigateMenu(item)}>
+                <MenuOption
+                  animate={expandedMenu}
+                  key={item.id}
+                  onClick={() => handleNavigateMenu(item)}
+                  active={
+                    location.pathname === item.route ||
+                    !!item.subItems?.find((subItem) => location.pathname === subItem.route)
+                  }
+                >
                   {!expandedMenu ? (
                     item.component
                   ) : item.subItems ? (
@@ -107,7 +115,12 @@ export const SideMenu = () => {
                 </MenuOption>
                 {item.id === expandedMenuOption
                   ? item.subItems?.map((subitem) => (
-                      <MenuOption animate={expandedMenu} key={subitem.id} onClick={() => handleNavigateMenu(subitem)}>
+                      <MenuOption
+                        animate={expandedMenu}
+                        key={subitem.id}
+                        onClick={() => handleNavigateMenu(subitem)}
+                        active={location.pathname === subitem.route}
+                      >
                         <ColumnJustifyFlex>
                           <SideMenuLine />
                           <SideMenuPoint active={location.pathname === subitem.route} />

@@ -102,7 +102,7 @@ export const LogoMenu = styled(Box)(({ theme }) => ({
 
 export const MenuOption = styled(Box, {
   shouldForwardProp: (prop) => prop !== "animate",
-})<{ animate: boolean }>(({ animate, theme }) => ({
+})<{ animate: boolean; active: boolean }>(({ animate, theme, active }) => ({
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "center",
@@ -112,6 +112,8 @@ export const MenuOption = styled(Box, {
   cursor: "pointer",
   padding: "5px",
   borderRadius: "5px",
+  backgroundColor: active ? theme.palette.primary.light : "",
+  opacity: active ? 0.7 : 1,
   "&:hover": {
     backgroundColor: theme.palette.primary.light,
     opacity: 0.7,
