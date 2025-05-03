@@ -63,7 +63,6 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
         : getArrayPropById(chartSelect, expensesConcepts, "categories"),
     [expensesConcepts, chartSelect]
   );
-  const feesCategories = ["Germán Ulloa", "Carlos Bermúdez"];
   const lawyerNames = useMemo(() => lawyers.map((lawyer) => lawyer.name), [lawyers]);
   const clientNames = useMemo(() => clients.map((client) => client.name), [clients]);
 
@@ -84,20 +83,41 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
     //eslint-disable-next-line
     [expenses, expensesConcepts, chartSelect, filters]
   );
-
-  const feesData = useMemo(() => {
-    return fees.reduce(
-      (acc, d) => {
-        if (isDateInFilter(d.date, filters)) {
-          if (d.feeConcept === "Germán Ulloa") acc[0] += d.amount;
-          else if (d.feeConcept === "Carlos Bermúdez") acc[1] += d.amount;
-        }
-        return acc;
-      },
-      [0, 0]
-    );
+  const feesBermudezData = useMemo(
+    () =>
+      chartSelect === "all"
+        ? expensesConcepts.map((c) =>
+            fees
+              .filter(
+                (f) => f.conceptId === c.id && isDateInFilter(f.date, filters) && f.feeConcept === "Carlos Bermúdez"
+              )
+              .reduce((sum, f) => sum + f.amount, 0)
+          )
+        : getArrayPropById(chartSelect, expensesConcepts, "categories").map((c) =>
+            fees
+              .filter((f) => f.categoryId === c && isDateInFilter(f.date, filters))
+              .reduce((sum, f) => sum + f.amount, 0)
+          ),
     //eslint-disable-next-line
-  }, [fees, filters]);
+    [expenses, expensesConcepts, chartSelect, filters]
+  );
+
+  const feesUlloaData = useMemo(
+    () =>
+      chartSelect === "all"
+        ? expensesConcepts.map((c) =>
+            fees
+              .filter((f) => f.conceptId === c.id && isDateInFilter(f.date, filters) && f.feeConcept === "Germán Ulloa")
+              .reduce((sum, f) => sum + f.amount, 0)
+          )
+        : getArrayPropById(chartSelect, expensesConcepts, "categories").map((c) =>
+            fees
+              .filter((f) => f.categoryId === c && isDateInFilter(f.date, filters))
+              .reduce((sum, f) => sum + f.amount, 0)
+          ),
+    //eslint-disable-next-line
+    [expenses, expensesConcepts, chartSelect, filters]
+  );
 
   const lawyerMinutesWorked = useMemo(
     () =>
@@ -378,19 +398,35 @@ export const useCharts = ({ filters, chartSelect, isDateInFilter }: useChartsPro
           formatter: "money",
         },
         {
-          id: "feesTotalPie",
-          title: "Honorarios (%)",
+          id: "feesBermudezTotalPie",
+          title: "Honorarios Carlos Bermúdez (%)",
           type: "pie",
-          categories: feesCategories,
-          series: feesData,
+          categories: expenseByConcept,
+          series: feesBermudezData,
           formatter: "money",
         },
         {
-          id: "feesTotalBar",
-          title: "Honorarios (Total)",
+          id: "feesBermudezTotalBar",
+          title: "Honorarios Carlos Bermúdez (Total)",
           type: "bar",
-          categories: feesCategories,
-          series: feesData,
+          categories: expenseByConcept,
+          series: feesBermudezData,
+          formatter: "money",
+        },
+        {
+          id: "feesUlloaTotalPie",
+          title: "Honorarios Germán Ulloa (%)",
+          type: "pie",
+          categories: expenseByConcept,
+          series: feesUlloaData,
+          formatter: "money",
+        },
+        {
+          id: "feesUlloaTotalBar",
+          title: "Honorarios Germán Ulloa (Total)",
+          type: "bar",
+          categories: expenseByConcept,
+          series: feesUlloaData,
           formatter: "money",
         },
       ],

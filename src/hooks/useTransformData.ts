@@ -498,7 +498,7 @@ export const useTransformData = () => {
         errorData.add(`El concepto "${conceptId}".`);
       }
     });
-
+    // TODO: Fix the unique DATA
     // Filter the duplicated with value of 0
     const uniqueData = mappedData.filter((data) => data.amount !== 0);
 
